@@ -2,7 +2,7 @@
 <div id="bj-chat" class="bj-chat" data-endpoint="{{ route('chat.send') }}" data-csrf="{{ csrf_token() }}">
     <button id="bj-chat-toggle" class="bj-chat-toggle" aria-label="Ouvrir l'assistant Blac Joyaux">
         <span class="bj-chat-toggle-ico">✦</span>
-        <span class="bj-chat-toggle-label">Une question ?</span>
+        <strong>Assistante Blac Joyaux</strong>
     </button>
 
     <div id="bj-chat-panel" class="bj-chat-panel" hidden>

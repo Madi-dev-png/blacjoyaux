@@ -8,6 +8,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -41,6 +42,9 @@ Route::post('/chat', [ChatController::class, 'send'])->name('chat.send');
 
 // SEO : sitemap dynamique
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+//Contact 
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 /*
 |--------------------------------------------------------------------------
