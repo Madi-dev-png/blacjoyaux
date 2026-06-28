@@ -1,14 +1,13 @@
 <?php
 
 return [
-    // Configuration de l'assistant IA (API Anthropic)
-    'anthropic' => [
-        'key' => env('ANTHROPIC_API_KEY'),
-        'model' => env('ANTHROPIC_MODEL', 'claude-sonnet-4-6'),
-    ],
+    // Configuration de l'assistant IA (API Groq)
+   'groq' => [
+    'key'   => env('GROQ_API_KEY'),
+    'model' => env('GROQ_MODEL', 'llama-3.3-70b-versatile'),
+],
 
-    // Coordonnées de contact de la marque
-    'brand' => [
-        'whatsapp' => env('BJ_WHATSAPP', '2250700000000'),
-    ],
+'brand' => [
+    'whatsapp' => env('BJ_WHATSAPP', '2250700000000'),
+],
 ];

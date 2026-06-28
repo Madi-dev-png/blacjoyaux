@@ -15,49 +15,46 @@ use Illuminate\Support\Facades\Http;
 class ChatService
 {
     public function reply(string $userMessage, array $history = []): array
-    {
-        $apiKey = config('services.anthropic.key');
+{
+    $apiKey = config('services.groq.key');
 
-        // Mode dégradé si la clé n'est pas configurée :
-        // on répond depuis la FAQ pour que la démo fonctionne sans clé.
-        if (empty($apiKey)) {
-            return [
-                'reply' => $this->fallbackFromFaq($userMessage),
-                'source' => 'faq',
-            ];
-        }
-
-        $payload = [
-            'model' => config('services.anthropic.model', 'claude-sonnet-4-6'),
-            'max_tokens' => 600,
-            'system' => $this->systemPrompt(),
-            'messages' => $this->buildMessages($userMessage, $history),
+    if (empty($apiKey)) {
+        return [
+            'reply'  => $this->fallbackFromFaq($userMessage),
+            'source' => 'faq',
         ];
+    }
 
-        try {
-            $response = Http::withHeaders([
-                'x-api-key' => $apiKey,
-                'anthropic-version' => '2023-06-01',
-                'content-type' => 'application/json',
-            ])->timeout(30)->post('https://api.anthropic.com/v1/messages', $payload);
+    $payload = [
+        'model'    => config('services.groq.model', 'llama-3.3-70b-versatile'),
+        'max_tokens' => 600,
+        'messages' => array_merge(
+            [['role' => 'system', 'content' => $this->systemPrompt()]],
+            $this->buildMessages($userMessage, $history)
+        ),
+    ];
 
-            if ($response->failed()) {
-                return ['reply' => $this->fallbackFromFaq($userMessage), 'source' => 'faq'];
-            }
+    try {
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $apiKey,
+            'Content-Type'  => 'application/json',
+        ])->timeout(30)->post('https://api.groq.com/openai/v1/chat/completions', $payload);
 
-            $text = collect($response->json('content', []))
-                ->where('type', 'text')
-                ->pluck('text')
-                ->implode("\n");
-
-            return [
-                'reply' => $text !== '' ? $text : $this->fallbackFromFaq($userMessage),
-                'source' => 'ia',
-            ];
-        } catch (\Throwable $e) {
+        if ($response->failed()) {
             return ['reply' => $this->fallbackFromFaq($userMessage), 'source' => 'faq'];
         }
+
+        $text = $response->json('choices.0.message.content', '');
+
+        return [
+            'reply'  => $text !== '' ? $text : $this->fallbackFromFaq($userMessage),
+            'source' => 'ia',
+        ];
+
+    } catch (\Throwable $e) {
+        return ['reply' => $this->fallbackFromFaq($userMessage), 'source' => 'faq'];
     }
+}
 
     /** Construit le prompt système avec le contexte de marque + catalogue + FAQ. */
     protected function systemPrompt(): string
