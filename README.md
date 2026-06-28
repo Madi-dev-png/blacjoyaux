@@ -6,7 +6,7 @@ Projet pédagogique IFRAN — *Mode Agence* — **Groupe 8**.
 
 ---
 
-## ✨ Fonctionnalités
+## Fonctionnalités
 
 **Boutique (front-office)**
 - Page d'accueil (héros, pièces phares, nouveautés, valeurs de marque)
@@ -17,14 +17,14 @@ Projet pédagogique IFRAN — *Mode Agence* — **Groupe 8**.
 - Page de confirmation avec référence unique (ex. `BJ-2026-0001`)
 - Page « Notre histoire » + **FAQ**
 
-**🤖 Assistant IA (sur toutes les pages)**
+**Assistant IA (sur toutes les pages)**
 - Widget de chat flottant en bas à droite de chaque page
 - Répond aux questions sur la marque, les produits, la livraison, le paiement
 - Connaît le **catalogue en temps réel** et la **FAQ** (injectés dans le contexte)
 - Utilise l'API Anthropic (Claude). **Mode dégradé** : si aucune clé n'est configurée,
   il répond automatiquement à partir de la FAQ — la démo fonctionne donc sans clé.
 
-**🔍 Référencement (SEO)**
+**Référencement (SEO)**
 - Balises `title`, `meta description`, canonical et Open Graph sur chaque page
 - Données structurées JSON-LD (Product sur les fiches, FAQPage sur la FAQ)
 - `sitemap.xml` dynamique + `robots.txt`
@@ -32,7 +32,7 @@ Projet pédagogique IFRAN — *Mode Agence* — **Groupe 8**.
   automatiquement le slug, le meta-title et la meta-description, affiche un
   **score de qualité 0–100** avec checklist et aperçu Google en direct.
 
-**🔐 Back-office administrateur (CRUD)**
+**Back-office administrateur (CRUD)**
 - Connexion sécurisée (réservée aux administrateurs)
 - Tableau de bord (statistiques, dernières commandes, stock faible)
 - Gestion des produits (créer / éditer / supprimer + upload image + SEO auto)
@@ -41,7 +41,7 @@ Projet pédagogique IFRAN — *Mode Agence* — **Groupe 8**.
 
 ---
 
-## 🚀 Installation (sur votre Mac)
+## Installation (sur votre Mac)
 
 > Pré-requis : PHP ≥ 8.2 et Composer installés.
 > (Vérifiez avec `php -v` et `composer --version`.)
@@ -76,7 +76,7 @@ Le site est accessible sur **http://localhost:8000**
 
 ---
 
-## 🔑 Connexion administrateur
+##  Connexion administrateur
 
 - URL : **http://localhost:8000/login**
 - Email : `admin@blacjoyaux.com`
@@ -86,7 +86,7 @@ Le site est accessible sur **http://localhost:8000**
 
 ---
 
-## 🤖 Activer le vrai chat IA (facultatif)
+## Activer le vrai chat IA (facultatif)
 
 Par défaut, l'assistant répond depuis la FAQ. Pour activer les réponses
 intelligentes via Claude :
@@ -104,7 +104,7 @@ intelligentes via Claude :
 
 ---
 
-## 🛠️ Stack technique
+## Stack technique
 
 | Élément        | Choix                          |
 |----------------|--------------------------------|
@@ -116,7 +116,7 @@ intelligentes via Claude :
 
 ---
 
-## 📂 Organisation rapide
+## Organisation rapide
 
 ```
 app/Http/Controllers/      → boutique (Home, Product, Cart, Checkout, Faq, Chat…)
