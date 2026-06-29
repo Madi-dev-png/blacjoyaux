@@ -1,133 +1,92 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@yield('title', 'BLAC — Maroquinerie')</title>
 
-    {{-- SEO --}}
-    <title>@yield('title', 'Blac Joyaux — Maroquinerie féminine, héritage Ashanti')</title>
-    <meta name="description" content="@yield('meta_description', "Blac Joyaux : sacs à main pour femmes inspirés de l'héritage Ashanti. Élégance, qualité et fierté africaine. Livraison à Abidjan.")">
-    <link rel="canonical" href="{{ url()->current() }}">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    {{-- Open Graph --}}
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Blac Joyaux">
-    <meta property="og:title" content="@yield('title', 'Blac Joyaux')">
-    <meta property="og:description" content="@yield('meta_description', 'Maroquinerie féminine, héritage Ashanti.')">
-    <meta property="og:url" content="{{ url()->current() }}">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-    @stack('structured-data')
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+        .font-cormorant {
+            font-family: 'Cormorant Garamond', serif;
+        }
+    </style>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     @stack('styles')
 </head>
 <body>
-<a href="#contenu" class="skip-link">Aller au contenu</a>
 
-<header class="site-header">
-    <div class="container header-inner">
-        <a href="{{ route('home') }}" class="brand">
-            <span class="brand-mark">◈</span>
-            <span class="brand-name">Blac&nbsp;Joyaux</span>
-        </a>
+{{-- HEADER --}}
+<header class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
 
-        <nav class="main-nav" aria-label="Navigation principale">
-            <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'is-active' : '' }}">Collection</a>
-            <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'is-active' : '' }}">L'histoire</a>
-            <a href="{{ route('faq') }}" class="{{ request()->routeIs('faq') ? 'is-active' : '' }}">FAQ</a>
-        </nav>
+            <!-- Recherche (gauche) -->
+            <div class="flex-1 flex items-center gap-2 text-gray-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input type="text" placeholder="Rechercher un sac..." class="text-sm bg-transparent focus:outline-none w-full" />
+            </div>
 
-        <div class="header-actions">
-            <a href="{{ route('cart.index') }}" class="cart-link" aria-label="Panier">
-                <span class="cart-icon">🛍</span>
-                @if($cartCount > 0)
-                    <span class="cart-badge">{{ $cartCount }}</span>
-                @endif
+            <!-- Logo -->
+            <a href="{{ route('home') }}" class="font-bold text-2xl tracking-widest text-center">
+                BLAC <span class="block text-[8px] tracking-[0.4em] -mt-1 font-medium">JOYAUX</span>
             </a>
 
-            <button type="button" class="nav-toggle" id="nav-toggle"
-                    aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-nav">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
-    </div>
+            <!-- Icônes (droite) -->
+            <div class="flex-1 flex justify-end gap-6 items-center">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <a href="{{ route('cart.index') }}" class="relative">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center font-bold">0</span>
+                </a>
+                <button class="font-bold text-sm uppercase flex items-center gap-2">
+                    Menu
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
 
-    {{-- Menu mobile (déroulant) --}}
-    <nav class="mobile-nav" id="mobile-nav" aria-label="Navigation mobile" hidden>
-        <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'is-active' : '' }}">Collection</a>
-        <a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'is-active' : '' }}">L'histoire</a>
-        <a href="{{ route('faq') }}" class="{{ request()->routeIs('faq') ? 'is-active' : '' }}">FAQ</a>
-        <a href="{{ route('cart.index') }}">Panier @if($cartCount > 0)({{ $cartCount }})@endif</a>
-    </nav>
+        </div>
+
+        <!-- Navigation Secondaire -->
+        <nav class="hidden lg:flex justify-center gap-10 text-[11px] uppercase tracking-[0.2em] pb-5 font-medium">
+            <a href="{{ route('home') }}">Accueil</a>
+            <a href="{{ route('products.index') }}">Boutique</a>
+            <a href="#">Collections</a>
+            <a href="{{ route('about') }}">À propos</a>
+            <a href="{{ route('faq') }}">Contact</a>
+        </nav>
+    </div>
 </header>
 
-@if(session('success'))
-    <div class="flash flash-success container" role="status">{{ session('success') }}</div>
-@endif
-@if(session('error'))
-    <div class="flash flash-error container" role="alert">{{ session('error') }}</div>
-@endif
-
-<main id="contenu">
+{{-- CONTENU PRINCIPAL --}}
+<main id="contenu" class="pt-20">
     @yield('content')
 </main>
 
-<footer class="site-footer">
-    <div class="container footer-grid">
-        <div class="footer-brand">
-            <span class="brand-mark">◈</span>
-            <p class="footer-tagline">L'élégance qui raconte une histoire. Maroquinerie féminine inspirée de l'héritage Ashanti, façonnée à Abidjan.</p>
-        </div>
-        <div>
-            <h3>Boutique</h3>
-            <ul>
-                <li><a href="{{ route('products.index') }}">Collection</a></li>
-                <li><a href="{{ route('about') }}">Notre histoire</a></li>
-                <li><a href="{{ route('faq') }}">Questions fréquentes</a></li>
-            </ul>
-        </div>
-        <div>
-            <h3>Nous joindre</h3>
-            <ul>
-                <li><a href="https://wa.me/{{ $brandWhatsapp }}" target="_blank" rel="noopener">WhatsApp</a></li>
-                <li>Cocody Palmeraie, Abidjan</li>
-                <li>Livraison 3–5 jours</li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom container">
-        <p>© {{ date('Y') }} Blac Joyaux — Projet pédagogique IFRAN (Groupe 8). Marque fondée par Manuela Kouadio.</p>
-    </div>
+{{-- FOOTER --}}
+<footer class="mt-20 border-t p-10 text-center text-sm text-gray-500">
+    © {{ date('Y') }} Blac Joyaux — Made in Côte d'Ivoire 🇨🇮
 </footer>
 
-{{-- Widget assistant IA (présent sur toutes les pages) --}}
-@include('partials.chat-widget')
-
-<script src="{{ asset('js/chat.js') }}"></script>
-<script>
-    // Menu mobile (burger)
-    (function () {
-        const toggle = document.getElementById('nav-toggle');
-        const menu = document.getElementById('mobile-nav');
-        if (!toggle || !menu) return;
-        toggle.addEventListener('click', function () {
-            const open = menu.hasAttribute('hidden');
-            if (open) {
-                menu.removeAttribute('hidden');
-                toggle.setAttribute('aria-expanded', 'true');
-                toggle.classList.add('is-open');
-            } else {
-                menu.setAttribute('hidden', '');
-                toggle.setAttribute('aria-expanded', 'false');
-                toggle.classList.remove('is-open');
-            }
-        });
-    })();
-</script>
-@stack('scripts')
 </body>
 </html>
