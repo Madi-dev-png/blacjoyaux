@@ -1,217 +1,204 @@
 @extends('layouts.shop')
 
-@section('title', 'BLAC — Maroquinerie féminine')
+@section('title', 'Blac Joyaux — L\'avenir en main')
+@section('meta_description', "Blac Joyaux : sacs à main inspirés de l'héritage Ashanti, façonnés à Abidjan. Livraison 1 à 3 jours, commande via WhatsApp.")
 
 @section('content')
 
-{{-- ============================================================
-     HERO - "MADE IN CÔTE D'IVOIRE" + "L'AVENIR EN MAIN"
-============================================================ --}}
-<section class="relative min-h-[85vh] flex items-end bg-gray-900 overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-stone-800 to-amber-950"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 md:pb-24 w-full">
-        <p class="text-xs tracking-[0.3em] uppercase text-amber-400 font-inter mb-4">Made in Côte d'Ivoire</p>
-        <h1 class="font-cormorant font-bold text-white leading-none mb-8">
-            <span class="block text-5xl md:text-7xl lg:text-8xl tracking-tight">L'AVENIR</span>
-            <span class="block text-5xl md:text-7xl lg:text-8xl tracking-tight">EN MAIN</span>
-        </h1>
-        <a href="{{ route('products.index') }}" class="inline-block border border-white text-white text-xs tracking-[0.2em] uppercase px-7 py-3 hover:bg-white hover:text-gray-900 transition-all duration-300 font-inter font-medium">
-            Découvrir
-        </a>
+{{-- HERO --}}
+<section class="promo-hero">
+    <div class="container">
+        <p class="promo-eyebrow">Made in Côte d'Ivoire</p>
+        <h1>L'AVENIR<strong>EN MAIN</strong></h1>
+        <a href="{{ route('products.index') }}" class="btn-ghost-light">Découvrir</a>
     </div>
 </section>
 
-{{-- ============================================================
-     BANDE DE PROMESSES - Couleur #e9e4f0
-============================================================ --}}
-<section class="py-6" style="background-color: #e9e4f0;">
-    <div class="max-w-7xl mx-auto px-4">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-[10px] font-bold uppercase tracking-widest text-gray-800">
-
-            <div class="flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-                Livraison 1 à 3 jours
-            </div>
-
-            <div class="flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
-                </svg>
-                Artisanat Premium
-            </div>
-
-            <div class="flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-                </svg>
-                Mobile Money accepté
-            </div>
-
-            <div class="flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                </svg>
-                Commander via WhatsApp
-            </div>
-
-        </div>
+{{-- BARRE AVANTAGES --}}
+<div class="perks-bar">
+    <div class="container">
+        <div class="perk"><span class="ico">📍</span> Livraison 1 à 3 jours</div>
+        <div class="perk"><span class="ico">★</span> Artisanat premium</div>
+        <div class="perk"><span class="ico">💳</span> Mobile money accepté</div>
+        <div class="perk"><span class="ico">💬</span> Commander via WhatsApp</div>
     </div>
-</section>
+</div>
 
-{{-- ============================================================
-     BEST-SELLER - "Collection JOYAU DE BLA"
-============================================================ --}}
-<section class="py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        <div class="text-center mb-12">
-            <span class="text-xs tracking-[0.3em] uppercase text-amber-700 font-inter">Best-Seller</span>
-            <h2 class="font-cormorant text-4xl md:text-5xl font-bold text-gray-900 mt-1">Collection JOYAU DE BLA</h2>
+{{-- BEST-SELLER : COLLECTION JOYAU DE BLA --}}
+<section class="nh-section">
+    <div class="container">
+        <div class="nh-section-head">
+            <span class="nh-eyebrow">Best-seller</span>
+            <h2>Collection <strong>JOYAU DE BLA</strong></h2>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-
+        <div class="nh-product-grid">
             @php
-                $products = $products ?? [
-                    ['name' => 'JOYAU DE BLA', 'price' => '65 000 FCFA', 'badge' => 'Best-Seller'],
-                    ['name' => 'JOYAU DE BLA', 'price' => '65 000 FCFA', 'badge' => 'Best-Seller'],
-                    ['name' => 'JOYAU DE BLA', 'price' => '65 000 FCFA', 'badge' => 'Best-Seller'],
-                    ['name' => 'JOYAU DE BLA', 'price' => '65 000 FCFA', 'badge' => 'Best-Seller'],
+                $joyauItems = [
+                    ['badge' => true],
+                    ['badge' => true],
+                    ['badge' => false],
+                    ['badge' => false],
                 ];
             @endphp
-
-            @foreach($products as $product)
-            <div>
-                <div class="aspect-square bg-gray-100 mb-3 flex items-center justify-center text-gray-400">
-                    <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
-                </div>
-                <div class="flex items-start justify-between">
-                    <div>
-                        <span class="text-[10px] tracking-widest uppercase text-amber-700 font-medium">{{ $product['badge'] }}</span>
-                        <p class="font-semibold text-sm">{{ $product['name'] }}</p>
-                        <p class="text-sm font-bold text-gray-900">{{ $product['price'] }}</p>
+            @foreach($joyauItems as $item)
+                <div class="nh-product-card">
+                    <div class="nh-product-thumb">
+                        @if($item['badge'])
+                            <span class="nh-badge">Best-seller</span>
+                        @endif
+                        <span class="placeholder-ico">◈</span>
                     </div>
-                    <a href="#" class="text-xs font-medium text-amber-800 hover:underline">Voir</a>
+                    <div class="nh-product-name">Joyau de Bla</div>
+                    <div class="nh-product-price">65 000 FCFA</div>
+                    <a href="{{ route('products.index') }}" class="btn-outline-dark">Voir la collection</a>
                 </div>
-            </div>
             @endforeach
-
-        </div>
-
-        <div class="text-center mt-10">
-            <a href="#" class="inline-block border border-gray-900 text-gray-900 text-xs tracking-[0.2em] uppercase px-6 py-3 hover:bg-gray-900 hover:text-white transition-all duration-300 font-inter font-medium">
-                VOIR LA COLLECTION
-            </a>
         </div>
     </div>
 </section>
 
-{{-- ============================================================
-     ADRESSE + NOUVEAUTÉ
-============================================================ --}}
-<section class="py-16 bg-gray-50 border-t border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-
-        <!-- Carte / Adresse -->
-        <div class="bg-white p-8 border border-gray-200 shadow-sm">
-            <div class="flex items-start gap-4">
-                <svg class="w-8 h-8 text-amber-700 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-                <div>
-                    <p class="font-bold text-gray-900 text-lg">COCODY PALMERAIE, ABIDJAN</p>
-                    <p class="text-sm text-gray-500 mt-1">Nous rende visite</p>
-                    <a href="#" class="inline-block mt-3 text-xs font-medium text-amber-800 border-b border-amber-800 pb-0.5">Voir sur la carte →</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Nouveauté -->
-        <div class="bg-amber-50 p-8 border border-amber-200 shadow-sm flex items-center justify-between">
-            <div>
-                <span class="text-[10px] tracking-widest uppercase text-amber-700 font-bold">Nouveauté</span>
-                <p class="font-cormorant text-3xl font-bold text-gray-900">Collection DO</p>
-                <p class="text-sm text-gray-600 mt-1">Édition limitée</p>
-            </div>
-            <svg class="w-12 h-12 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-        </div>
-
+{{-- SHOWROOM --}}
+<section class="showroom-banner">
+    <div class="container">
+        <span class="nh-eyebrow">Showroom</span>
+        <h2>Cocody Palmeraie, Abidjan</h2>
+        <a href="{{ route('about') }}" class="btn-ghost-light">Nous rendre visite</a>
     </div>
 </section>
 
-{{-- ============================================================
-     TÉMOIGNAGES - "Nos Clientes"
-============================================================ --}}
-<section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <p class="text-xs tracking-[0.3em] uppercase text-amber-700 font-inter mb-2">Elles témoignent</p>
-            <h2 class="font-cormorant text-4xl md:text-5xl font-bold text-gray-900">Nos Clientes</h2>
+{{-- COLLECTION DO --}}
+<section class="nh-section">
+    <div class="container">
+        <div class="nh-section-head">
+            <span class="nh-eyebrow">Nouveauté</span>
+            <h2><strong>COLLECTION DO</strong></h2>
+            <p class="subtitle">Élégance ivoirienne, portée avec héritage</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-            @php
-                $testimonials = $testimonials ?? [
-                    [
-                        'initials' => 'AM',
-                        'name' => 'Awa M.',
-                        'location' => 'Abidjan',
-                        'text' => 'La qualité du cuir est exceptionnelle. Mon sac Joyau de Bla m\'accompagne partout, au bureau comme en soirée. Une vraie fierté ivoirienne.',
-                    ],
-                    [
-                        'initials' => 'SK',
-                        'name' => 'Sarah K.',
-                        'location' => 'Dakar',
-                        'text' => 'Service client impeccable et livraison rapide. Le design est épuré et chic. Je recommande vivement cette marque à toutes mes amies.',
-                    ],
-                    [
-                        'initials' => 'FT',
-                        'name' => 'Fatou T.',
-                        'location' => 'Paris',
-                        'text' => 'Les finitions sont parfaites. On sent vraiment le savoir-faire artisanal. C\'est mon troisième achat et je suis toujours aussi satisfaite.',
-                    ],
-                ];
-            @endphp
-
-            @foreach($testimonials as $t)
-            <div class="bg-gray-50 p-8 border border-gray-100 shadow-sm">
-                <div class="flex gap-0.5 mb-5">
-                    @for($i = 0; $i < 5; $i++)
-                        <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292Z"/>
-                        </svg>
-                    @endfor
+        <div class="do-grid">
+            <div class="do-item do-1">
+                <div class="do-item-text">
+                    <div class="name">Sac Bureau DO</div>
+                    <div class="price">70 000 FCFA</div>
                 </div>
+            </div>
+            <div class="do-item do-2">
+                <div class="do-item-text">
+                    <div class="name">DO Clutch</div>
+                    <div class="price">75 000 FCFA</div>
+                </div>
+            </div>
+            <div class="do-item do-3">
+                <div class="do-item-text">
+                    <div class="name">DO Mini</div>
+                    <div class="price">75 000 FCFA</div>
+                </div>
+            </div>
+            <div class="do-item do-4">
+                <div class="do-item-text">
+                    <div class="name">DO Tote</div>
+                    <div class="price">75 000 FCFA</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-                <p class="text-sm text-gray-600 leading-relaxed mb-6 font-inter">
-                    "{{ $t['text'] }}"
-                </p>
+{{-- COLLECTION CAPSULE --}}
+<section class="nh-section capsule-section">
+    <div class="container">
+        <div class="nh-section-head">
+            <span class="nh-eyebrow">Exclusivité</span>
+            <h2><strong>Collection CAPSULE</strong></h2>
+            <p class="subtitle">2 à 3 modèles exclusifs</p>
+        </div>
 
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-full bg-amber-700 text-white flex items-center justify-center text-xs font-bold font-inter">
-                        {{ $t['initials'] }}
-                    </div>
+        <div class="capsule-grid">
+            <div class="capsule-card">
+                <div class="capsule-thumb"><span class="placeholder-ico">◈</span></div>
+                <h3>GYE NYAME ÉLAN</h3>
+                <div class="subt">Sac bureau femme</div>
+                <div class="price">55 000 FCFA</div>
+                <a href="https://wa.me/{{ $brandWhatsapp }}" target="_blank" rel="noopener" class="btn-whatsapp-block">Commander via WhatsApp</a>
+            </div>
+            <div class="capsule-card">
+                <div class="capsule-thumb"><span class="placeholder-ico">◈</span></div>
+                <h3>GYE NYAME LEGACY</h3>
+                <div class="subt">Sac bureau homme</div>
+                <div class="price">60 000 FCFA</div>
+                <a href="https://wa.me/{{ $brandWhatsapp }}" target="_blank" rel="noopener" class="btn-whatsapp-block">Commander via WhatsApp</a>
+            </div>
+            <div class="capsule-card">
+                <div class="capsule-thumb"><span class="placeholder-ico">◈</span></div>
+                <h3>GYE NYAME HORIZON</h3>
+                <div class="subt">Sac lifestyle unisexe</div>
+                <div class="price">60 000 FCFA</div>
+                <a href="https://wa.me/{{ $brandWhatsapp }}" target="_blank" rel="noopener" class="btn-whatsapp-block">Commander via WhatsApp</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- POUR LA FEMME / POUR L'HOMME --}}
+<div class="split-banner">
+    <div class="split-panel femme">
+        <div>
+            <h3>Pour la femme</h3>
+            <a href="{{ route('products.index') }}" class="btn-ghost-light">Nous rendre visite</a>
+        </div>
+    </div>
+    <div class="split-panel homme">
+        <div>
+            <h3>Pour l'homme</h3>
+            <a href="{{ route('products.index') }}" class="btn-ghost-light">Nous rendre visite</a>
+        </div>
+    </div>
+</div>
+
+{{-- TÉMOIGNAGES --}}
+<section class="nh-section testimonials-section">
+    <div class="container">
+        <div class="nh-section-head">
+            <span class="nh-eyebrow">Elles témoignent</span>
+            <h2>Nos <strong>CLIENTES</strong></h2>
+        </div>
+
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="quote">"La qualité du cuir est exceptionnelle. Mon sac Joyau de Bla m'accompagne partout, au bureau comme en soirée. Une vraie fierté ivoirienne."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">AM</div>
                     <div>
-                        <p class="text-sm font-semibold text-gray-900 font-inter">{{ $t['name'] }}</p>
-                        <p class="text-xs text-gray-400 font-inter">{{ $t['location'] }}</p>
+                        <div class="name">Awa M.</div>
+                        <div class="loc">Abidjan</div>
                     </div>
                 </div>
             </div>
-            @endforeach
-
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="quote">"Service client impeccable et livraison rapide. Le design est épuré et chic. Je recommande vivement cette marque à toutes mes amies."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">SK</div>
+                    <div>
+                        <div class="name">Sarah K.</div>
+                        <div class="loc">Dakar</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="quote">"Les finitions sont parfaites. On sent vraiment le savoir-faire artisanal. C'est mon troisième achat et je suis toujours aussi satisfaite."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">FT</div>
+                    <div>
+                        <div class="name">Fatou T.</div>
+                        <div class="loc">Paris</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
-
 @endsection
