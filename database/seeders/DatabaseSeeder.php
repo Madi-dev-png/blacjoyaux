@@ -31,31 +31,38 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Pochettes',    'description' => 'Pochettes élégantes pour vos soirées.'],
             ['name' => 'Cabas',        'description' => 'Grands sacs pour le quotidien.'],
             ['name' => 'Bandoulières', 'description' => 'Sacs bandoulière pratiques et chics.'],
-        ])->map(fn ($c) => Category::create([
-            'name' => $c['name'],
-            'slug' => Str::slug($c['name']),
-            'description' => $c['description'],
-        ]));
+        ])->map(fn ($c) => Category::updateOrCreate(
+            ['slug' => Str::slug($c['name'])],
+            ['name' => $c['name'], 'description' => $c['description']]
+        ));
 
         $seo = app(SeoService::class);
 
         // ---- Produits de démonstration ----
         $products = [
-            ['Sac Akua\'ba',        'Sacs à main',  72000, 'Sac à main structuré inspiré de la poupée Ashanti.', 'Pièce phare de la maison, le sac Akua\'ba rend hommage à la poupée de fécondité Ashanti. Cuir grainé, fermoir doré, anse rigide.', 'Or', 'Cuir grainé', true, 8],
-            ['Pochette Kente',      'Pochettes',    38000, 'Pochette de soirée aux motifs inspirés du tissu Kente.', 'Une pochette raffinée qui capte la lumière. Parfaite pour vos sorties et cérémonies.', 'Multicolore', 'Cuir verni', true, 12],
-            ['Cabas Adinkra',       'Cabas',        65000, 'Grand cabas du quotidien, symboles Adinkra discrets.', 'Spacieux et élégant, le cabas Adinkra vous accompagne partout. Doublure intérieure, poche zippée.', 'Terre cuite', 'Cuir souple', true, 6],
-            ['Bandoulière Bla',     'Bandoulières', 45000, 'Sac bandoulière compact et féminin.', 'Le compagnon idéal des journées chargées. Bandoulière ajustable, format compact.', 'Aubergine', 'Cuir lisse', true, 10],
-            ['Sac Joyaux Royal',    'Sacs à main',  89000, 'Notre sac le plus prestigieux, finitions dorées.', 'L\'excellence Blac Joyaux. Un sac d\'exception aux finitions soignées, pour les grandes occasions.', 'Noir & or', 'Cuir premium', true, 4],
-            ['Pochette Soirée Or',  'Pochettes',    42000, 'Pochette dorée pour vos événements.', 'Brillez en soirée avec cette pochette dorée à la chaîne amovible.', 'Or', 'Satin & cuir', true, 7],
-            ['Cabas Abidjan',       'Cabas',        58000, 'Cabas léger et résistant pour la ville.', 'Pensé pour le rythme d\'Abidjan : léger, résistant, élégant.', 'Camel', 'Toile enduite', true, 9],
-            ['Sac Mini Bla',        'Sacs à main',  52000, 'Version mini de notre best-seller.', 'Tout le charme du sac Bla dans un format mini, ultra tendance.', 'Rose poudré', 'Cuir grainé', false, 5],
+            // --- Joyau de Bla (4) ---
+            ['Sac Akua\'ba',        'Sacs à main',  'joyau_de_bla', 72000, 'Sac à main structuré inspiré de la poupée Ashanti.', 'Pièce phare de la maison, le sac Akua\'ba rend hommage à la poupée de fécondité Ashanti. Cuir grainé, fermoir doré, anse rigide.', 'Or', 'Cuir grainé', true, 8],
+            ['Sac Joyaux Royal',    'Sacs à main',  'joyau_de_bla', 89000, 'Notre sac le plus prestigieux, finitions dorées.', 'L\'excellence Blac Joyaux. Un sac d\'exception aux finitions soignées, pour les grandes occasions.', 'Noir & or', 'Cuir premium', true, 4],
+            ['Sac Mini Bla',        'Sacs à main',  'joyau_de_bla', 52000, 'Version mini de notre best-seller.', 'Tout le charme du sac Bla dans un format mini, ultra tendance.', 'Rose poudré', 'Cuir grainé', false, 5],
+            ['Sac Bureau Awura',    'Sacs à main',  'joyau_de_bla', 78000, 'Sac de bureau structuré, format A4.', 'Pensé pour les femmes actives : compartiment ordinateur, format A4, finitions soignées.', 'Marron foncé', 'Cuir grainé', true, 6],
+
+            // --- Collection DO (4) ---
+            ['Cabas Adinkra',       'Cabas',        'collection_do', 65000, 'Grand cabas du quotidien, symboles Adinkra discrets.', 'Spacieux et élégant, le cabas Adinkra vous accompagne partout. Doublure intérieure, poche zippée.', 'Terre cuite', 'Cuir souple', true, 6],
+            ['Bandoulière Bla',     'Bandoulières', 'collection_do', 45000, 'Sac bandoulière compact et féminin.', 'Le compagnon idéal des journées chargées. Bandoulière ajustable, format compact.', 'Aubergine', 'Cuir lisse', true, 10],
+            ['Cabas Abidjan',       'Cabas',        'collection_do', 58000, 'Cabas léger et résistant pour la ville.', 'Pensé pour le rythme d\'Abidjan : léger, résistant, élégant.', 'Camel', 'Toile enduite', true, 9],
+            ['Cabas Bingerville',   'Cabas',        'collection_do', 62000, 'Cabas tressé, esprit artisanal.', "Un cabas au tressage artisanal, doublure intérieure et anses renforcées pour le quotidien.", 'Beige', 'Cuir tressé', true, 5],
+
+            // --- Capsule (3) ---
+            ['Pochette Kente',      'Pochettes',    'capsule', 38000, 'Pochette de soirée aux motifs inspirés du tissu Kente.', 'Une pochette raffinée qui capte la lumière. Parfaite pour vos sorties et cérémonies.', 'Multicolore', 'Cuir verni', true, 12],
+            ['Pochette Soirée Or',  'Pochettes',    'capsule', 42000, 'Pochette dorée pour vos événements.', 'Brillez en soirée avec cette pochette dorée à la chaîne amovible.', 'Or', 'Satin & cuir', true, 7],
+            ['Pochette Nyame',      'Pochettes',    'capsule', 35000, 'Mini pochette du soir avec chaîne dorée.', 'Compacte et raffinée, parfaite pour une soirée. Chaîne amovible, fermoir doré.', 'Noir', 'Cuir verni', false, 8],
         ];
 
         foreach ($products as $p) {
-            [$name, $catName, $price, $short, $desc, $color, $material, $featured, $stock] = $p;
+            [$name, $catName, $collection, $price, $short, $desc, $color, $material, $featured, $stock] = $p;
             $category = $categories->firstWhere('name', $catName);
 
-            $slug = $seo->generateSlug($name);
+            $slug = Str::slug($name);
             $metaTitle = $seo->generateMetaTitle($name, $catName);
             $metaDesc = $seo->generateMetaDescription($name, $short, $price);
             $score = $seo->score([
@@ -64,22 +71,25 @@ class DatabaseSeeder extends Seeder
                 'description' => $desc,
             ]);
 
-            Product::create([
-                'category_id' => $category?->id,
-                'name' => $name,
-                'slug' => $slug,
-                'short_description' => $short,
-                'description' => $desc,
-                'price' => $price,
-                'stock' => $stock,
-                'color' => $color,
-                'material' => $material,
-                'is_active' => true,
-                'is_featured' => $featured,
-                'meta_title' => $metaTitle,
-                'meta_description' => $metaDesc,
-                'seo_score' => $score['score'],
-            ]);
+            Product::updateOrCreate(
+                ['slug' => $slug],
+                [
+                    'category_id' => $category?->id,
+                    'collection' => $collection,
+                    'name' => $name,
+                    'short_description' => $short,
+                    'description' => $desc,
+                    'price' => $price,
+                    'stock' => $stock,
+                    'color' => $color,
+                    'material' => $material,
+                    'is_active' => true,
+                    'is_featured' => $featured,
+                    'meta_title' => $metaTitle,
+                    'meta_description' => $metaDesc,
+                    'seo_score' => $score['score'],
+                ]
+            );
         }
 
         // ---- FAQ de démonstration ----
@@ -95,13 +105,15 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($faqs as $f) {
-            Faq::create([
-                'question' => $f[0],
-                'answer' => $f[1],
-                'category' => $f[2],
-                'sort_order' => $f[3],
-                'is_active' => true,
-            ]);
+            Faq::updateOrCreate(
+                ['question' => $f[0]],
+                [
+                    'answer' => $f[1],
+                    'category' => $f[2],
+                    'sort_order' => $f[3],
+                    'is_active' => true,
+                ]
+            );
         }
     }
 }

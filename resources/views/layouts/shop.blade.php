@@ -56,9 +56,7 @@
                     <path d="M3 6h18"/>
                     <path d="M16 10a4 4 0 0 1-8 0"/>
                 </svg>
-                @if($cartCount > 0)
-                    <span class="nh-badge">{{ $cartCount }}</span>
-                @endif
+                <span class="nh-badge">{{ $cartCount }}</span>
             </a>
             <button type="button" class="nav-toggle" id="nav-toggle"
                     aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-nav">

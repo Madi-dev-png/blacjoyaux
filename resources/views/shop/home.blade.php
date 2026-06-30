@@ -60,13 +60,15 @@
 
 {{-- SHOWROOM --}}
 <section class="showroom-banner">
+    <video class="showroom-video" autoplay muted loop playsinline poster="{{ asset('images/showroom-poster.jpg') }}">
+        <source src="{{ asset('videos/showroom.mp4') }}" type="video/mp4">
+    </video>
     <div class="container">
         <span class="nh-eyebrow">Showroom</span>
         <h2>Cocody Palmeraie, Abidjan</h2>
         <a href="{{ route('about') }}" class="btn-ghost-light">Nous rendre visite</a>
     </div>
 </section>
-
 {{-- COLLECTION DO --}}
 <section class="nh-section">
     <div class="container">
@@ -92,12 +94,6 @@
             <div class="do-item do-3">
                 <div class="do-item-text">
                     <div class="name">DO Mini</div>
-                    <div class="price">75 000 FCFA</div>
-                </div>
-            </div>
-            <div class="do-item do-4">
-                <div class="do-item-text">
-                    <div class="name">DO Tote</div>
                     <div class="price">75 000 FCFA</div>
                 </div>
             </div>

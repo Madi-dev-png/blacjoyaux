@@ -14,8 +14,8 @@ class ProductController extends Controller
         $categories = Category::all();
 
         $products = Product::active()
-            ->when($request->category, function ($q) use ($request) {
-                $q->whereHas('category', fn ($c) => $c->where('slug', $request->category));
+            ->when($request->collection, function ($q) use ($request) {
+                $q->where('collection', $request->collection);
             })
             ->when($request->search, function ($q) use ($request) {
                 $q->where('name', 'like', '%'.$request->search.'%');
@@ -23,7 +23,7 @@ class ProductController extends Controller
             ->when($request->sort === 'price_asc', fn ($q) => $q->orderBy('price'))
             ->when($request->sort === 'price_desc', fn ($q) => $q->orderByDesc('price'))
             ->when(! $request->sort || $request->sort === 'recent', fn ($q) => $q->latest())
-            ->paginate(9)
+            ->paginate(11)
             ->withQueryString();
 
         return view('shop.collection', compact('products', 'categories'));
