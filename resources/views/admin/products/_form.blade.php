@@ -46,6 +46,21 @@
             </div>
         </div>
 
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;">
+            <div class="field">
+                <label for="dimensions">Dimensions</label>
+                <input type="text" id="dimensions" name="dimensions" value="{{ old('dimensions', $product->dimensions) }}" placeholder="27 cm x 16 cm x 11 cm" style="width:100%;">
+            </div>
+            <div class="field">
+                <label for="closure">Fermeture</label>
+                <input type="text" id="closure" name="closure" value="{{ old('closure', $product->closure) }}" placeholder="Broche en métal doré" style="width:100%;">
+            </div>
+            <div class="field">
+                <label for="lining">Doublure</label>
+                <input type="text" id="lining" name="lining" value="{{ old('lining', $product->lining) }}" placeholder="Gabardine 100% coton" style="width:100%;">
+            </div>
+        </div>
+
         <div class="field">
             <label for="short_description">Description courte</label>
             <input type="text" id="short_description" name="short_description" value="{{ old('short_description', $product->short_description) }}" maxlength="300" style="width:100%;">

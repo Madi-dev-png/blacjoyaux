@@ -61,7 +61,7 @@
 {{-- SHOWROOM --}}
 <section class="showroom-banner">
     <video class="showroom-video" autoplay muted loop playsinline poster="{{ asset('images/showroom-poster.jpg') }}">
-        <source src="{{ asset('videos/showroom.mp4') }}" type="video/mp4">
+        <source src="{{ asset('videos/howroom.mp4') }}" type="video/mp4">
     </video>
     <div class="container">
         <span class="nh-eyebrow">Showroom</span>

@@ -37,9 +37,23 @@ class ProductController extends Controller
         $related = Product::active()
             ->where('id', '!=', $product->id)
             ->when($product->category_id, fn ($q) => $q->where('category_id', $product->category_id))
+            ->inRandomOrder()
             ->take(4)
             ->get();
 
-        return view('shop.product', compact('product', 'related'));
+        $colorSiblings = Product::active()
+            ->where('collection', $product->collection)
+            ->orderBy('id')
+            ->take(5)
+            ->get();
+
+        $collectionLabels = [
+            'joyau_de_bla'  => 'Joyau de Bla',
+            'collection_do' => 'Collection DO',
+            'capsule'       => 'Capsule',
+        ];
+        $collectionLabel = $collectionLabels[$product->collection] ?? null;
+
+        return view('shop.product', compact('product', 'related', 'colorSiblings', 'collectionLabel'));
     }
 }

@@ -50,7 +50,7 @@ class CheckoutController extends Controller
             'shipping_address' => 'required|string|max:500',
             'city'             => 'required|string|max:120',
             'delivery_method'  => 'required|in:abidjan,interieur,retrait',
-            'payment_method'   => 'required|in:a_la_livraison,wave,orange_money',
+            'payment_method'   => 'required|in:a_la_livraison,wave,orange_money,mtn_momo',
             'notes'            => 'nullable|string|max:1000',
         ]);
 

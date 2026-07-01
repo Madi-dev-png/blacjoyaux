@@ -14,10 +14,10 @@ class Product extends Model
    protected $fillable = [
         'category_id', 'collection', 'name', 'slug', 'short_description', 'description',
         'price', 'stock', 'image', 'gallery', 'color', 'material',
+        'dimensions', 'closure', 'lining',
         'is_active', 'is_featured',
         'meta_title', 'meta_description', 'seo_score',
     ];
-
     protected $casts = [
         'gallery' => 'array',
         'is_active' => 'boolean',
@@ -56,5 +56,28 @@ class Product extends Model
     public function scopeFeatured(Builder $query): Builder
     {
         return $query->where('is_featured', true);
+    }
+
+    /** Convertit le champ texte "color" (ex: "Vert", "Noir & doré") en code hexadécimal pour affichage. */
+    public function getColorHexAttribute(): string
+    {
+        $map = [
+            'noir' => '#1a1a1a', 'blanc' => '#f5f5f5', 'rouge' => '#b3261e',
+            'vert' => '#3d6b4f', 'bleu' => '#2b4b7e', 'jaune' => '#e0b23a',
+            'orange' => '#d16a2c', 'marron' => '#5c3d2e', 'beige' => '#d8c6a8',
+            'camel' => '#b98a52', 'or' => '#c8902f', 'doré' => '#c8902f',
+            'dore' => '#c8902f', 'bordeaux' => '#5e1f2e', 'aubergine' => '#3f2436',
+            'rose' => '#e0a1b0', 'gris' => '#8a8a8a', 'cognac' => '#9a5b2e',
+            'croco' => '#5c3d2e', 'terre cuite' => '#b5622f', 'émeraude' => '#1f6b4f',
+        ];
+
+        $name = strtolower($this->color ?? '');
+        foreach ($map as $key => $hex) {
+            if (str_contains($name, $key)) {
+                return $hex;
+            }
+        }
+
+        return '#cccccc'; // couleur par défaut si non reconnue
     }
 }

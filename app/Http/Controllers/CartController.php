@@ -15,7 +15,15 @@ class CartController extends Controller
         $items = $this->cart->items();
         $subtotal = $this->cart->subtotal();
 
-        return view('shop.cart', compact('items', 'subtotal'));
+        $cartProductIds = collect($items)->pluck('product.id');
+
+        $suggestions = \App\Models\Product::active()
+            ->whereNotIn('id', $cartProductIds)
+            ->inRandomOrder()
+            ->take(3)
+            ->get();
+
+        return view('shop.cart', compact('items', 'subtotal', 'suggestions'));
     }
 
     public function add(Request $request, Product $product)

@@ -39,23 +39,23 @@ class DatabaseSeeder extends Seeder
         $seo = app(SeoService::class);
 
         // ---- Produits de démonstration ----
-        $products = [
-            // --- Joyau de Bla (4) ---
-            ['Sac Akua\'ba',        'Sacs à main',  'joyau_de_bla', 72000, 'Sac à main structuré inspiré de la poupée Ashanti.', 'Pièce phare de la maison, le sac Akua\'ba rend hommage à la poupée de fécondité Ashanti. Cuir grainé, fermoir doré, anse rigide.', 'Or', 'Cuir grainé', true, 8],
-            ['Sac Joyaux Royal',    'Sacs à main',  'joyau_de_bla', 89000, 'Notre sac le plus prestigieux, finitions dorées.', 'L\'excellence Blac Joyaux. Un sac d\'exception aux finitions soignées, pour les grandes occasions.', 'Noir & or', 'Cuir premium', true, 4],
-            ['Sac Mini Bla',        'Sacs à main',  'joyau_de_bla', 52000, 'Version mini de notre best-seller.', 'Tout le charme du sac Bla dans un format mini, ultra tendance.', 'Rose poudré', 'Cuir grainé', false, 5],
-            ['Sac Bureau Awura',    'Sacs à main',  'joyau_de_bla', 78000, 'Sac de bureau structuré, format A4.', 'Pensé pour les femmes actives : compartiment ordinateur, format A4, finitions soignées.', 'Marron foncé', 'Cuir grainé', true, 6],
+       $products = [
+            // --- Joyau de Bla (4) — Best-seller ---
+            ['Sac à main – Nouvelle version – Noir avec Bijoux Doré', 'Sacs à main', 'joyau_de_bla', 50000, 'Sac à main structuré, finitions dorées.', 'La nouvelle version de notre sac signature, en cuir noir rehaussé de bijoux dorés. Une pièce intemporelle et raffinée.', 'Noir & doré', 'Cuir grainé', true, 8],
+            ['Sac à main – Nouvelle version – Vert',                 'Sacs à main', 'joyau_de_bla', 50000, 'Sac à main coloré, nouvelle version.', 'Un coloris vert éclatant pour twister votre style avec élégance et caractère.', 'Vert', 'Cuir grainé', true, 6],
+            ['Sac à main – Nouvelle version – Rouge',                'Sacs à main', 'joyau_de_bla', 50000, 'Sac à main coloré, nouvelle version.', 'Un rouge intense qui affirme votre personnalité, pour un look qui ne passe pas inaperçu.', 'Rouge', 'Cuir grainé', false, 6],
+            ['Sac à main – Nouvelle version – Orange',               'Sacs à main', 'joyau_de_bla', 50000, 'Sac à main coloré, nouvelle version.', 'Une touche d\'orange vibrant, parfaite pour illuminer toutes vos tenues.', 'Orange', 'Cuir grainé', false, 5],
 
-            // --- Collection DO (4) ---
-            ['Cabas Adinkra',       'Cabas',        'collection_do', 65000, 'Grand cabas du quotidien, symboles Adinkra discrets.', 'Spacieux et élégant, le cabas Adinkra vous accompagne partout. Doublure intérieure, poche zippée.', 'Terre cuite', 'Cuir souple', true, 6],
-            ['Bandoulière Bla',     'Bandoulières', 'collection_do', 45000, 'Sac bandoulière compact et féminin.', 'Le compagnon idéal des journées chargées. Bandoulière ajustable, format compact.', 'Aubergine', 'Cuir lisse', true, 10],
-            ['Cabas Abidjan',       'Cabas',        'collection_do', 58000, 'Cabas léger et résistant pour la ville.', 'Pensé pour le rythme d\'Abidjan : léger, résistant, élégant.', 'Camel', 'Toile enduite', true, 9],
-            ['Cabas Bingerville',   'Cabas',        'collection_do', 62000, 'Cabas tressé, esprit artisanal.', "Un cabas au tressage artisanal, doublure intérieure et anses renforcées pour le quotidien.", 'Beige', 'Cuir tressé', true, 5],
+            // --- Collection DO (4) — Nouveauté ---
+            ['Sac à main – Collection DO – Cuir Marron (avec boucle)', 'Sacs à main', 'collection_do', 50000, 'Sac à main en cuir marron avec boucle décorative.', 'Un sac élégant en cuir marron véritable, orné d\'une boucle qui apporte du caractère à chaque tenue.', 'Marron', 'Cuir véritable', true, 7],
+            ['Sac à main – Collection DO – Cuir Marron',               'Sacs à main', 'collection_do', 50000, 'Sac à main en cuir marron, ligne épurée.', 'La sobriété du cuir marron dans une ligne épurée, pour un usage quotidien élégant.', 'Marron', 'Cuir véritable', true, 6],
+            ['Sac à main – Collection DO – Croco Lézard',              'Sacs à main', 'collection_do', 70000, 'Sac à main effet croco/lézard, finition premium.', 'Un effet croco-lézard qui sublime ce sac au design contemporain, pour une allure sophistiquée.', 'Marron croco', 'Cuir effet croco', true, 4],
+            ['DO Tote',                                                'Cabas',       'collection_do', 75000, 'Cabas Tote spacieux, cuir souple.', 'Le tote bag DO, spacieux et pratique, taillé pour accompagner vos journées chargées avec style.', 'Camel', 'Cuir souple', true, 5],
 
-            // --- Capsule (3) ---
-            ['Pochette Kente',      'Pochettes',    'capsule', 38000, 'Pochette de soirée aux motifs inspirés du tissu Kente.', 'Une pochette raffinée qui capte la lumière. Parfaite pour vos sorties et cérémonies.', 'Multicolore', 'Cuir verni', true, 12],
-            ['Pochette Soirée Or',  'Pochettes',    'capsule', 42000, 'Pochette dorée pour vos événements.', 'Brillez en soirée avec cette pochette dorée à la chaîne amovible.', 'Or', 'Satin & cuir', true, 7],
-            ['Pochette Nyame',      'Pochettes',    'capsule', 35000, 'Mini pochette du soir avec chaîne dorée.', 'Compacte et raffinée, parfaite pour une soirée. Chaîne amovible, fermoir doré.', 'Noir', 'Cuir verni', false, 8],
+            // --- Capsule (3) — Exclusif ---
+            ['Capsule Noir/Gye Nyame Horizon', 'Pochettes',   'capsule', 60000, 'Pièce capsule exclusive, motif Gye Nyame.', 'Une création capsule en noir, ornée du symbole Gye Nyame, pour une pièce unique et symbolique.', 'Noir & or', 'Cuir premium', true, 3],
+            ['Gye Nyame Legacy',               'Sacs à main', 'capsule', 60000, 'Pièce capsule exclusive, héritage Gye Nyame.', 'Un sac d\'exception qui porte l\'héritage du symbole Gye Nyame, structuré et intemporel.', 'Marron cognac', 'Cuir premium', true, 3],
+            ['Gye Nyame Élan',                 'Pochettes',   'capsule', 55000, 'Pièce capsule exclusive, motif Gye Nyame doré.', 'Une pochette raffinée aux motifs dorés inspirés du symbole Gye Nyame, pour un élan de style unique.', 'Noir & doré', 'Cuir verni', false, 4],
         ];
 
         foreach ($products as $p) {
@@ -94,7 +94,7 @@ class DatabaseSeeder extends Seeder
 
         // ---- FAQ de démonstration ----
         $faqs = [
-            ['Quels sont les délais de livraison ?', "Nous livrons à Abidjan en 3 à 5 jours ouvrés. Pour l'intérieur du pays, comptez 5 à 7 jours.", 'livraison', 1],
+            ['Quels sont les délais de livraison ?', "Nous livrons à Abidjan en 1 à 3 jours ouvrés. Pour l'intérieur du pays, comptez 5 à 7 jours.", 'livraison', 1],
             ['Combien coûte la livraison ?', "La livraison à Abidjan est à 1 500 F CFA, l'intérieur du pays à 3 000 F CFA. Le retrait en boutique à Cocody Palmeraie est gratuit.", 'livraison', 2],
             ['Quels moyens de paiement acceptez-vous ?', "Vous pouvez payer à la livraison, ou via Wave et Orange Money. Le paiement se confirme avec notre équipe sur WhatsApp.", 'paiement', 1],
             ['Dois-je créer un compte pour commander ?', "Non, vous pouvez commander directement en renseignant vos coordonnées au moment de la commande.", 'general', 1],

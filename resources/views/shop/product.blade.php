@@ -24,55 +24,130 @@
 @endpush
 
 @section('content')
+<section class="pdp-page">
 <div class="container">
-    <div class="product-detail">
-        <div class="product-gallery">
-            @if($product->image)
-                <img src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}">
-            @else
-                <span aria-hidden="true">◈</span>
+
+    {{-- FIL D'ARIANE --}}
+    <nav class="pdp-breadcrumb" aria-label="Fil d'ariane">
+        <a href="{{ route('home') }}">Accueil</a> <span>›</span>
+        <a href="{{ route('products.index') }}">Boutique</a>
+        @if($collectionLabel)
+            <span>›</span> <a href="{{ route('products.index', ['collection' => $product->collection]) }}">{{ $collectionLabel }}</a>
+        @endif
+        <span>›</span> <strong>{{ strtoupper($product->name) }}</strong>
+    </nav>
+
+    <div class="pdp-layout">
+
+        {{-- GALERIE --}}
+        <div class="pdp-gallery">
+            @php
+                $images = array_filter(array_merge([$product->image], $product->gallery ?? []));
+            @endphp
+            <div class="pdp-main-image" id="pdpMainImage">
+                @if(count($images))
+                    <img src="{{ asset('storage/'.$images[array_key_first($images)]) }}" alt="{{ $product->name }}" id="pdpMainImg">
+                @else
+                    <span class="placeholder-ico" aria-hidden="true">◈</span>
+                @endif
+            </div>
+            @if(count($images) > 1)
+                <div class="pdp-thumbs">
+                    @foreach($images as $i => $img)
+                        <button type="button" class="pdp-thumb {{ $i === 0 ? 'is-active' : '' }}" onclick="pdpSwapImage('{{ asset('storage/'.$img) }}', this)">
+                            <img src="{{ asset('storage/'.$img) }}" alt="{{ $product->name }} vue {{ $i + 1 }}">
+                        </button>
+                    @endforeach
+                </div>
             @endif
         </div>
 
-        <div class="product-info">
-            @if($product->category)
-                <span class="product-cat">{{ $product->category->name }}</span>
+        {{-- INFOS --}}
+        <div class="pdp-info">
+            @if($collectionLabel)
+                <span class="pdp-pill">{{ strtoupper($collectionLabel) }}</span>
             @endif
+
             <h1>{{ $product->name }}</h1>
-            <div class="price">{{ $product->formatted_price }}</div>
+
+            <div class="pdp-price">{{ $product->formatted_price }}</div>
+
+            @if($colorSiblings->count() > 1)
+                <div class="pdp-colors">
+                    <span class="pdp-colors-label">Couleur :</span>
+                    <div class="pdp-swatches">
+                        @foreach($colorSiblings as $sibling)
+                            <a href="{{ route('products.show', $sibling) }}"
+                               class="pdp-swatch {{ $sibling->id === $product->id ? 'is-active' : '' }}"
+                               title="{{ $sibling->color ?? $sibling->name }}"
+                               style="background: {{ $sibling->color_hex }};">
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             @if($product->short_description)
-                <p>{{ $product->short_description }}</p>
+                <p class="pdp-short-desc">{{ $product->short_description }}</p>
             @endif
-
-            <div class="product-meta">
-                @if($product->color)<span><strong>Coloris :</strong> {{ $product->color }}</span>@endif
-                @if($product->material)<span><strong>Matière :</strong> {{ $product->material }}</span>@endif
-                <span><strong>Disponibilité :</strong>
-                    {{ $product->in_stock ? 'En stock ('.$product->stock.')' : 'Épuisé' }}
-                </span>
-            </div>
 
             @if($product->in_stock)
-                <form method="POST" action="{{ route('cart.add', $product) }}">
+                <form method="POST" action="{{ route('cart.add', $product) }}" class="pdp-actions">
                     @csrf
-                    <div class="qty-row">
-                        <label for="quantity">Quantité</label>
-                        <input class="qty-input" type="number" id="quantity" name="quantity" value="1" min="1" max="{{ min(20, $product->stock) }}">
-                    </div>
-                    <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-                        <button type="submit" class="btn btn-primary">Ajouter au panier</button>
-                        <a href="https://wa.me/{{ $brandWhatsapp }}?text={{ urlencode('Bonjour, je suis intéressée par le sac « '.$product->name.' »') }}"
-                           target="_blank" rel="noopener" class="btn btn-whatsapp">Commander sur WhatsApp</a>
-                    </div>
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="btn-pdp-cart">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:.4rem;">
+                            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+                            <path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                        </svg>
+                        Ajouter au panier
+                    </button>
                 </form>
             @else
-                <a href="https://wa.me/{{ $brandWhatsapp }}?text={{ urlencode('Bonjour, le sac « '.$product->name.' » est épuisé. Quand sera-t-il de nouveau disponible ?') }}"
-                   target="_blank" rel="noopener" class="btn btn-whatsapp">Me prévenir du retour</a>
+                <div class="pdp-actions"><span class="btn-pdp-cart" style="opacity:.5; pointer-events:none;">Épuisé</span></div>
             @endif
 
+            <a href="https://wa.me/{{ $brandWhatsapp }}?text={{ urlencode('Bonjour, je suis intéressée par le sac « '.$product->name.' »') }}"
+               target="_blank" rel="noopener" class="btn-pdp-whatsapp">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.3c1.4.8 3.1 1.3 4.8 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.7-3-1.3-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3.1s.8-2.2 1.1-2.5c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5-.1.2-.3.4-.4.5-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.5 1.5.3.1.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.2.7-.1.3.1 1.7.8 2 .9.3.1.5.2.6.3.1.2.1.9-.1 1.6z"/></svg>
+                Commander via WhatsApp
+            </a>
+
+            {{-- DÉTAILS PRODUIT --}}
+            @if($product->dimensions || $product->material || $product->closure || $product->lining)
+            <details class="pdp-accordion" open>
+                <summary>Détails produit <span class="acc-ico">+</span></summary>
+                <div class="pdp-accordion-body">
+                    @if($product->dimensions)<p><strong>Dimensions :</strong> {{ $product->dimensions }}</p>@endif
+                    @if($product->material)<p><strong>Matière :</strong> {{ $product->material }}</p>@endif
+                    @if($product->closure)<p><strong>Fermeture :</strong> {{ $product->closure }}</p>@endif
+                    @if($product->lining)<p><strong>Doublure :</strong> {{ $product->lining }}</p>@endif
+                </div>
+            </details>
+            @endif
+
+            {{-- LIVRAISON --}}
+            <details class="pdp-accordion" open>
+                <summary>Livraison <span class="acc-ico">+</span></summary>
+                <div class="pdp-accordion-body">
+                    <p><strong>Abidjan :</strong> 1 à 3 jours ouvrés</p>
+                    <p><strong>Côte d'Ivoire :</strong> 2 à 4 jours ouvrés</p>
+                    <p><strong>Afrique de l'Ouest :</strong> 5 à 8 jours ouvrés</p>
+                </div>
+            </details>
+
+            {{-- ENTRETIEN --}}
+            <details class="pdp-accordion">
+                <summary>Entretien <span class="acc-ico">+</span></summary>
+                <div class="pdp-accordion-body">
+                    <p>Nettoyer avec un chiffon légèrement humide.</p>
+                    <p>Appliquer une crème nourrissante cuir tous les 3 mois.</p>
+                    <p>Éviter l'exposition prolongée au soleil.</p>
+                </div>
+            </details>
+
             @if($product->description)
-                <div class="product-desc">
+                <div class="pdp-full-desc">
                     <h3>Description</h3>
                     {!! nl2br(e($product->description)) !!}
                 </div>
@@ -80,15 +155,39 @@
         </div>
     </div>
 
+    {{-- PRODUITS SIMILAIRES --}}
     @if($related->isNotEmpty())
-    <section class="section">
-        <div class="section-head"><span class="eyebrow">Vous aimerez aussi</span><h2>Dans le même esprit</h2></div>
-        <div class="product-grid">
+    <section class="pdp-related">
+        <div class="pdp-related-head">
+            <span class="nh-eyebrow">À découvrir</span>
+            <h2>Vous aimerez aussi</h2>
+        </div>
+        <div class="pdp-related-grid">
             @foreach($related as $item)
-                @include('shop.partials.product-card', ['product' => $item])
+                <a href="{{ route('products.show', $item) }}" class="pdp-related-card">
+                    <div class="pdp-related-thumb">
+                        @if($item->image)
+                            <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->name }}">
+                        @else
+                            <span class="placeholder-ico">◈</span>
+                        @endif
+                    </div>
+                    <div class="pdp-related-name">{{ strtoupper($item->name) }}</div>
+                    <div class="pdp-related-price">{{ $item->formatted_price }}</div>
+                    <span class="pdp-related-btn">Voir le produit</span>
+                </a>
             @endforeach
         </div>
     </section>
-    @endif
+  @endif
 </div>
+</section>
+
+<script>
+function pdpSwapImage(src, btn) {
+    document.getElementById('pdpMainImg').src = src;
+    document.querySelectorAll('.pdp-thumb').forEach(t => t.classList.remove('is-active'));
+    btn.classList.add('is-active');
+}
+</script>
 @endsection

@@ -87,7 +87,7 @@ IDENTITÉ DE LA MARQUE :
 - Valeurs : héritage, féminité, qualité, fierté africaine.
 
 INFORMATIONS PRATIQUES :
-- Livraison à Abidjan en 3 à 5 jours.
+- Livraison à Abidjan en 1 à 3 jours.
 - Paiement : à la livraison, ou via Wave et Orange Money.
 - Canal privilégié pour finaliser une commande ou poser une question urgente : WhatsApp ({$whatsapp}).
 - On peut commander directement sur le site sans créer de compte.
