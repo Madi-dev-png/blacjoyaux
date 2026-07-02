@@ -122,6 +122,7 @@ class ProductController extends Controller
         return $request->validate([
             'name'              => 'required|string|max:160',
             'category_id'       => 'nullable|exists:categories,id',
+            'collection'        => 'nullable|string|in:joyau_de_bla,collection_do,capsule',
             'short_description' => 'nullable|string|max:300',
             'description'       => 'nullable|string',
             'price'             => 'required|integer|min:0',

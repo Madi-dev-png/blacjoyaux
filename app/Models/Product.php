@@ -48,6 +48,25 @@ class Product extends Model
         return $this->stock > 0;
     }
 
+    /**
+     * Nom "de base" du modèle, sans le suffixe de couleur.
+     * Ex: "Sac à main – Nouvelle version – Rouge" -> "Sac à main – Nouvelle version"
+     * Sert à regrouper les vraies variantes de couleur d'un même sac (et uniquement celles-ci),
+     * au lieu de mélanger tous les produits d'une même collection.
+     */
+    public function getBaseNameAttribute(): string
+    {
+        $parts = preg_split('/\s+[–-]\s+/u', trim($this->name));
+
+        if (count($parts) < 2) {
+            return trim($this->name);
+        }
+
+        array_pop($parts);
+
+        return trim(implode(' – ', $parts));
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);

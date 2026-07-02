@@ -17,10 +17,41 @@
 {{-- BARRE AVANTAGES --}}
 <div class="perks-bar">
     <div class="container">
-        <div class="perk"><span class="ico">📍</span> Livraison 1 à 3 jours</div>
-        <div class="perk"><span class="ico">★</span> Artisanat premium</div>
-        <div class="perk"><span class="ico">💳</span> Mobile money accepté</div>
-        <div class="perk"><span class="ico">💬</span> Commander via WhatsApp</div>
+        <div class="perk">
+            <span class="ico" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/>
+                    <path d="M15 18H9"/>
+                    <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/>
+                    <circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>
+                </svg>
+            </span>
+            Livraison 1 à 3 jours
+        </div>
+        <div class="perk">
+            <span class="ico" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+            </span>
+            Artisanat premium
+        </div>
+        <div class="perk">
+            <span class="ico" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>
+                </svg>
+            </span>
+            Mobile money accepté
+        </div>
+        <div class="perk">
+            <span class="ico" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+                </svg>
+            </span>
+            Commander via WhatsApp
+        </div>
     </div>
 </div>
 
