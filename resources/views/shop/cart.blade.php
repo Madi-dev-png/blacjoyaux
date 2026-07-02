@@ -25,9 +25,7 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <p class="cart-flash">{{ session('success') }}</p>
-    @endif
+   
 
     <div class="cart-layout">
 
@@ -68,7 +66,7 @@
                             {{ number_format($item['line_total'], 0, ',', ' ') }} FCFA
                         </div>
 
-                        <form action="{{ route('cart.remove', $product) }}" method="POST" class="cart-row-remove">
+                        <form action="{{ route('cart.remove', $product) }}" method="POST" class="cart-row-remove js-confirm-remove">
                             @csrf @method('DELETE')
                             <button type="submit" aria-label="Retirer">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -173,5 +171,52 @@
 
 </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.cart-row-qty').forEach(function (form) {
+        const input = form.querySelector('.qty-input');
+        const minusBtn = form.querySelector('.qty-minus');
+        const plusBtn = form.querySelector('.qty-plus');
+
+        minusBtn.addEventListener('click', function () {
+            const current = parseInt(input.value, 10) || 1;
+            if (current > 1) {
+                input.value = current - 1;
+                form.submit();
+            }
+        });
+
+       plusBtn.addEventListener('click', function () {
+            const current = parseInt(input.value, 10) || 1;
+            const max = parseInt(input.max, 10) || 20;
+            if (current < max) {
+                input.value = current + 1;
+                form.submit();
+            }
+        });
+    });
+
+    document.querySelectorAll('.js-confirm-remove').forEach(function (form) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Retirer cet article ?',
+                text: 'Ce produit sera supprimé de votre panier.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui, retirer',
+                cancelButtonText: 'Annuler',
+                confirmButtonColor: '#5e4b8c',
+                cancelButtonColor: '#aaa',
+            }).then(function (result) {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+});
+</script>
 
 @endsection

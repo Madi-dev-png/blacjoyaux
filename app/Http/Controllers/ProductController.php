@@ -29,6 +29,31 @@ class ProductController extends Controller
         return view('shop.collection', compact('products', 'categories'));
     }
 
+    /** Page "Nos collections". */
+    public function collections()
+    {
+        $defs = [
+            'joyau_de_bla'  => ['label' => 'Joyau de Bla', 'tag' => 'Collection signature'],
+            'collection_do' => ['label' => 'Collection DO', 'tag' => 'Nouveauté 2025'],
+            'capsule'       => ['label' => 'Collection Capsule', 'tag' => 'Exclusivité'],
+        ];
+
+        $collections = collect($defs)->map(function ($def, $key) {
+            $products = Product::active()->where('collection', $key)->get();
+
+            return [
+                'key'         => $key,
+                'label'       => $def['label'],
+                'tag'         => $def['tag'],
+                'count'       => $products->count(),
+                'from_price'  => $products->min('price'),
+                'thumbs'      => $products->take(4)->pluck('image'),
+            ];
+        });
+
+        return view('shop.collections', compact('collections'));
+    }
+
     /** Fiche produit. */
     public function show(Product $product)
     {

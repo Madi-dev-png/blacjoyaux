@@ -8,17 +8,19 @@ class FaqController extends Controller
 {
     public function index()
     {
+        $order = ['livraison', 'paiement', 'produit', 'retours'];
+
         $faqs = Faq::active()
-            ->orderBy('category')
             ->orderBy('sort_order')
             ->get()
-            ->groupBy('category');
+            ->groupBy('category')
+            ->sortBy(fn ($items, $category) => array_search($category, $order) === false ? 999 : array_search($category, $order));
 
         $labels = [
-            'general'   => 'Questions générales',
-            'livraison' => 'Livraison',
+            'livraison' => 'Commande & Livraison',
             'paiement'  => 'Paiement',
-            'produit'   => 'Nos produits',
+            'produit'   => 'Produits',
+            'retours'   => 'Retours & SAV',
         ];
 
         return view('shop.faq', compact('faqs', 'labels'));

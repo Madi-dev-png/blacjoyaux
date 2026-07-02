@@ -97,11 +97,11 @@ class DatabaseSeeder extends Seeder
             ['Quels sont les délais de livraison ?', "Nous livrons à Abidjan en 1 à 3 jours ouvrés. Pour l'intérieur du pays, comptez 5 à 7 jours.", 'livraison', 1],
             ['Combien coûte la livraison ?', "La livraison à Abidjan est à 1 500 F CFA, l'intérieur du pays à 3 000 F CFA. Le retrait en boutique à Cocody Palmeraie est gratuit.", 'livraison', 2],
             ['Quels moyens de paiement acceptez-vous ?', "Vous pouvez payer à la livraison, ou via Wave et Orange Money. Le paiement se confirme avec notre équipe sur WhatsApp.", 'paiement', 1],
-            ['Dois-je créer un compte pour commander ?', "Non, vous pouvez commander directement en renseignant vos coordonnées au moment de la commande.", 'general', 1],
+            ['Dois-je créer un compte pour commander ?', "Non, vous pouvez commander directement en renseignant vos coordonnées au moment de la commande.", 'livraison', 1],
             ['Vos sacs sont-ils en cuir véritable ?', "La plupart de nos modèles sont en cuir grainé, lisse ou premium. La matière est précisée sur chaque fiche produit.", 'produit', 1],
             ['Comment entretenir mon sac Blac Joyaux ?', "Évitez l'humidité prolongée, nettoyez avec un chiffon doux et rangez votre sac dans sa housse. Un entretien régulier prolonge sa beauté.", 'produit', 2],
-            ['Puis-je échanger ou retourner un article ?', "Oui, vous disposez de 7 jours après réception pour un échange, sous réserve que le sac soit neuf et non utilisé. Contactez-nous sur WhatsApp.", 'general', 2],
-            ['Quelle est l\'histoire de Blac Joyaux ?', "Blac Joyaux, fondée par Manuela Kouadio, s'inspire de la poupée Ashanti Joyaux de Bla (Akua'ba), symbole de beauté et de transmission culturelle.", 'general', 3],
+            ['Puis-je échanger ou retourner un article ?', "Oui, vous disposez de 7 jours après réception pour un échange, sous réserve que le sac soit neuf et non utilisé. Contactez-nous sur WhatsApp.",'retours', 2],
+            ['Quelle est l\'histoire de Blac Joyaux ?', "Blac Joyaux, fondée par Manuela Kouadio, s'inspire de la poupée Ashanti Joyaux de Bla (Akua'ba), symbole de beauté et de transmission culturelle.", 'produit', 3],
         ];
 
         foreach ($faqs as $f) {
