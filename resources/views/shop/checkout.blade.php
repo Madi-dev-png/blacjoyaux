@@ -74,14 +74,20 @@
 
                 <div class="checkout-row">
                     <div class="checkout-field">
+                        <label for="customer_email">Email <span style="font-weight:400; color:var(--gris);">(pour recevoir la confirmation de commande)</span></label>
+                        <input type="email" id="customer_email" name="customer_email" value="{{ old('customer_email') }}" placeholder="vous@example.com">
+                        @error('customer_email')<div class="checkout-error">{{ $message }}</div>@enderror
+                    </div>
+                    <div class="checkout-field">
                         <label for="quartier">Quartier</label>
                         <input type="text" id="quartier" name="quartier" value="{{ old('quartier') }}" placeholder="Ex: Angré 7ème Tranche">
                     </div>
-                    <div class="checkout-field">
-                        <label for="shipping_address">Adresse précise</label>
-                        <input type="text" id="shipping_address" name="shipping_address" value="{{ old('shipping_address') }}" placeholder="Rue, Bâtiment, Appt..." required>
-                        @error('shipping_address')<div class="checkout-error">{{ $message }}</div>@enderror
-                    </div>
+                </div>
+
+                <div class="checkout-field">
+                    <label for="shipping_address">Adresse précise</label>
+                    <input type="text" id="shipping_address" name="shipping_address" value="{{ old('shipping_address') }}" placeholder="Rue, Bâtiment, Appt..." required>
+                    @error('shipping_address')<div class="checkout-error">{{ $message }}</div>@enderror
                 </div>
 
                 <input type="hidden" name="delivery_method" id="delivery_method" value="abidjan">
