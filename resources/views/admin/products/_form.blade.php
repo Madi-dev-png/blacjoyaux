@@ -57,6 +57,12 @@
             </div>
         </div>
 
+        <div class="field">
+            <label for="variant_group">Groupe de couleur <small style="color:var(--gris); font-weight:400;">(optionnel)</small></label>
+            <input type="text" id="variant_group" name="variant_group" value="{{ old('variant_group', $product->variant_group) }}" placeholder="Ex: sac-bureau-femme" style="width:100%;">
+            <small style="color:var(--gris); font-size:.78rem;">Donnez EXACTEMENT le même texte à tous les sacs qui sont de vraies variantes de couleur d'un même modèle (ex: tous les "sac-bureau-femme" partageront leurs pastilles de couleur). Laissez vide si ce sac n'a pas de variante de couleur, ou si un autre sac lui ressemble sans être le même modèle.</small>
+        </div>
+
         <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem;">
             <div class="field">
                 <label for="dimensions">Dimensions</label>

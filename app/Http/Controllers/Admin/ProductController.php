@@ -128,6 +128,7 @@ class ProductController extends Controller
             'price'             => 'required|integer|min:0',
             'stock'             => 'required|integer|min:0',
             'color'             => 'nullable|string|max:60',
+            'variant_group'     => 'nullable|string|max:80',
             'material'          => 'nullable|string|max:60',
             'dimensions'        => 'nullable|string|max:60',
             'closure'           => 'nullable|string|max:100',

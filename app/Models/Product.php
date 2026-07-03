@@ -13,7 +13,7 @@ class Product extends Model
 
    protected $fillable = [
         'category_id', 'collection', 'name', 'slug', 'short_description', 'description',
-        'price', 'stock', 'image', 'gallery', 'color', 'material',
+        'price', 'stock', 'image', 'gallery', 'color', 'variant_group', 'material',
         'dimensions', 'closure', 'lining',
         'is_active', 'is_featured',
         'meta_title', 'meta_description', 'seo_score',
@@ -49,10 +49,9 @@ class Product extends Model
     }
 
     /**
-     * Nom "de base" du modèle, sans le suffixe de couleur.
-     * Ex: "Sac à main – Nouvelle version – Rouge" -> "Sac à main – Nouvelle version"
-     * Sert à regrouper les vraies variantes de couleur d'un même sac (et uniquement celles-ci),
-     * au lieu de mélanger tous les produits d'une même collection.
+     * Nom "de base" du modèle, sans le suffixe de couleur (utilisé uniquement
+     * comme information secondaire désormais ; le regroupement réel des couleurs
+     * se fait via le champ variant_group, plus fiable).
      */
     public function getBaseNameAttribute(): string
     {
@@ -82,18 +81,24 @@ class Product extends Model
     {
         $map = [
             'noir' => '#1a1a1a', 'blanc' => '#f5f5f5', 'rouge' => '#b3261e',
-            'vert' => '#3d6b4f', 'bleu' => '#2b4b7e', 'jaune' => '#e0b23a',
+            'vert' => '#3d6b4f', 'bleu marine' => '#1b2a4a', 'bleu' => '#2b4b7e', 'jaune' => '#e0b23a',
             'orange' => '#d16a2c', 'marron' => '#5c3d2e', 'beige' => '#d8c6a8',
-            'camel' => '#b98a52', 'or' => '#c8902f', 'doré' => '#c8902f',
-            'dore' => '#c8902f', 'bordeaux' => '#5e1f2e', 'aubergine' => '#3f2436',
+            'camel' => '#b98a52', 'bordeaux' => '#5e1f2e', 'aubergine' => '#3f2436',
             'rose' => '#e0a1b0', 'gris' => '#8a8a8a', 'cognac' => '#9a5b2e',
             'croco' => '#5c3d2e', 'terre cuite' => '#b5622f', 'émeraude' => '#1f6b4f',
+            'doré' => '#c8902f', 'dore' => '#c8902f', 'or' => '#c8902f',
         ];
 
         $name = strtolower($this->color ?? '');
-        foreach ($map as $key => $hex) {
+
+        // On teste les mots-clés du plus long au plus court, pour éviter qu'un mot court
+        // (ex: "or") ne matche par erreur à l'intérieur d'un mot plus long (ex: "bORdeaux").
+        $keys = array_keys($map);
+        usort($keys, fn ($a, $b) => mb_strlen($b) <=> mb_strlen($a));
+
+        foreach ($keys as $key) {
             if (str_contains($name, $key)) {
-                return $hex;
+                return $map[$key];
             }
         }
 
