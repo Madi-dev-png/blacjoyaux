@@ -22,6 +22,17 @@
             </select>
         </div>
 
+        <div class="field">
+            <label for="collection">Collection</label>
+            <select id="collection" name="collection" style="width:100%;">
+                <option value="">— Aucune —</option>
+                <option value="joyau_de_bla" {{ old('collection', $product->collection) === 'joyau_de_bla' ? 'selected' : '' }}>Joyau de Bla</option>
+                <option value="collection_do" {{ old('collection', $product->collection) === 'collection_do' ? 'selected' : '' }}>Collection DO</option>
+                <option value="capsule" {{ old('collection', $product->collection) === 'capsule' ? 'selected' : '' }}>Capsule</option>
+            </select>
+            <small style="color:var(--gris); font-size:.78rem;">Détermine dans quelle section du site (accueil/boutique) ce produit apparaît, et avec quels sacs il partage ses pastilles de couleur.</small>
+        </div>
+
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
             <div class="field">
                 <label for="price">Prix (F CFA) *</label>
@@ -184,9 +195,11 @@
             // Checklist
             const ul = get('seo-checks');
             ul.innerHTML = '';
+            const icoOk = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:.35rem;"><path d="M20 6 9 17l-5-5"/></svg>';
+            const icoWarn = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:.35rem;"><path d="M12 9v4"/><path d="M10.4 3.9 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.6 3.9a2 2 0 0 0-3.2 0Z"/><path d="M12 17h.01"/></svg>';
             Object.values(data.checks).forEach(c => {
                 const li = document.createElement('li');
-                li.innerHTML = (c.ok ? '✅ ' : '⚠️ ') + c.msg;
+                li.innerHTML = (c.ok ? icoOk : icoWarn) + c.msg;
                 li.style.color = c.ok ? 'var(--vert-jade)' : 'var(--gris)';
                 ul.appendChild(li);
             });

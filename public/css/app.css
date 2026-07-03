@@ -544,7 +544,25 @@ img { max-width: 100%; display: block; }
 .perks-bar { background: var(--lilac); padding: 1.4rem 0; }
 .perks-bar .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1.2rem; }
 .perk { display: flex; align-items: center; gap: .6rem; font-size: .78rem; font-weight: 600; letter-spacing: .04em; color: var(--purple-dark); text-transform: uppercase; }
-.perk .ico { color: var(--purple); font-size: 1rem; }
+.perk .ico { color: var(--purple); font-size: 1rem; display: inline-flex; align-items: center; }
+.perk .ico svg { display: block; }
+/* ---------- Pagination Laravel par défaut ----------
+   Les vues de pagination intégrées à Laravel utilisent des classes Tailwind
+   (w-5 h-5, etc.) qui n'ont aucun effet ici puisque Tailwind n'est pas chargé
+   sur ce projet. Sans cette règle, les flèches SVG « précédent/suivant »
+   s'affichent à une taille énorme (comportement par défaut du navigateur). */
+nav[role="navigation"] { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; font-size: .85rem; }
+nav[role="navigation"] svg { width: 18px; height: 18px; display: inline-block; vertical-align: middle; }
+nav[role="navigation"] a, nav[role="navigation"] span {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 34px; height: 34px; padding: 0 .5rem; border-radius: 8px;
+    color: var(--aubergine); text-decoration: none;
+}
+nav[role="navigation"] a:hover { background: var(--ivoire-2); }
+nav[role="navigation"] span[aria-current="page"] {
+    background: var(--aubergine); color: var(--ivoire); font-weight: 600;
+}
+nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 
 /* ---------- Section titres communs ---------- */
 .nh-section { padding: 4.5rem 0; background: #fff; }
