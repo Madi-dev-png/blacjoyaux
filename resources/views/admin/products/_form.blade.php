@@ -89,6 +89,12 @@
         </div>
 
         <div class="field">
+            <label for="story">Storytelling <small style="color:var(--gris); font-weight:400;">(optionnel)</small></label>
+            <textarea id="story" name="story" style="width:100%; min-height:120px;" placeholder="Le récit de marque autour de ce produit (héritage, inspiration, symbolique...).">{{ old('story', $product->story) }}</textarea>
+            <small style="color:var(--gris); font-size:.78rem;">Affiché sur la fiche produit dans un bloc séparé de la description. Laissez vide tant que le texte n'est pas prêt.</small>
+        </div>
+
+        <div class="field">
             <label for="image">Image principale</label>
             <input type="file" id="image" name="image" accept="image/*" style="width:100%;">
             @if($isEdit && $product->image)

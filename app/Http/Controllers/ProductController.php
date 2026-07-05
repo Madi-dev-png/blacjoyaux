@@ -29,6 +29,29 @@ class ProductController extends Controller
         return view('shop.collection', compact('products', 'categories'));
     }
 
+    /** Suggestions de recherche en direct (AJAX), utilisées par la barre de recherche du header. */
+    public function search(Request $request)
+    {
+        $term = trim((string) $request->get('search'));
+
+        if (mb_strlen($term) < 2) {
+            return response()->json([]);
+        }
+
+        $products = Product::active()
+            ->where('name', 'like', '%'.$term.'%')
+            ->orderBy('name')
+            ->take(6)
+            ->get();
+
+        return response()->json($products->map(fn ($p) => [
+            'name'  => $p->name,
+            'price' => $p->formatted_price,
+            'url'   => route('products.show', $p),
+            'image' => $p->image ? asset('storage/'.$p->image) : null,
+        ]));
+    }
+
     /** Page "Nos collections". */
     public function collections()
     {

@@ -88,7 +88,6 @@
                                data-price="{{ $sibling->formatted_price }}"
                                data-in-stock="{{ $sibling->in_stock ? '1' : '0' }}"
                                data-add-url="{{ route('cart.add', $sibling) }}"
-                               data-whatsapp-text="{{ urlencode('Bonjour, je suis intéressée par le sac « '.$sibling->name.' »') }}"
                                onclick="return pdpSelectColor(event, this)">
                             </a>
                         @endforeach
@@ -117,12 +116,6 @@
                 <div class="pdp-actions"><span class="btn-pdp-cart" style="opacity:.5; pointer-events:none;">Épuisé</span></div>
             @endif
             </div>
-
-            <a href="https://wa.me/{{ $brandWhatsapp }}?text={{ urlencode('Bonjour, je suis intéressée par le sac « '.$product->name.' »') }}"
-               target="_blank" rel="noopener" class="btn-pdp-whatsapp" id="pdpWhatsapp">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.2-1.3c1.4.8 3.1 1.3 4.8 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.7-3-1.3-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3.1s.8-2.2 1.1-2.5c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5-.1.2-.3.4-.4.5-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.5 1.5.3.1.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.2.7-.1.3.1 1.7.8 2 .9.3.1.5.2.6.3.1.2.1.9-.1 1.6z"/></svg>
-                Commander via WhatsApp
-            </a>
 
             {{-- DÉTAILS PRODUIT --}}
             @if($product->dimensions || $product->material || $product->closure || $product->lining)
@@ -161,6 +154,13 @@
                 <div class="pdp-full-desc">
                     <h3>Description</h3>
                     {!! nl2br(e($product->description)) !!}
+                </div>
+            @endif
+
+            @if($product->story)
+                <div class="pdp-story">
+                    <h3>L'histoire de ce sac</h3>
+                    {!! nl2br(e($product->story)) !!}
                 </div>
             @endif
         </div>
@@ -258,13 +258,6 @@ function pdpSelectColor(event, swatch) {
     // Formulaire "Ajouter au panier" -> pointe vers le bon produit / bonne couleur.
     const cartForm = document.getElementById('pdpCartForm');
     if (cartForm) cartForm.action = swatch.dataset.addUrl;
-
-    // Bouton WhatsApp -> message pré-rempli avec le nom de la variante choisie.
-    const wa = document.getElementById('pdpWhatsapp');
-    if (wa) {
-        const base = wa.href.split('?text=')[0];
-        wa.href = base + '?text=' + swatch.dataset.whatsappText;
-    }
 
     // Disponibilité (stock)
     const actions = document.getElementById('pdpActions');

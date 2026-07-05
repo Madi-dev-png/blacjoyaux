@@ -26,7 +26,7 @@
                 $descriptions = [
                     'joyau_de_bla'  => "Notre collection iconique. Des sacs sculptés dans le cuir véritable, portant l'élégance ivoirienne à travers chaque couture.",
                     'collection_do' => "Inspirée de la modernité ivoirienne. Des silhouettes épurées pour la femme contemporaine qui porte son héritage avec style.",
-                    'capsule'       => "Deux à trois pièces uniques par saison. Chaque modèle est une édition limitée, numérotée et signée.",
+                    'capsule'       => "La collection GYE NYAME est pensée comme une capsule premium composée de trois modèles complémentaires, chacun répondant à un moment précis de la vie d'un professionnel.",
                 ];
             @endphp
             <p>{{ $descriptions[$c['key']] ?? '' }}</p>

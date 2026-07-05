@@ -20,7 +20,7 @@ class FaqController extends Controller
         $data = $request->validate([
             'question'   => 'required|string|max:255',
             'answer'     => 'required|string',
-            'category'   => 'required|in:general,livraison,paiement,produit',
+            'category'   => 'required|in:general,livraison,paiement,produit,retours',
             'sort_order' => 'nullable|integer|min:0',
         ]);
 
@@ -34,7 +34,7 @@ class FaqController extends Controller
         $data = $request->validate([
             'question'   => 'required|string|max:255',
             'answer'     => 'required|string',
-            'category'   => 'required|in:general,livraison,paiement,produit',
+            'category'   => 'required|in:general,livraison,paiement,produit,retours',
             'sort_order' => 'nullable|integer|min:0',
             'is_active'  => 'nullable|boolean',
         ]);

@@ -56,15 +56,18 @@
 @else
 <header class="new-header">
     <div class="container new-header-top">
-        <form class="nh-search" action="{{ route('products.index') }}" method="GET">
-            <span class="ico">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="7"/>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                </svg>
-            </span>
-            <input type="search" name="q" placeholder="Rechercher un sac...">
-        </form>
+        <div class="nh-search-wrap">
+            <form class="nh-search" action="{{ route('products.index') }}" method="GET" autocomplete="off">
+                <span class="ico">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="7"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                </span>
+                <input type="search" name="search" id="nhSearchInput" placeholder="Rechercher un sac..." autocomplete="off">
+            </form>
+            <div id="nhSearchResults" class="nh-search-results"></div>
+        </div>
 
         <a href="{{ route('home') }}" class="nh-brand">
             <span class="nh-brand-name">BLAC</span>
@@ -227,6 +230,101 @@ Swal.fire({
 </script>
 @endif
 
+
+<script>
+(function () {
+    const input = document.getElementById('nhSearchInput');
+    const results = document.getElementById('nhSearchResults');
+    if (!input || !results) return;
+
+    let timer = null;
+    let currentController = null;
+
+    function hideResults() {
+        results.innerHTML = '';
+        results.classList.remove('is-open');
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str == null ? '' : str;
+        return div.innerHTML;
+    }
+
+    function renderResults(products) {
+        if (!products.length) {
+            results.innerHTML = '<div class="nh-search-empty">Aucun sac trouvé.</div>';
+            results.classList.add('is-open');
+            return;
+        }
+
+        results.innerHTML = products.map(function (p) {
+            return '<a href="' + escapeHtml(p.url) + '" class="nh-search-item">' +
+                '<span class="nh-search-thumb">' + (p.image ? '<img src="' + escapeHtml(p.image) + '" alt="">' : '◈') + '</span>' +
+                '<span class="nh-search-info"><span class="nh-search-name">' + escapeHtml(p.name) + '</span>' +
+                '<span class="nh-search-price">' + escapeHtml(p.price) + '</span></span>' +
+                '</a>';
+        }).join('');
+        results.classList.add('is-open');
+    }
+
+    input.addEventListener('input', function () {
+        const term = input.value.trim();
+        clearTimeout(timer);
+
+        if (term.length < 2) {
+            hideResults();
+            return;
+        }
+
+        timer = setTimeout(function () {
+            if (currentController) currentController.abort();
+            currentController = new AbortController();
+
+            fetch('{{ route('products.search') }}?search=' + encodeURIComponent(term), {
+                signal: currentController.signal,
+                headers: { 'Accept': 'application/json' },
+            })
+                .then(function (r) { return r.json(); })
+                .then(renderResults)
+                .catch(function (err) {
+                    if (err.name !== 'AbortError') hideResults();
+                });
+        }, 250);
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.nh-search-wrap')) hideResults();
+    });
+})();
+</script>
+
+<script>
+(function () {
+    if (!('IntersectionObserver' in window)) return;
+
+    var targets = document.querySelectorAll(
+        'section:not([class*="hero"]):not(.checkout-header), .product-card, .shop-card, ' +
+        '.nh-product-card, .capsule-card, a.do-item, .testimonial-card, .about-value-card, ' +
+        '.faq-group, .pdp-related-card, .coll-split'
+    );
+
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+
+    targets.forEach(function (el) {
+        el.classList.add('reveal-on-scroll');
+        if (el.parentElement) el.parentElement.classList.add('reveal-group');
+        observer.observe(el);
+    });
+})();
+</script>
 @stack('scripts')
 </body>
 </html>

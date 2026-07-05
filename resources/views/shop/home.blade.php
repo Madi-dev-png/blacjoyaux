@@ -64,27 +64,25 @@
         </div>
 
         <div class="nh-product-grid">
-            @php
-                $joyauItems = [
-                    ['badge' => true],
-                    ['badge' => true],
-                    ['badge' => false],
-                    ['badge' => false],
-                ];
-            @endphp
-            @foreach($joyauItems as $item)
+            @forelse($joyauDeBla as $product)
                 <div class="nh-product-card">
-                    <div class="nh-product-thumb">
-                        @if($item['badge'])
+                    <a href="{{ route('products.show', $product) }}" class="nh-product-thumb">
+                        @if($product->is_featured)
                             <span class="nh-badge">Best-seller</span>
                         @endif
-                        <span class="placeholder-ico">◈</span>
-                    </div>
-                    <div class="nh-product-name">Joyau de Bla</div>
-                    <div class="nh-product-price">65 000 FCFA</div>
-                    <a href="{{ route('products.index') }}" class="btn-outline-dark">Voir la collection</a>
+                        @if($product->image)
+                            <img src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}">
+                        @else
+                            <span class="placeholder-ico">◈</span>
+                        @endif
+                    </a>
+                    <div class="nh-product-name">{{ $product->name }}</div>
+                    <div class="nh-product-price">{{ $product->formatted_price }}</div>
+                    <a href="{{ route('products.show', $product) }}" class="btn-outline-dark">Voir le sac</a>
                 </div>
-            @endforeach
+            @empty
+                <p>La collection Joyau de Bla arrive bientôt.</p>
+            @endforelse
         </div>
     </div>
 </section>
@@ -110,24 +108,19 @@
         </div>
 
         <div class="do-grid">
-            <div class="do-item do-1">
-                <div class="do-item-text">
-                    <div class="name">Sac Bureau DO</div>
-                    <div class="price">70 000 FCFA</div>
-                </div>
-            </div>
-            <div class="do-item do-2">
-                <div class="do-item-text">
-                    <div class="name">DO Clutch</div>
-                    <div class="price">75 000 FCFA</div>
-                </div>
-            </div>
-            <div class="do-item do-3">
-                <div class="do-item-text">
-                    <div class="name">DO Mini</div>
-                    <div class="price">75 000 FCFA</div>
-                </div>
-            </div>
+            @forelse($collectionDo as $product)
+                <a href="{{ route('products.show', $product) }}" class="do-item do-{{ $loop->iteration }}">
+                    @if($product->image)
+                        <img src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}">
+                    @endif
+                    <div class="do-item-text">
+                        <div class="name">{{ $product->name }}</div>
+                        <div class="price">{{ $product->formatted_price }}</div>
+                    </div>
+                </a>
+            @empty
+                <p>La Collection DO arrive bientôt.</p>
+            @endforelse
         </div>
     </div>
 </section>
@@ -142,27 +135,22 @@
         </div>
 
         <div class="capsule-grid">
-            <div class="capsule-card">
-                <div class="capsule-thumb"><span class="placeholder-ico">◈</span></div>
-                <h3>GYE NYAME ÉLAN</h3>
-                <div class="subt">Sac bureau femme</div>
-                <div class="price">55 000 FCFA</div>
-                <a href="https://wa.me/{{ $brandWhatsapp }}" target="_blank" rel="noopener" class="btn-whatsapp-block">Commander via WhatsApp</a>
-            </div>
-            <div class="capsule-card">
-                <div class="capsule-thumb"><span class="placeholder-ico">◈</span></div>
-                <h3>GYE NYAME LEGACY</h3>
-                <div class="subt">Sac bureau homme</div>
-                <div class="price">60 000 FCFA</div>
-                <a href="https://wa.me/{{ $brandWhatsapp }}" target="_blank" rel="noopener" class="btn-whatsapp-block">Commander via WhatsApp</a>
-            </div>
-            <div class="capsule-card">
-                <div class="capsule-thumb"><span class="placeholder-ico">◈</span></div>
-                <h3>GYE NYAME HORIZON</h3>
-                <div class="subt">Sac lifestyle unisexe</div>
-                <div class="price">60 000 FCFA</div>
-                <a href="https://wa.me/{{ $brandWhatsapp }}" target="_blank" rel="noopener" class="btn-whatsapp-block">Commander via WhatsApp</a>
-            </div>
+            @forelse($collectionCapsule as $product)
+                <a href="{{ route('products.show', $product) }}" class="capsule-card">
+                    <div class="capsule-thumb">
+                        @if($product->image)
+                            <img src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}">
+                        @else
+                            <span class="placeholder-ico">◈</span>
+                        @endif
+                    </div>
+                    <h3>{{ $product->base_name }}</h3>
+                    <div class="subt">{{ $product->color }}</div>
+                    <div class="price">{{ $product->formatted_price }}</div>
+                </a>
+            @empty
+                <p>La collection Capsule arrive bientôt.</p>
+            @endforelse
         </div>
     </div>
 </section>
@@ -172,13 +160,13 @@
     <div class="split-panel femme">
         <div>
             <h3>Pour la femme</h3>
-            <a href="{{ route('products.index') }}" class="btn-ghost-light">Nous rendre visite</a>
+            <a href="{{ $bureauFemme ? route('products.show', $bureauFemme) : route('products.index') }}" class="btn-ghost-light">Découvrir</a>
         </div>
     </div>
     <div class="split-panel homme">
         <div>
             <h3>Pour l'homme</h3>
-            <a href="{{ route('products.index') }}" class="btn-ghost-light">Nous rendre visite</a>
+            <a href="{{ $bureauHomme ? route('products.show', $bureauHomme) : route('products.index') }}" class="btn-ghost-light">Découvrir</a>
         </div>
     </div>
 </div>

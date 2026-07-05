@@ -62,6 +62,14 @@
         </td>
     </tr>
 
+    {{-- Message WhatsApp --}}
+    <tr>
+        <td style="padding:0 32px 8px; text-align:center;">
+            <p style="margin:0 0 12px; font-size:13px; color:#6E6258;">Une question sur votre commande ? Notre équipe vous répond directement sur WhatsApp.</p>
+            <a href="https://wa.me/{{ config('services.brand.whatsapp') }}?text={{ urlencode('Bonjour Blac Joyaux, j\'ai une question sur ma commande '.$order->reference.'.') }}" style="display:inline-block; background:#25D366; color:#ffffff; text-decoration:none; padding:10px 22px; border-radius:100px; font-size:13px; font-weight:bold;">Contacter sur WhatsApp</a>
+        </td>
+    </tr>
+
     {{-- Livraison --}}
     <tr>
         <td style="padding:8px 32px 28px;">

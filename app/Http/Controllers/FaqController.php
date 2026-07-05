@@ -8,7 +8,7 @@ class FaqController extends Controller
 {
     public function index()
     {
-        $order = ['livraison', 'paiement', 'produit', 'retours'];
+        $order = ['livraison', 'paiement', 'produit', 'retours', 'general'];
 
         $faqs = Faq::active()
             ->orderBy('sort_order')
@@ -21,6 +21,7 @@ class FaqController extends Controller
             'paiement'  => 'Paiement',
             'produit'   => 'Produits',
             'retours'   => 'Retours & SAV',
+            'general'   => 'La marque',
         ];
 
         return view('shop.faq', compact('faqs', 'labels'));

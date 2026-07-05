@@ -125,6 +125,7 @@ class ProductController extends Controller
             'collection'        => 'nullable|string|in:joyau_de_bla,collection_do,capsule',
             'short_description' => 'nullable|string|max:300',
             'description'       => 'nullable|string',
+            'story'             => 'nullable|string',
             'price'             => 'required|integer|min:0',
             'stock'             => 'required|integer|min:0',
             'color'             => 'nullable|string|max:60',
