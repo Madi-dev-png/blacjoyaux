@@ -117,6 +117,13 @@
             @endif
             </div>
 
+            @if($product->story)
+                <div class="pdp-story">
+                    <h3>L'histoire de ce sac</h3>
+                    {!! nl2br(e($product->story)) !!}
+                </div>
+            @endif
+
             {{-- DÉTAILS PRODUIT --}}
             @if($product->dimensions || $product->material || $product->closure || $product->lining)
             <details class="pdp-accordion" open>
@@ -154,13 +161,6 @@
                 <div class="pdp-full-desc">
                     <h3>Description</h3>
                     {!! nl2br(e($product->description)) !!}
-                </div>
-            @endif
-
-            @if($product->story)
-                <div class="pdp-story">
-                    <h3>L'histoire de ce sac</h3>
-                    {!! nl2br(e($product->story)) !!}
                 </div>
             @endif
         </div>

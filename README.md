@@ -100,7 +100,7 @@ intelligentes via Claude :
 3. Rechargez la page : le chat utilise désormais l'IA.
 
 > Pensez aussi à mettre votre vrai numéro WhatsApp dans `.env` :
-> `BJ_WHATSAPP=2250700000000`
+> `BJ_WHATSAPP=2250153864606`
 
 ---
 

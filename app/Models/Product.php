@@ -81,11 +81,12 @@ class Product extends Model
     {
         $map = [
             'noir' => '#1a1a1a', 'blanc' => '#f5f5f5', 'rouge' => '#b3261e',
-            'vert' => '#3d6b4f', 'bleu marine' => '#1b2a4a', 'bleu' => '#2b4b7e', 'jaune' => '#e0b23a',
+            'vert' => '#3d6b4f', 'bleu marine' => '#1b2a4a', 'marine' => '#1b2a4a', 'bleu' => '#2b4b7e', 'jaune' => '#e0b23a',
             'orange' => '#d16a2c', 'marron' => '#5c3d2e', 'beige' => '#d8c6a8',
             'camel' => '#b98a52', 'bordeaux' => '#5e1f2e', 'aubergine' => '#3f2436',
             'rose' => '#e0a1b0', 'gris' => '#8a8a8a', 'cognac' => '#9a5b2e',
             'croco' => '#5c3d2e', 'terre cuite' => '#b5622f', 'émeraude' => '#1f6b4f',
+            'kaki' => '#6b6f3a',
             'doré' => '#c8902f', 'dore' => '#c8902f', 'or' => '#c8902f',
         ];
 

@@ -155,6 +155,40 @@
     </div>
 </section>
 
+{{-- LIFESTYLE : le sac dans la vraie vie --}}
+<section class="lifestyle-section">
+    <div class="container">
+        <div class="nh-section-head">
+            <span class="nh-eyebrow">Au quotidien</span>
+            <h2><strong>PORTÉ DANS LA VRAIE VIE</strong></h2>
+            <p class="subtitle">Blac Joyaux vous accompagne, du bureau aux voyages</p>
+        </div>
+
+        <div class="lifestyle-grid">
+            @php
+                $lifestyleShots = [
+                    ['file' => 'lifestyle-bureau-homme.jpg', 'product' => 'sac-bureau-homme-noir'],
+                    ['file' => 'lifestyle-voyage.jpg', 'product' => 'sac-lifestyle-joyaux-kaki'],
+                    ['file' => 'lifestyle-bureau-femme.jpg', 'product' => 'sac-bureau-femme-noir-croco-lezard'],
+                    ['file' => 'lifestyle-pochette.jpg', 'product' => 'sac-bureau-homme-noir'],
+                ];
+            @endphp
+            @foreach($lifestyleShots as $shot)
+                @php($shotProduct = $shot['product'] ? \App\Models\Product::where('slug', $shot['product'])->first() : null)
+                <a href="{{ $shotProduct ? route('products.show', $shotProduct) : route('products.index') }}" class="lifestyle-card">
+                    <img src="{{ asset('images/lifestyle/'.$shot['file']) }}" alt="Sac Blac Joyaux porté au quotidien" onerror="this.closest('.lifestyle-card').style.display='none'">
+                    @if($shotProduct)
+                        <div class="lifestyle-card-text">
+                            <div class="name">{{ $shotProduct->name }}</div>
+                            <div class="price">{{ $shotProduct->formatted_price }}</div>
+                        </div>
+                    @endif
+                </a>
+            @endforeach
+        </div>
+    </div>
+</section>
+
 {{-- POUR LA FEMME / POUR L'HOMME --}}
 <div class="split-banner">
     <div class="split-panel femme">

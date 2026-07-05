@@ -8,6 +8,6 @@ return [
 ],
 
 'brand' => [
-    'whatsapp' => env('BJ_WHATSAPP', '2250700000000'),
+    'whatsapp' => env('BJ_WHATSAPP', '2250153864606'),
 ],
 ];
