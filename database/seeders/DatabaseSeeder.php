@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
         // ---- Produits de démonstration ----
        $products = [
             // --- Joyau de Bla (4) — Best-seller ---
-            ['Sac à main – Nouvelle version – Noir avec Bijoux Doré', 'Sacs à main', 'joyau_de_bla', 50000, 'Sac à main structuré, finitions dorées.', 'La nouvelle version de notre sac signature, en cuir noir rehaussé de bijoux dorés. Une pièce intemporelle et raffinée.', 'Noir & doré', 'Cuir grainé', true, 8],
+            ['Sac à main – Nouvelle version – Noir avec Bijoux Doré', 'Sacs à main', 'joyau_de_bla', 50000, 'Sac à main structuré, finitions dorées.', 'La nouvelle version de notre sac signature, en cuir noir rehaussé de bijoux dorés. Une pièce intemporelle et raffinée.', 'Noir', 'Cuir grainé', true, 8],
             ['Sac à main – Nouvelle version – Vert',                 'Sacs à main', 'joyau_de_bla', 50000, 'Sac à main coloré, nouvelle version.', 'Un coloris vert éclatant pour twister votre style avec élégance et caractère.', 'Vert', 'Cuir grainé', true, 6],
             ['Sac à main – Nouvelle version – Rouge',                'Sacs à main', 'joyau_de_bla', 50000, 'Sac à main coloré, nouvelle version.', 'Un rouge intense qui affirme votre personnalité, pour un look qui ne passe pas inaperçu.', 'Rouge', 'Cuir grainé', false, 6],
             ['Sac à main – Nouvelle version – Orange',               'Sacs à main', 'joyau_de_bla', 50000, 'Sac à main coloré, nouvelle version.', 'Une touche d\'orange vibrant, parfaite pour illuminer toutes vos tenues.', 'Orange', 'Cuir grainé', false, 5],

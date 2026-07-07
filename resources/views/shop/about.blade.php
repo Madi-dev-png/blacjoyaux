@@ -51,8 +51,7 @@
             </div>
         </div>
         <div class="about-ashanti-photo">
-            <span class="about-ashanti-brand">Blac Joyaux</span>
-            <img src="{{ asset('images/about/ashanti.jpg') }}" alt="Sac Blac Joyaux jaune avec pendentif Akua'ba" onerror="this.style.display='none'">
+            <img src="{{ asset('images/about/ashanti.jpg') }}" alt="Poupée Akua'ba traditionnelle Ashanti" onerror="this.style.display='none'">
         </div>
     </div>
 </section>
@@ -61,10 +60,7 @@
 <section class="about-symbol">
     <div class="container">
         <div class="about-symbol-ico">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3"/>
-                <path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>
-            </svg>
+            <img src="{{ asset('images/about/gye-nyame.jpg') }}" alt="Symbole Adinkra Gye Nyame">
         </div>
         <h2>Gye Nyame</h2>
         <p>« Sauf pour Dieu » — Le symbole Adinkra de l'omnipotence et de l'omniprésence. Il est l'ancre spirituelle de nos collections, rappelant que la force réside dans l'unité et la foi.</p>

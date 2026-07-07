@@ -49,6 +49,33 @@ class Product extends Model
     }
 
     /**
+     * Format réel largeur/hauteur de la photo (ex: "608/1080"), pour que la case qui
+     * l'affiche épouse toujours la vraie forme du fichier — même si la photo est
+     * remplacée plus tard sous un autre nom. Repli sur 3/4 si le fichier est absent
+     * ou illisible.
+     */
+    public function getImageRatioAttribute(): string
+    {
+        if (! $this->image) {
+            return '3/4';
+        }
+
+        $path = storage_path('app/public/'.$this->image);
+
+        if (! file_exists($path)) {
+            return '3/4';
+        }
+
+        $size = @getimagesize($path);
+
+        if (! $size) {
+            return '3/4';
+        }
+
+        return $size[0].'/'.$size[1];
+    }
+
+    /**
      * Nom "de base" du modèle, sans le suffixe de couleur (utilisé uniquement
      * comme information secondaire désormais ; le regroupement réel des couleurs
      * se fait via le champ variant_group, plus fiable).

@@ -44,7 +44,7 @@
             @php
                 $images = array_filter(array_merge([$product->image], $product->gallery ?? []));
             @endphp
-            <div class="pdp-main-image" id="pdpMainImage">
+            <div class="pdp-main-image" id="pdpMainImage" style="aspect-ratio: {{ $product->image_ratio }};">
                 @if(count($images))
                     <img src="{{ asset('storage/'.$images[array_key_first($images)]) }}" alt="{{ $product->name }}" id="pdpMainImg">
                 @else
@@ -83,6 +83,7 @@
                                style="background: {{ $sibling->color_hex }};"
                                data-url="{{ route('products.show', $sibling) }}"
                                data-image="{{ $sibling->image ? asset('storage/'.$sibling->image) : '' }}"
+                               data-ratio="{{ $sibling->image_ratio }}"
                                data-name="{{ $sibling->name }}"
                                data-color="{{ $sibling->color ?? $sibling->name }}"
                                data-price="{{ $sibling->formatted_price }}"
@@ -218,6 +219,8 @@ function pdpSelectColor(event, swatch) {
     const image = swatch.dataset.image;
     const mainImg = document.getElementById('pdpMainImg');
     const placeholder = document.getElementById('pdpMainPlaceholder');
+    const mainHolder = document.getElementById('pdpMainImage');
+    if (mainHolder && swatch.dataset.ratio) mainHolder.style.aspectRatio = swatch.dataset.ratio;
 
     if (image) {
         if (!mainImg) {

@@ -531,7 +531,7 @@ img { max-width: 100%; display: block; }
 /* ---------- Hero promo ---------- */
 .promo-hero {
     position: relative;
-   min-height: 100vh;;
+    min-height: 100vh;
     display: flex;
     align-items: center;
 
@@ -598,7 +598,7 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 
 /* ---------- Best-seller grid ---------- */
 .nh-product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; }
-.nh-product-card { display: flex; flex-direction: column; }
+.nh-product-card { display: flex; flex-direction: column; height: 100%; }
 .nh-product-thumb {
     position: relative; aspect-ratio: 3/4; background: var(--lilac-2); border-radius: 4px;
     display: grid; place-items: center; overflow: hidden; margin-bottom: 1rem;
@@ -611,6 +611,7 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 }
 .nh-product-name { font-size: .78rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--near-black); }
 .nh-product-price { font-size: .85rem; color: var(--gris); margin: .3rem 0 1rem; }
+.nh-product-card .btn-outline-dark { margin-top: auto; }
 .btn-outline-dark {
     display: block; text-align: center; padding: .75rem 1rem; border: 1.5px solid var(--near-black);
     color: var(--near-black); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 600;
@@ -651,8 +652,8 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
     position: relative; aspect-ratio: 3/4; overflow: hidden;
     display: flex; align-items: flex-end; padding: 1.2rem; color: #fff;
 }
-.do-item img { position: absolute; inset: 0; width: 550px; height: 450px; margin-top: 75px; margin-bottom: 15px;  }
-.do-item::before { content: '';  background: linear-gradient(0deg, rgba(0,0,0,.6), transparent 55%); }
+.do-item img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.do-item::before { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(0,0,0,.6), transparent 55%); }
 .do-item-text { position: relative; z-index: 2; }
 .do-item-text .name { font-size: .85rem; font-weight: 600; }
 .do-item-text .price { font-size: .78rem; opacity: .85; }
@@ -667,17 +668,30 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 .do-1::before, .do-2::before { background: linear-gradient(0deg, rgba(255,255,255,.7), transparent 55%); }
 .do-1 .do-item-text, .do-2 .do-item-text { color: var(--terre); }
 
+/* Photos Collection DO : sac cadré large (carré, bord à bord), un "cover" couperait les côtés du sac.
+   On passe en "contain" avec fond blanc assorti à leur propre fond studio, sans jamais rogner. */
+.do-item:has(img[src*="do-cuir-marron-boucle"]),
+.do-item:has(img[src*="do-cuir-marron.jpg"]),
+.do-item:has(img[src*="do-croco-lezard"]) {
+    background: #fff;
+}
+.do-item img[src*="do-cuir-marron-boucle"],
+.do-item img[src*="do-cuir-marron.jpg"],
+.do-item img[src*="do-croco-lezard"] {
+    object-fit: contain;
+}
+
 /* ---------- Collection Capsule ---------- */
 .capsule-section { background: var(--lilac-deep); }
 .capsule-section .nh-eyebrow { color: var(--red-badge); }
 .capsule-section .nh-section-head h2 { color: var(--purple-dark); }
-.capsule-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; }
+.capsule-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; align-items: start; }
 .capsule-card { background: #fff; padding: 19px; text-align: center; border-radius: 9px; }
 .capsule-thumb {
     aspect-ratio: 3/4; background: var(--lilac); margin-bottom: 15px; border-radius: 15px;
-     place-items: center; overflow: visible;
+    display: grid; place-items: center; overflow: hidden;
 }
-.capsule-thumb img { width: 600px; height: 600px; border-radius: 20px; }
+.capsule-thumb img { width: 100%; height: 100%; object-fit: contain; }
 .capsule-card h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; margin-bottom: .3rem; }
 .capsule-card .subt { font-size: .82rem; color: var(--gris); margin-bottom: .5rem; }
 .capsule-card .price { color: var(--green-dark); font-weight: 700; font-size: .95rem; margin-bottom: 1rem; }
@@ -686,34 +700,6 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
     font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; border-radius: 2px;
 }
 .btn-whatsapp-block:hover { background: #163d31; color: #fff; }
-
-/* ---------- Section lifestyle (le sac dans la vraie vie) ---------- */
-/* Pleine largeur, sans marge ni coin arrondi : galerie brute façon "grande photo éditoriale". */
-.lifestyle-section { background: #eee; }
-.lifestyle-grid {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px;
-    width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw;
-}
-.lifestyle-card { position: relative; aspect-ratio: 3/4; overflow: hidden; display: block; }
-.lifestyle-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
-.lifestyle-card-info {
-    position: absolute; left: 1rem; bottom: 1rem; z-index: 2;
-    background: rgba(255, 230, 150, 0.22); color: #f5c84c;
-    padding: .75rem .95rem; border-radius: 12px; max-width: 82%; backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, .45);
-}
-.lifestyle-card-title {
-    font-family: var(--font-display); font-size: .95rem; font-weight: 700; line-height: 1.25;
-    margin-bottom: .2rem;
-    color: #f5c84c;
-}
-.lifestyle-card-price {
-    color: #f5c84c; font-weight: 700; font-size: .86rem; opacity: .95;
-}
-.lifestyle-card:hover img { transform: scale(1.03); }
-@media (max-width: 600px) {
-    .lifestyle-grid { grid-template-columns: 1fr; }
-}
 
 /* ---------- Bandeau homme / femme ---------- */
 .split-banner { display: grid; grid-template-columns: 1fr 1fr; }
@@ -837,7 +823,7 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 }
 .view-btn.is-active { background: var(--purple); border-color: var(--purple); color: #fff; }
 
-.shop-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; padding-bottom: 3rem; }
+.shop-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; padding-bottom: 3rem; align-items: start; }
 .shop-card { background: var(--lilac-2); border-radius: 4px; padding: 1rem; position: relative; }
 .shop-card-badge {
     position: absolute; top: 1rem; left: 1rem; z-index: 2;
@@ -848,10 +834,10 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 .badge-new { background: var(--green-dark); }
 .badge-exclusive { background: var(--red-badge); }
 .shop-card-thumb {
-    aspect-ratio: 3/4; background: #fff; border-radius: 1px; display: table-cell; place-items: center;
-    overflow: hidden; margin-top: 6px;
+    aspect-ratio: 3/4; background: #fff; border-radius: 2px; display: grid; place-items: center;
+    overflow: hidden;
 }
-.shop-card-thumb img { width: 400px; height: 400px;  }
+.shop-card-thumb img { width: 100%; height: 100%; object-fit: contain; }
 .shop-card-thumb .placeholder-ico { font-size: 3rem; color: var(--purple); opacity: .35; }
 .shop-card-cat { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--purple); }
 .shop-card-name {
@@ -1105,7 +1091,7 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
     font-family: var(--font-display); font-weight: 300; letter-spacing: .2em;
     font-size: clamp(1.6rem, 3.5vw, 2.4rem); color: var(--lilac-deep);
 }
-.pdp-related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; text-align: left; }
+.pdp-related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; text-align: left; align-items: start; }
 .pdp-related-card { background: var(--lilac-2); border-radius: 4px; padding: 1rem; display: block; }
 .pdp-related-thumb { aspect-ratio: 3/4; background: #fff; border-radius: 2px; display: grid; place-items: center; overflow: hidden; margin-bottom: 1rem; }
 .pdp-related-thumb img { width: 100%; height: 100%; object-fit: contain; }
@@ -1392,7 +1378,7 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 .about-ashanti-card { background: rgba(255,255,255,.55); border-radius: 6px; padding: 1.2rem; }
 .about-ashanti-card h3 { font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .6rem; }
 .about-ashanti-card p { font-size: .82rem; line-height: 1.6; }
-.about-ashanti-photo { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 4/5; background: #ccc; }
+.about-ashanti-photo { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 529/810; }
 .about-ashanti-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .about-ashanti-brand {
     position: absolute; top: 1rem; left: 1rem; z-index: 2; font-family: var(--font-display);
@@ -1401,9 +1387,10 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 
 .about-symbol { text-align: center; padding: 5rem 0; background: #fff; }
 .about-symbol-ico {
-    width: 90px; height: 90px; border: 1.5px solid var(--near-black); border-radius: 4px;
-    display: grid; place-items: center; margin: 0 auto 1.6rem; color: var(--near-black);
+    width: 400px; height: 400px;
+    display: grid; place-items: center; margin: 0 auto 1.6rem;
 }
+.about-symbol-ico img { width: 100%; height: 100%; object-fit: contain; }
 .about-symbol h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.8rem, 3.5vw, 2.4rem); margin-bottom: 1.1rem; }
 .about-symbol p { max-width: 60ch; margin: 0 auto; color: var(--gris); line-height: 1.75; }
 
@@ -1538,17 +1525,11 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 }
 .btn-faq-whatsapp:hover { background: var(--near-black); color: #fff; }
 
-/* Les photos "v2" (lot Capsule) sont cadrées serré et laissent des bandes vides
-   sur les côtés (le sac est plus étroit que la case). On teinte ces cases d'un
-   ton champagne proche du tissu de fond des photos, pour que la bande vide se
-   fonde dans l'image au lieu de trancher en blanc/lilas. */
-.shop-card-thumb:has(img[src*="-v2.jpg"]),
-.capsule-thumb:has(img[src*="-v2.jpg"]),
-.nh-product-thumb:has(img[src*="-v2.jpg"]),
-.pdp-main-image:has(img[src*="-v2.jpg"]),
-.pdp-related-thumb:has(img[src*="-v2.jpg"]) {
-    background: #ECDFC4;
-}
+/* Le format de chaque case catalogue (shop-card-thumb, capsule-thumb, nh-product-thumb,
+   pdp-main-image, pdp-related-thumb) est désormais calculé dynamiquement à partir de la
+   vraie photo (voir Product::getImageRatioAttribute + style="aspect-ratio" inline dans les
+   vues), donc valable quel que soit le nom du fichier — même après un remplacement via
+   l'admin. Fond neutre de repli au cas où une image serait manquante ou illisible. */
 
 /* ---------- Animations : apparition au défilement ---------- */
 @media (prefers-reduced-motion: no-preference) {
@@ -1581,4 +1562,37 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 @media (max-width: 900px) {
     .faq-layout { grid-template-columns: 1fr; }
     .faq-sidebar nav { flex-direction: row; flex-wrap: wrap; gap: 1.2rem; }
+}
+
+/* ---------- Overrides: ensure lifestyle responsive & overlay alignment ---------- */
+.lifestyle-grid {
+    display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 1.2rem !important;
+    max-width: 1100px !important; margin: 0 auto !important; padding: 0 1rem !important;
+}
+.lifestyle-card {
+    position: relative !important; aspect-ratio: 3/4 !important; border-radius: 6px !important; overflow: hidden !important;
+    display: block !important; box-shadow: 0 14px 30px -12px rgba(0,0,0,.6) !important;
+}
+.lifestyle-card img { transition: transform .36s ease !important; }
+.lifestyle-card:hover img { transform: scale(1.04) !important; }
+.lifestyle-card::before { background: linear-gradient(0deg, rgba(0,0,0,.42), transparent 55%) !important; }
+.lifestyle-card-info {
+    position: absolute !important; left: 1rem !important; bottom: 1rem !important; z-index: 2 !important;
+    background: rgba(255, 230, 150, 0.16) !important; color: #f5c84c !important; padding: .6rem .9rem !important;
+    border-radius: 10px !important; max-width: 85% !important; backdrop-filter: blur(6px) !important;
+    border: 1px solid rgba(255,255,255,.12) !important;
+}
+.lifestyle-card-title { font-family: var(--font-display) !important; font-size: .95rem !important; font-weight: 700 !important; color: #f5c84c !important; margin-bottom: .15rem !important; }
+.lifestyle-card-price { font-weight: 700 !important; font-size: .86rem !important; color: #f5c84c !important; }
+
+@media (max-width: 900px) {
+    .lifestyle-grid { grid-template-columns: repeat(2, 1fr) !important; max-width: 900px !important; gap: .9rem !important; }
+    .lifestyle-card-info { left: .8rem !important; bottom: .8rem !important; padding: .5rem .75rem !important; }
+}
+@media (max-width: 600px) {
+    .lifestyle-grid { grid-template-columns: 1fr !important; max-width: 100% !important; gap: .8rem !important; }
+    .lifestyle-card { aspect-ratio: 16/9 !important; }
+    .lifestyle-card-info { left: .6rem !important; bottom: .6rem !important; padding: .45rem .6rem !important; border-radius: 8px !important; }
+    .lifestyle-card-title { font-size: .95rem !important; }
+    .lifestyle-card-price { font-size: .84rem !important; }
 }
