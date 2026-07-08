@@ -16,6 +16,15 @@
 
     @stack('structured-data')
 
+    {{-- PWA : installation en app, icône et couleur de thème --}}
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="theme-color" content="#15101C">
+    <link rel="icon" href="{{ asset('images/favicon-32.png') }}" sizes="32x32">
+    <link rel="apple-touch-icon" href="{{ asset('images/icon-apple-touch.png') }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Blac Joyaux">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -81,6 +90,14 @@
                     <circle cx="12" cy="7" r="4"/>
                 </svg>
             </a>
+            <a href="{{ route('wishlist.index') }}" class="nh-cart" aria-label="Favoris">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z"/>
+                </svg>
+                @if($wishlistCount > 0)
+                    <span class="nh-badge">{{ $wishlistCount }}</span>
+                @endif
+            </a>
             <a href="{{ route('cart.index') }}" class="nh-cart" aria-label="Panier">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
@@ -119,6 +136,7 @@
        <a href="{{ route('about') }}">À propos</a>
         <a href="{{ route('faq') }}">FAQ</a>
         <a href="{{ route('contact') }}">Contact</a>
+        <a href="{{ route('wishlist.index') }}">Favoris @if($wishlistCount > 0)({{ $wishlistCount }})@endif</a>
         <a href="{{ route('cart.index') }}">Panier @if($cartCount > 0)({{ $cartCount }})@endif</a>
     </nav>
 </header>
@@ -373,6 +391,63 @@ Swal.fire({
         observer.observe(el);
     });
 })();
+</script>
+
+<script>
+(function () {
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.wishlist-btn');
+        if (!btn) return;
+        e.preventDefault();
+
+        fetch(btn.dataset.toggleUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                document.querySelectorAll('.wishlist-btn[data-product-id="' + btn.dataset.productId + '"]').forEach(function (b) {
+                    b.classList.toggle('is-active', data.added);
+                    b.classList.remove('is-bump');
+                    void b.offsetWidth;
+                    b.classList.add('is-bump');
+                });
+
+                document.querySelectorAll('.nh-cart[aria-label="Favoris"]').forEach(function (link) {
+                    var badge = link.querySelector('.nh-badge');
+                    if (data.count > 0) {
+                        if (!badge) {
+                            badge = document.createElement('span');
+                            badge.className = 'nh-badge';
+                            link.appendChild(badge);
+                        }
+                        badge.textContent = data.count;
+                    } else if (badge) {
+                        badge.remove();
+                    }
+                });
+
+                // Sur la page /favoris elle-même : si on retire un article, on fait disparaître sa carte.
+                if (!data.added) {
+                    var card = btn.closest('[data-wishlist-card]');
+                    if (card) card.remove();
+                }
+            })
+            .catch(function () {});
+    });
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/sw.js').catch(function () {});
+    });
+}
 </script>
 @stack('scripts')
 </body>

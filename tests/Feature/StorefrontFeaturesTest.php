@@ -67,4 +67,26 @@ class StorefrontFeaturesTest extends TestCase
         $this->get(route('products.show', $withoutStory))
             ->assertDontSee('histoire cachée derrière ce sac');
     }
+
+    public function test_wishlist_toggle_adds_and_removes_product(): void
+    {
+        $product = Product::factory()->create(['is_active' => true]);
+
+        $add = $this->postJson(route('wishlist.toggle', $product));
+        $add->assertStatus(200)->assertJson(['added' => true, 'count' => 1]);
+
+        $this->get('/favoris')->assertStatus(200)->assertSee($product->name);
+
+        $remove = $this->postJson(route('wishlist.toggle', $product));
+        $remove->assertStatus(200)->assertJson(['added' => false, 'count' => 0]);
+
+        $this->get('/favoris')->assertStatus(200)->assertDontSee($product->name);
+    }
+
+    public function test_wishlist_page_shows_empty_state_by_default(): void
+    {
+        $this->get('/favoris')
+            ->assertStatus(200)
+            ->assertSee('pas encore ajouté de sac à vos favoris');
+    }
 }

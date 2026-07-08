@@ -846,6 +846,22 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 .badge-bestseller { background: var(--red-badge); }
 .badge-new { background: var(--green-dark); }
 .badge-exclusive { background: var(--red-badge); }
+
+/* ---------- Bouton favoris (coeur) ---------- */
+.wishlist-btn {
+    width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(255,255,255,.92);
+    display: inline-flex; align-items: center; justify-content: center; color: var(--near-black, #15101C);
+    cursor: pointer; transition: transform .15s ease, color .15s ease; box-shadow: 0 2px 10px rgba(0,0,0,.14);
+    flex-shrink: 0; padding: 0;
+}
+.wishlist-btn:hover { transform: scale(1.08); }
+.wishlist-btn.is-active { color: var(--red-badge, #B5302E); }
+.wishlist-btn.is-active svg { fill: currentColor; }
+.wishlist-btn.is-bump { animation: wishlist-bump .3s ease; }
+@keyframes wishlist-bump { 0% { transform: scale(1); } 40% { transform: scale(1.25); } 100% { transform: scale(1); } }
+
+.shop-card-wishlist { position: absolute; top: 1rem; right: 1rem; z-index: 3; }
+
 .shop-card-thumb {
     aspect-ratio: 3/4; background: #fff; border-radius: 2px; display: grid; place-items: center;
     overflow: hidden;

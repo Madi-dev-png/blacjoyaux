@@ -9,6 +9,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +29,10 @@ Route::get('/panier', [CartController::class, 'index'])->name('cart.index');
 Route::post('/panier/{product}', [CartController::class, 'add'])->name('cart.add');
 Route::patch('/panier/{product}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/panier/{product}', [CartController::class, 'remove'])->name('cart.remove');
+
+// Favoris (session, sans compte)
+Route::get('/favoris', [WishlistController::class, 'index'])->name('wishlist.index');
+Route::post('/favoris/{product}', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 
 // Commande (guest checkout)
 Route::get('/commande', [CheckoutController::class, 'index'])->name('checkout.index');

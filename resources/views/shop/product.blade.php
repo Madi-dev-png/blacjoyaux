@@ -105,6 +105,8 @@
                                data-in-stock="{{ $sibling->in_stock ? '1' : '0' }}"
                                data-add-url="{{ route('cart.add', $sibling) }}"
                                data-has-360="{{ count($sibling->spin_frames) ? '1' : '0' }}"
+                               data-wishlist-url="{{ route('wishlist.toggle', $sibling) }}"
+                               data-wishlist-active="{{ in_array($sibling->id, $wishlistIds) ? '1' : '0' }}"
                                onclick="return pdpSelectColor(event, this)">
                             </a>
                         @endforeach
@@ -128,9 +130,27 @@
                         </svg>
                         Ajouter au panier
                     </button>
+                    <button type="button" class="wishlist-btn {{ in_array($product->id, $wishlistIds) ? 'is-active' : '' }}" id="pdpWishlistBtn" style="width:48px; height:48px;"
+                            data-product-id="{{ $product->id }}"
+                            data-toggle-url="{{ route('wishlist.toggle', $product) }}"
+                            aria-label="Ajouter aux favoris">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z"/>
+                        </svg>
+                    </button>
                 </form>
             @else
-                <div class="pdp-actions"><span class="btn-pdp-cart" style="opacity:.5; pointer-events:none;">Épuisé</span></div>
+                <div class="pdp-actions">
+                    <span class="btn-pdp-cart" style="opacity:.5; pointer-events:none;">Épuisé</span>
+                    <button type="button" class="wishlist-btn {{ in_array($product->id, $wishlistIds) ? 'is-active' : '' }}" id="pdpWishlistBtn" style="width:48px; height:48px;"
+                            data-product-id="{{ $product->id }}"
+                            data-toggle-url="{{ route('wishlist.toggle', $product) }}"
+                            aria-label="Ajouter aux favoris">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z"/>
+                        </svg>
+                    </button>
+                </div>
             @endif
             </div>
 
@@ -287,6 +307,13 @@ function pdpSelectColor(event, swatch) {
     // Formulaire "Ajouter au panier" -> pointe vers le bon produit / bonne couleur.
     const cartForm = document.getElementById('pdpCartForm');
     if (cartForm) cartForm.action = swatch.dataset.addUrl;
+
+    // Bouton favoris -> pointe vers la bonne variante et reflète son état.
+    const wishlistBtn = document.getElementById('pdpWishlistBtn');
+    if (wishlistBtn && swatch.dataset.wishlistUrl) {
+        wishlistBtn.dataset.toggleUrl = swatch.dataset.wishlistUrl;
+        wishlistBtn.classList.toggle('is-active', swatch.dataset.wishlistActive === '1');
+    }
 
     // Disponibilité (stock)
     const actions = document.getElementById('pdpActions');
