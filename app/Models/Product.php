@@ -77,6 +77,34 @@ class Product extends Model
     }
 
     /**
+     * Format réel largeur/hauteur de la PREMIÈRE frame 360° (indépendant de la photo
+     * principale : les frames viennent d'une planche découpée, pas du même fichier).
+     * Repli sur 3/4 si le dossier est vide ou le fichier illisible.
+     */
+    public function getSpinRatioAttribute(): string
+    {
+        if (! $this->spin_folder) {
+            return '3/4';
+        }
+
+        $files = Storage::disk('public')->files($this->spin_folder);
+        sort($files, SORT_NATURAL);
+
+        if (empty($files)) {
+            return '3/4';
+        }
+
+        $path = storage_path('app/public/'.$files[0]);
+        $size = @getimagesize($path);
+
+        if (! $size) {
+            return '3/4';
+        }
+
+        return $size[0].'/'.$size[1];
+    }
+
+    /**
      * URLs des images de la rotation 360° (triées par angle), ou tableau vide
      * si le produit n'a pas de dossier "spin_folder" renseigné.
      */

@@ -46,7 +46,7 @@
                 $spinFrames = $product->spin_frames;
             @endphp
             @if(count($spinFrames))
-                <div class="pdp-360" id="pdp360" data-frames="{{ json_encode($spinFrames) }}" style="aspect-ratio: {{ $product->image_ratio }};">
+                <div class="pdp-360" id="pdp360" data-frames="{{ json_encode($spinFrames) }}" style="aspect-ratio: {{ $product->spin_ratio }};">
                     <img src="{{ $spinFrames[0] }}" alt="{{ $product->name }}" id="pdp360ImgA" class="pdp-360-layer is-active" draggable="false">
                     <img src="{{ $spinFrames[0] }}" alt="{{ $product->name }}" id="pdp360ImgB" class="pdp-360-layer" draggable="false">
                     <span class="pdp-360-badge">360°</span>
