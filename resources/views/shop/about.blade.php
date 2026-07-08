@@ -1,7 +1,7 @@
 @extends('layouts.shop')
 
 @section('title', 'À propos — Blac Joyaux')
-@section('meta_description', "Découvrez l'histoire de Blac Joyaux, notre fondatrice Emmanuela Kouadio, et l'héritage Ashanti derrière chaque création.")
+@section('meta_description', "Découvrez l'histoire de Blac Joyaux, notre fondatrice Manuela Kouadio, et l'héritage Ashanti derrière chaque création.")
 
 @section('content')
 
@@ -20,13 +20,13 @@
 <section class="about-founder">
     <div class="container about-founder-grid">
         <div class="about-founder-photo">
-            <img src="{{ asset('images/about/founder.jpg') }}" alt="Emmanuela Kouadio, fondatrice de Blac Joyaux" onerror="this.style.display='none'">
+            <img src="{{ asset('images/about/founder.jpg') }}" alt="Manuela Kouadio, fondatrice de Blac Joyaux" onerror="this.style.display='none'">
             <span class="about-founder-tag">Fondatrice</span>
         </div>
         <div class="about-founder-text">
             <span class="nh-eyebrow">La visionnaire</span>
             <h2>Manuela Kouadio</h2>
-            <p>Animée par une passion pour la culture Akan et le design moderne, Emmanuela a fondé Blac Joyaux pour combler le fossé entre les symboles traditionnels et la joaillerie de luxe. Son parcours est une quête d'identité, de beauté et d'authenticité.</p>
+            <p>Animée par une passion pour la culture Akan et le design moderne, Manuela a fondé Blac Joyaux pour combler le fossé entre les symboles traditionnels et la joaillerie de luxe. Son parcours est une quête d'identité, de beauté et d'authenticité.</p>
             <blockquote>« Chaque bijou est un pont jeté entre nos racines et notre futur. »</blockquote>
         </div>
     </div>
@@ -42,7 +42,7 @@
             <div class="about-ashanti-cards">
                 <div class="about-ashanti-card">
                     <h3>Symbolisme</h3>
-                    <p>La tête circulaire représente le soleil et l'éternité, tandis que le cou anneié symbolise la beauté idéale.</p>
+                    <p>La tête circulaire représente le soleil et l'éternité, tandis que le cou annelé symbolise la beauté idéale.</p>
                 </div>
                 <div class="about-ashanti-card">
                     <h3>Héritage</h3>
