@@ -1022,7 +1022,7 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 .pdp-360.is-dragging { cursor: grabbing; }
 .pdp-360 img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; user-select: none; }
 .pdp-360-layer {
-    position: absolute; inset: 0; opacity: 0; transition: opacity .35s linear;
+    position: absolute; inset: 0; opacity: 0; transition: opacity .45s linear;
 }
 .pdp-360-layer.is-active { opacity: 1; }
 .pdp-360-badge {

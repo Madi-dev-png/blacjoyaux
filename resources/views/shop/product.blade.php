@@ -351,7 +351,7 @@ function pdpSelectColor(event, swatch) {
 
     function startAuto() {
         if (reduceMotion || autoTimer) return;
-        autoTimer = setInterval(() => setFrame(currentFrame + 1), 550);
+        autoTimer = setInterval(() => setFrame(currentFrame + 1), 800);
     }
 
     function stopAuto() {
