@@ -330,16 +330,36 @@ function pdpSelectColor(event, swatch) {
     let currentFrame = 0;
     let dragging = false;
     let lastX = 0;
+    let autoTimer = null;
+    let resumeTimer = null;
     const pxPerFrame = Math.max(8, Math.round(280 / frames.length));
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     function setFrame(index) {
         currentFrame = ((index % frames.length) + frames.length) % frames.length;
         img.src = frames[currentFrame];
     }
 
+    function startAuto() {
+        if (reduceMotion || autoTimer) return;
+        autoTimer = setInterval(() => setFrame(currentFrame + 1), 320);
+    }
+
+    function stopAuto() {
+        clearInterval(autoTimer);
+        autoTimer = null;
+    }
+
+    function scheduleResume() {
+        clearTimeout(resumeTimer);
+        resumeTimer = setTimeout(startAuto, 2500);
+    }
+
     function start(x) {
         dragging = true;
         lastX = x;
+        stopAuto();
+        clearTimeout(resumeTimer);
         viewer.classList.add('is-dragging');
         if (hint) hint.style.display = 'none';
     }
@@ -356,6 +376,7 @@ function pdpSelectColor(event, swatch) {
     function stop() {
         dragging = false;
         viewer.classList.remove('is-dragging');
+        scheduleResume();
     }
 
     viewer.addEventListener('mousedown', e => { e.preventDefault(); start(e.clientX); });
@@ -365,6 +386,11 @@ function pdpSelectColor(event, swatch) {
     viewer.addEventListener('touchstart', e => start(e.touches[0].clientX), { passive: true });
     viewer.addEventListener('touchmove', e => move(e.touches[0].clientX), { passive: true });
     viewer.addEventListener('touchend', stop);
+
+    viewer.addEventListener('mouseenter', stopAuto);
+    viewer.addEventListener('mouseleave', () => { if (!dragging) scheduleResume(); });
+
+    startAuto();
 })();
 </script>
 @endsection
