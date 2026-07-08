@@ -9,8 +9,8 @@
 <section class="promo-hero">
     <div class="hero-slides">
         <div class="hero-slide is-active" style="background-image: url('/images/hero.jpg')"></div>
-        <div class="hero-slide" style="background-image: url('/images/hero2.jpg')"></div>
-        <div class="hero-slide" style="background-image: url('/images/hero3.jpg')"></div>
+        <div class="hero-slide" style="background-image: url('/images/hero-2.jpg')"></div>
+        <div class="hero-slide" style="background-image: url('/images/hero-3.jpg')"></div>
     </div>
     <div class="container">
         <p class="promo-eyebrow">Made in Côte d'Ivoire</p>
