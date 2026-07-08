@@ -32,10 +32,11 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; font-size: 17.5px; }
 
 body {
     margin: 0;
+    overflow-x: hidden;
     font-family: var(--font-body);
     color: var(--encre);
     background: var(--ivoire);
@@ -56,7 +57,7 @@ a:hover { color: var(--or); }
 
 img { max-width: 100%; display: block; }
 
-.container { width: max(1180px, 98vw); margin-inline: auto; }
+.container { width: min(1180px, 92vw); margin-inline: auto; }
 
 .skip-link {
     position: absolute; left: -999px;
@@ -591,7 +592,7 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 /* ---------- Section titres communs ---------- */
 .nh-section { padding: 4.5rem 0; background: #fff; }
 .nh-section-head { text-align: center; margin-bottom: 2.6rem; }
-.nh-eyebrow { font-size: 1.75rem; letter-spacing: .3em; text-transform: uppercase; color: var(--purple); font-weight: 600; }
+.nh-eyebrow { font-size: .75rem; letter-spacing: .3em; text-transform: uppercase; color: var(--purple); font-weight: 600; }
 .nh-section-head h2 { font-family: var(--font-display); font-size: clamp(2.8rem, 3vw, 2.4rem); font-weight: 700; margin-top: .6rem; }
 .nh-section-head h2 strong { font-weight: 700; }
 .nh-section-head p.subtitle { font-family: var(--font-display); font-style: italic; color: var(--gris); margin-top: .4rem; }
@@ -722,7 +723,7 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 
 /* ---------- Témoignages ---------- */
 .testimonials-section { background: #E8E2F2; }
-.testimonials-grid { display:flex; grid-template-columns: repeat(3, 1fr); gap: 170px;   }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem; }
 .testimonial-card { background: #fff; padding: 90px; border-radius: 4px; }
 .stars { color: var(--gold-soft); font-size: 39px; margin-bottom: .9rem; letter-spacing: .1em; }
 .testimonial-card p.quote { font-size: 1.30rem; color: var(--encre); font-style: italic; min-height: 70px; }
@@ -731,8 +732,8 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
     width: 38px; height: 38px; border-radius: 50%; background: var(--purple); color: #fff;
     display: grid; place-items: center; font-size: .75rem; font-weight: 700;
 }
-.testimonial-author .name { font-size: 1.95rem; font-weight: 600; color: var(--near-black); }
-.testimonial-author .loc { font-size: 1.75rem; color: var(--gris); }
+.testimonial-author .name { font-size: .85rem; font-weight: 600; color: var(--near-black); }
+.testimonial-author .loc { font-size: .75rem; color: var(--gris); }
 
 /* ---------- Nouveau footer ---------- */
 .new-footer { background: var(--lilac); padding: 3.5rem 0 1.5rem; }
@@ -1360,7 +1361,7 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 }
 .about-founder-text .nh-eyebrow { color: var(--purple); }
 .about-founder-text h2 { font-family: var(--font-display); font-size: clamp(2rem, 8vw, 6.6rem); margin: .5rem 0 1.2rem; }
-.about-founder-text > p { font-size: 1.52rem; line-height: 1.75; color: var(--near-black); margin-bottom: 1.4rem; }
+.about-founder-text > p { font-size: .92rem; line-height: 1.75; color: var(--near-black); margin-bottom: 1.4rem; }
 .about-founder-text blockquote {
     border-left: 3px solid var(--purple); padding-left: 1.2rem; font-style: oblique;
     font-family: var(--font-display); font-size: 1.85rem; color: var(--near-black);
@@ -1369,10 +1370,10 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 .about-ashanti { background: var(--lilac-deep); padding: 4.5rem 0; }
 .about-ashanti-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 3rem; align-items: center; }
 .about-ashanti-text h2 { font-family: var(--font-display); font-weight: 900; font-size: clamp(2rem, 8vw, 6.6rem); margin-bottom: 1.91rem; }
-.about-ashanti-text > p { font-size: 1.92rem; line-height: 1.7; margin-bottom: 1.8rem; }
+.about-ashanti-text > p { font-size: .92rem; line-height: 1.7; margin-bottom: 1.8rem; }
 .about-ashanti-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .about-ashanti-card { background: rgba(255,255,255,.55); border-radius: 6px; padding: 1.2rem; }
-.about-ashanti-card h3 { font-size: 1.82rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .6rem; }
+.about-ashanti-card h3 { font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .6rem; }
 .about-ashanti-card p { font-size: .99rem; line-height: 1.6; }
 .about-ashanti-photo { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 529/810; }
 .about-ashanti-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -1383,7 +1384,7 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 
 .about-symbol { text-align: center; padding: 5rem 0; background: #fff; }
 .about-symbol-ico {
-    width: 400px; height: 400px;
+    width: min(400px, 60vw); aspect-ratio: 1;
     display: grid; place-items: center; margin: 0 auto 1.6rem;
 }
 .about-symbol-ico img { width: 100%; height: 100%; object-fit: contain; }
@@ -1394,9 +1395,9 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
 .about-values h2 { text-align: center; color: white; font-family: var(--font-display); font-weight: 700; letter-spacing: .08em; font-size: clamp(1.8rem, 5vw, 4rem); margin-bottom: 3rem; }
 .about-values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
 .about-value-card { border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 4px; padding: 2rem 1.6rem; }
-.about-value-card .num { font-family: var(--font-display); font-size: 2.4rem; font-weight: 700; color: rgba(255,255,255,.25); display: block; margin-bottom: 1.2rem; }
-.about-value-card h3 { font-size: 2.1rem; font-weight: 600; margin-bottom: .5rem; color:rgb(222, 173, 255)}
-.about-value-card p { font-size: 1.54rem; color: white; line-height: 1.6; }
+.about-value-card .num { font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; color: rgba(255,255,255,.25); display: block; margin-bottom: 1.2rem; }
+.about-value-card h3 { font-size: clamp(1.15rem, 2.4vw, 2.1rem); font-weight: 600; margin-bottom: .5rem; color:rgb(222, 173, 255)}
+.about-value-card p { font-size: clamp(.92rem, 1.6vw, 1.54rem); color: white; line-height: 1.6; }
 .about-value-card:nth-child(1), .about-value-card:nth-child(2) { grid-column: span 1; }
 
 .about-showroom { padding: 4.5rem 0; background: var(--lilac); }
