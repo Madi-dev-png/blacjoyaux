@@ -82,13 +82,6 @@ class ProductController extends Controller
     {
         abort_unless($product->is_active, 404);
 
-        $related = Product::active()
-            ->where('id', '!=', $product->id)
-            ->when($product->category_id, fn ($q) => $q->where('category_id', $product->category_id))
-            ->inRandomOrder()
-            ->take(4)
-            ->get();
-
         // Regroupement des couleurs : UNIQUEMENT via le champ "variant_group" rempli
         // manuellement dans l'admin. On ne devine plus rien à partir du nom du produit,
         // car deux sacs différents peuvent partager un nom très proche (ex: deux modèles
@@ -100,6 +93,28 @@ class ProductController extends Controller
                 ->get();
         } else {
             $colorSiblings = collect([$product]);
+        }
+
+        // "Vous aimerez aussi" : on exclut le produit courant et ses propres variantes de
+        // couleur (pas d'intérêt à se recommander soi-même), on privilégie la même catégorie,
+        // puis on complète avec d'autres produits actifs pour toujours proposer 4 suggestions.
+        $excludedIds = $colorSiblings->pluck('id')->push($product->id);
+
+        $related = Product::active()
+            ->whereNotIn('id', $excludedIds)
+            ->when($product->category_id, fn ($q) => $q->where('category_id', $product->category_id))
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+
+        if ($related->count() < 4) {
+            $more = Product::active()
+                ->whereNotIn('id', $excludedIds->merge($related->pluck('id')))
+                ->inRandomOrder()
+                ->take(4 - $related->count())
+                ->get();
+
+            $related = $related->concat($more);
         }
 
         $collectionLabels = [

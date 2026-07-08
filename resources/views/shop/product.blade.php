@@ -120,7 +120,7 @@
 
             @if($product->story)
                 <div class="pdp-story">
-                    <h3>L'histoire de ce sac</h3>
+                    <h3>L'histoire cachée derrière ce sac…</h3>
                     {!! nl2br(e($product->story)) !!}
                 </div>
             @endif
@@ -159,10 +159,12 @@
             </details>
 
             @if($product->description)
-                <div class="pdp-full-desc">
-                    <h3>Description</h3>
+            <details class="pdp-accordion">
+                <summary>Description <span class="acc-ico">+</span></summary>
+                <div class="pdp-accordion-body">
                     {!! nl2br(e($product->description)) !!}
                 </div>
+            </details>
             @endif
         </div>
     </div>

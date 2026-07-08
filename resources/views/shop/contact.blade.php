@@ -61,14 +61,6 @@
         {{-- COLONNE DROITE : Infos --}}
         <div class="contact-side">
 
-            <div class="contact-map">
-                <iframe
-                    src="https://maps.google.com/maps?q=Rond-point de la Riviera Palmeraie, Cocody, Abidjan, Côte d'Ivoire&z=16&output=embed"
-                    width="100%" height="100%" style="border:0;" allowfullscreen loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade" title="Localisation Blac Joyaux">
-                </iframe>
-            </div>
-
             <div class="contact-whatsapp-list">
                 @foreach([
                     ['label' => 'WhatsApp Direct', 'number' => config('services.brand.whatsapp')],

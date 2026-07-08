@@ -1,0 +1,70 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\Faq;
+use App\Models\Product;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class StorefrontFeaturesTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_faq_page_shows_active_questions(): void
+    {
+        Faq::create([
+            'question' => 'Peut-on payer par Wave ou Orange Money ?',
+            'answer' => 'Oui, Wave et Orange Money sont acceptés.',
+            'category' => 'paiement',
+            'sort_order' => 1,
+            'is_active' => true,
+        ]);
+
+        $this->get('/faq')
+            ->assertStatus(200)
+            ->assertSee('Peut-on payer par Wave ou Orange Money ?');
+    }
+
+    public function test_product_search_endpoint_returns_matching_product(): void
+    {
+        $product = Product::factory()->create(['name' => 'Sac Bureau Femme – Marron', 'is_active' => true]);
+        Product::factory()->create(['name' => 'Pochette Soirée', 'is_active' => true]);
+
+        $response = $this->getJson('/recherche?search=Bureau');
+
+        $response->assertStatus(200)
+            ->assertJsonCount(1)
+            ->assertJsonFragment(['name' => $product->name]);
+    }
+
+    public function test_product_search_endpoint_ignores_short_terms(): void
+    {
+        Product::factory()->create(['name' => 'Sac Bureau Femme', 'is_active' => true]);
+
+        $this->getJson('/recherche?search=a')->assertJson([]);
+    }
+
+    public function test_cart_page_shows_whatsapp_cta_when_it_has_items(): void
+    {
+        $product = Product::factory()->create(['is_active' => true, 'stock' => 5]);
+
+        $this->post(route('cart.add', $product), ['quantity' => 1]);
+
+        $this->get('/panier')
+            ->assertStatus(200)
+            ->assertSee('Finaliser ma commande sur WhatsApp');
+    }
+
+    public function test_product_page_shows_story_block_only_when_present(): void
+    {
+        $withStory = Product::factory()->create(['is_active' => true, 'story' => "Le leadership se construit chaque jour."]);
+        $withoutStory = Product::factory()->create(['is_active' => true, 'story' => null]);
+
+        $this->get(route('products.show', $withStory))
+            ->assertSee('histoire cachée derrière ce sac');
+
+        $this->get(route('products.show', $withoutStory))
+            ->assertDontSee('histoire cachée derrière ce sac');
+    }
+}
