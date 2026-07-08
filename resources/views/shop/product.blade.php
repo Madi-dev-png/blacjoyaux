@@ -47,7 +47,8 @@
             @endphp
             @if(count($spinFrames))
                 <div class="pdp-360" id="pdp360" data-frames="{{ json_encode($spinFrames) }}" style="aspect-ratio: {{ $product->image_ratio }};">
-                    <img src="{{ $spinFrames[0] }}" alt="{{ $product->name }}" id="pdp360Img" draggable="false">
+                    <img src="{{ $spinFrames[0] }}" alt="{{ $product->name }}" id="pdp360ImgA" class="pdp-360-layer is-active" draggable="false">
+                    <img src="{{ $spinFrames[0] }}" alt="{{ $product->name }}" id="pdp360ImgB" class="pdp-360-layer" draggable="false">
                     <span class="pdp-360-badge">360°</span>
                     <div class="pdp-360-hint" id="pdp360Hint">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -320,7 +321,7 @@ function pdpSelectColor(event, swatch) {
     const viewer = document.getElementById('pdp360');
     if (!viewer) return;
 
-    const img = document.getElementById('pdp360Img');
+    const layers = [document.getElementById('pdp360ImgA'), document.getElementById('pdp360ImgB')];
     const hint = document.getElementById('pdp360Hint');
     const frames = JSON.parse(viewer.dataset.frames || '[]');
     if (frames.length < 2) return;
@@ -328,6 +329,7 @@ function pdpSelectColor(event, swatch) {
     frames.forEach(src => { (new Image()).src = src; });
 
     let currentFrame = 0;
+    let activeLayer = 0;
     let dragging = false;
     let lastX = 0;
     let autoTimer = null;
@@ -335,9 +337,16 @@ function pdpSelectColor(event, swatch) {
     const pxPerFrame = Math.max(8, Math.round(280 / frames.length));
     const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // Fondu enchaîné entre deux calques superposés : on charge la nouvelle image
+    // dans le calque caché (déjà en cache grâce au préchargement ci-dessus), puis
+    // on bascule l'opacité — ça masque le "jump-cut" entre deux angles à 45° d'écart.
     function setFrame(index) {
         currentFrame = ((index % frames.length) + frames.length) % frames.length;
-        img.src = frames[currentFrame];
+        const next = activeLayer === 0 ? 1 : 0;
+        layers[next].src = frames[currentFrame];
+        layers[next].classList.add('is-active');
+        layers[activeLayer].classList.remove('is-active');
+        activeLayer = next;
     }
 
     function startAuto() {
