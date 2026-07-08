@@ -321,7 +321,7 @@ function pdpSelectColor(event, swatch) {
     let currentFrame = 0;
     let dragging = false;
     let lastX = 0;
-    const pxPerFrame = 8;
+    const pxPerFrame = Math.max(8, Math.round(280 / frames.length));
 
     function setFrame(index) {
         currentFrame = ((index % frames.length) + frames.length) % frames.length;
