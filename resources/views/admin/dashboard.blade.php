@@ -75,6 +75,22 @@
     </div>
 </div>
 
+<div class="panel">
+    <div class="panel-head">
+        <h2>Ventes des 14 derniers jours</h2>
+    </div>
+    <div class="sales-chart">
+        @foreach($salesChart as $i => $point)
+            <div class="sales-chart-bar">
+                <div class="sales-chart-fill" style="height: {{ $point['height'] }}%;" title="{{ $point['label'] }} — {{ number_format($point['total'],0,',',' ') }} FCFA"></div>
+                @if($i % 2 === 0)
+                    <span class="sales-chart-label">{{ $point['label'] }}</span>
+                @endif
+            </div>
+        @endforeach
+    </div>
+</div>
+
 <div class="admin-grid-2">
     <div class="panel">
         <div class="panel-head">
@@ -136,6 +152,24 @@
                 @endforeach
                 </tbody>
             </table>
+        </div>
+        @endif
+
+        @if($weakProducts->isNotEmpty())
+        <div class="panel">
+            <div class="panel-head">
+                <h2>Santé du catalogue</h2>
+                <a href="{{ route('admin.products.index') }}" class="btn btn-outline btn-sm">Voir tout</a>
+            </div>
+            @foreach($weakProducts as $product)
+                <div class="health-row">
+                    <div style="flex:1; min-width:0;">
+                        <a href="{{ route('admin.products.edit', $product) }}" class="ranking-name">{{ $product->name }}</a>
+                        <div class="seo-meter"><span style="width: {{ $product->seo_score }}%; background: var(--bad);"></span></div>
+                    </div>
+                    <span class="health-score">{{ $product->seo_score }}/100</span>
+                </div>
+            @endforeach
         </div>
         @endif
 

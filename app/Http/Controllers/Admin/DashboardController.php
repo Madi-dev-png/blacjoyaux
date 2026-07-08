@@ -41,6 +41,16 @@ class DashboardController extends Controller
         $recentOrders = Order::latest()->take(8)->get();
         $lowStock = Product::where('stock', '<=', 3)->where('is_active', true)->take(5)->get();
 
+        $salesChart = $this->salesChart($paidStatuses, 14);
+
+        // Santé du catalogue : produits dont le score SEO (calculé par SeoService lors de
+        // la sauvegarde) est en dessous du seuil "moyen" — fiche incomplète à soigner.
+        $weakProducts = Product::active()
+            ->where('seo_score', '<', 50)
+            ->orderBy('seo_score')
+            ->take(5)
+            ->get();
+
         // Produits les plus vendus (quantité cumulée sur les commandes non annulées).
         $topProducts = OrderItem::query()
             ->join('orders', 'orders.id', '=', 'order_items.order_id')
@@ -53,7 +63,39 @@ class DashboardController extends Controller
             ->take(3)
             ->get();
 
-        return view('admin.dashboard', compact('stats', 'trends', 'recentOrders', 'lowStock', 'topProducts'));
+        return view('admin.dashboard', compact('stats', 'trends', 'recentOrders', 'lowStock', 'topProducts', 'salesChart', 'weakProducts'));
+    }
+
+    /**
+     * Chiffre d'affaires jour par jour sur les $days derniers jours (jours sans
+     * commande inclus à 0, pour que le graphique reste régulier).
+     */
+    private function salesChart(array $paidStatuses, int $days): array
+    {
+        $start = now()->subDays($days - 1)->startOfDay();
+
+        $rows = Order::whereIn('status', $paidStatuses)
+            ->where('created_at', '>=', $start)
+            ->selectRaw("DATE(created_at) as day, SUM(total) as total")
+            ->groupBy('day')
+            ->pluck('total', 'day');
+
+        $points = [];
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $key = $date->format('Y-m-d');
+            $points[] = [
+                'label' => $date->translatedFormat('d M'),
+                'total' => (float) ($rows[$key] ?? 0),
+            ];
+        }
+
+        $max = collect($points)->max('total') ?: 1;
+        foreach ($points as &$point) {
+            $point['height'] = max(4, round(($point['total'] / $max) * 100));
+        }
+
+        return $points;
     }
 
     private function trend(int|float $current, int|float $previous): array

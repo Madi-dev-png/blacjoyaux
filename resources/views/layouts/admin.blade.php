@@ -116,6 +116,22 @@
         .ranking-sub { font-size: .76rem; color: var(--gris); }
         .ranking-value { margin-left: auto; text-align: right; font-size: .88rem; font-weight: 600; color: var(--adm-purple-2); }
 
+        /* ---------- Graphique de ventes (barres CSS, pas de librairie) ---------- */
+        .sales-chart { display: flex; align-items: flex-end; gap: .5rem; height: 140px; }
+        .sales-chart-bar { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; min-width: 0; }
+        .sales-chart-fill {
+            width: 100%; max-width: 26px; background: var(--adm-purple); border-radius: 4px 4px 0 0;
+            transition: background .15s; cursor: default;
+        }
+        .sales-chart-fill:hover { background: var(--adm-purple-2); }
+        .sales-chart-label { font-size: .64rem; color: var(--gris); margin-top: .5rem; white-space: nowrap; }
+
+        /* ---------- Santé du catalogue ---------- */
+        .health-row { display: flex; align-items: center; gap: 1rem; padding: .7rem 0; border-bottom: 1px solid var(--ivoire-2); }
+        .health-row:last-child { border-bottom: none; }
+        .health-row .seo-meter { width: 100%; margin-top: .4rem; }
+        .health-score { flex-shrink: 0; font-size: .82rem; font-weight: 700; color: var(--bad); white-space: nowrap; }
+
         @media (max-width: 900px) {
             .admin-shell { grid-template-columns: 1fr; }
             .admin-side { flex-direction: row; flex-wrap: wrap; align-items: center; gap: .4rem .8rem; padding: 1rem 1.2rem; }
