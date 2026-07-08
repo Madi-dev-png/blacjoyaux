@@ -5,9 +5,11 @@
 
 @section('content')
 
-{{-- HERO --}}
+{{-- HERO VIDÉO --}}
 <section class="about-hero">
-    <img src="{{ asset('images/about/hero.jpg') }}" alt="Sacs Blac Joyaux" class="about-hero-img" onerror="this.style.display='none'">
+    <video class="about-hero-video" autoplay muted loop playsinline poster="{{ asset('images/about/hero.jpg') }}">
+        <source src="{{ asset('images/about/histoire.mp4') }}" type="video/mp4">
+    </video>
     <div class="about-hero-overlay">
         <div class="container">
             <h1>Notre histoire</h1>

@@ -1390,18 +1390,22 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
     .confirm-body { grid-template-columns: 1fr; }
 }
 /* ---------- Page À propos ---------- */
-.about-hero { position: relative; width: 100%; height: 420px; overflow: hidden; }
-.about-hero-img {
+.about-hero { position: relative; width: 100%; height: 100vh; min-height: 560px; overflow: hidden; }
+.about-hero-img, .about-hero-video {
     position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: cover; display: block; z-index: 0;
 }
 .about-hero-overlay {
-    position: absolute; inset: 0; background: rgba(0, 0, 0, 0.75);
-    display: flex; align-items: center; text-align: center;
+    position: absolute; inset: 0;
+    background: linear-gradient(0deg, rgba(8,6,10,.72) 0%, rgba(8,6,10,.15) 45%, rgba(8,6,10,.35) 100%);
+    display: flex; align-items: flex-end; text-align: center; padding-bottom: 4.5rem;
 }
 .about-hero-overlay .container { width: 100%; }
-.about-hero h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.2rem, 5vw, 3.4rem); color: var(--near-black); margin-bottom: .6rem; }
-.about-hero p { color: var(--near-black); font-size: .95rem; opacity: .8; }
+.about-hero h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.4rem, 6vw, 4rem); color: #fff; margin-bottom: .6rem; }
+.about-hero p { color: #fff; font-size: 1rem; opacity: .88; }
+@media (max-width: 600px) {
+    .about-hero { height: 100vh; min-height: 480px; }
+}
 
 .about-founder { padding: 4rem 0; }
 .about-founder-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 3rem; align-items: center; }
