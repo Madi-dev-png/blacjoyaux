@@ -40,8 +40,7 @@
 <header class="checkout-header">
     <div class="container checkout-header-inner">
         <a href="{{ route('home') }}" class="nh-brand">
-            <span class="nh-brand-name">BLAC</span>
-            <span class="nh-brand-sub">JOYAUX</span>
+            <img src="{{ asset('images/logo.png') }}" alt="Blac Joyaux" class="nh-brand-logo">
         </a>
         @if(request()->routeIs('checkout.index'))
         <span class="checkout-secure-badge">
@@ -79,8 +78,7 @@
         </div>
 
         <a href="{{ route('home') }}" class="nh-brand">
-            <span class="nh-brand-name">BLAC</span>
-            <span class="nh-brand-sub">JOYAUX</span>
+            <img src="{{ asset('images/logo.png') }}" alt="Blac Joyaux" class="nh-brand-logo">
         </a>
 
         <div class="nh-actions">

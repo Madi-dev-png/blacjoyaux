@@ -501,14 +501,10 @@ img { max-width: 100%; display: block; }
 .nh-search-info { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
 .nh-search-name { font-size: .85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .nh-search-price { font-size: .78rem; color: var(--purple, #6b4f8f); font-weight: 600; }
-.nh-brand { text-align: center; line-height: 1; }
-.nh-brand .nh-brand-name {
-    font-family: var(--font-display); font-weight: 600; letter-spacing: .12em;
-    font-size: 1.5rem; color: var(--near-black); display: block;
-}
-.nh-brand .nh-brand-sub {
-    font-family: var(--font-body); font-size: .62rem; letter-spacing: .35em;
-    color: var(--gris); display: block; margin-top: .15rem;
+.nh-brand { text-align: center; line-height: 1; display: inline-flex; align-items: center; }
+.nh-brand-logo { height: 50px; width: auto; display: block; }
+@media (max-width: 600px) {
+    .nh-brand-logo { height: 42px; }
 }
 .nh-actions { display: flex; align-items: center; justify-content: flex-end; gap: 1.3rem; }
 .nh-actions a { color: var(--near-black); font-size: 1rem; display: inline-flex; align-items: center; gap: .4rem; }
@@ -1390,7 +1386,7 @@ nav[role="navigation"] span.cursor-default { color: var(--gris); opacity: .5; }
     .confirm-body { grid-template-columns: 1fr; }
 }
 /* ---------- Page À propos ---------- */
-.about-hero { position: relative; width: 100%; height: 100vh; min-height: 560px; overflow: hidden; }
+.about-hero { position: relative; width: 100%; max-width: none; margin-inline: 0; height: 100vh; min-height: 560px; overflow: hidden; }
 .about-hero-img, .about-hero-video {
     position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: cover; display: block; z-index: 0;
