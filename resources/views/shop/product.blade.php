@@ -103,6 +103,7 @@
                                data-price="{{ $sibling->formatted_price }}"
                                data-in-stock="{{ $sibling->in_stock ? '1' : '0' }}"
                                data-add-url="{{ route('cart.add', $sibling) }}"
+                               data-has-360="{{ count($sibling->spin_frames) ? '1' : '0' }}"
                                onclick="return pdpSelectColor(event, this)">
                             </a>
                         @endforeach
@@ -225,12 +226,20 @@ function pdpSwapImage(src, btn) {
  * et que le rechargement de la page affiche bien la bonne variante.
  */
 function pdpSelectColor(event, swatch) {
-    event.preventDefault();
-
     // Couleur déjà sélectionnée : rien à faire.
     if (swatch.classList.contains('is-active')) {
+        event.preventDefault();
         return false;
     }
+
+    // Le produit actuel ou la variante ciblée utilise la visionneuse 360° (pas de
+    // balise <img> statique à mettre à jour) : on laisse le lien naviguer normalement,
+    // la page se recharge et affiche la bonne visionneuse (360° ou image classique).
+    if (document.getElementById('pdp360') || swatch.dataset.has360 === '1') {
+        return true;
+    }
+
+    event.preventDefault();
 
     const image = swatch.dataset.image;
     const mainImg = document.getElementById('pdpMainImg');
