@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -13,7 +14,7 @@ class Product extends Model
 
    protected $fillable = [
         'category_id', 'collection', 'name', 'slug', 'short_description', 'description', 'story',
-        'price', 'stock', 'image', 'gallery', 'color', 'variant_group', 'material',
+        'price', 'stock', 'image', 'gallery', 'spin_folder', 'color', 'variant_group', 'material',
         'dimensions', 'closure', 'lining',
         'is_active', 'is_featured',
         'meta_title', 'meta_description', 'seo_score',
@@ -73,6 +74,22 @@ class Product extends Model
         }
 
         return $size[0].'/'.$size[1];
+    }
+
+    /**
+     * URLs des images de la rotation 360° (triées par angle), ou tableau vide
+     * si le produit n'a pas de dossier "spin_folder" renseigné.
+     */
+    public function getSpinFramesAttribute(): array
+    {
+        if (! $this->spin_folder) {
+            return [];
+        }
+
+        $files = Storage::disk('public')->files($this->spin_folder);
+        sort($files, SORT_NATURAL);
+
+        return array_map(fn ($file) => asset('storage/'.$file), $files);
     }
 
     /**

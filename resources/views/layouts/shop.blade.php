@@ -374,37 +374,6 @@ Swal.fire({
     });
 })();
 </script>
-
-<script>
-(function () {
-    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var noHover = window.matchMedia && window.matchMedia('(hover: none)').matches;
-    if (reduceMotion || noHover) return;
-
-    var selector = '.product-thumb, .nh-product-thumb, .shop-card-thumb, .capsule-thumb, ' +
-        '.pdp-related-thumb, .suggestion-thumb, .lifestyle-card, .pdp-main-image';
-
-    document.querySelectorAll(selector).forEach(function (el) {
-        var img = el.querySelector('img');
-        if (!img) return;
-
-        el.style.perspective = '900px';
-
-        el.addEventListener('mousemove', function (e) {
-            var rect = el.getBoundingClientRect();
-            var x = (e.clientX - rect.left) / rect.width;
-            var y = (e.clientY - rect.top) / rect.height;
-            var rotateY = (x - .5) * 16;
-            var rotateX = (.5 - y) * 16;
-            img.style.transform = 'perspective(900px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale(1.04)';
-        });
-
-        el.addEventListener('mouseleave', function () {
-            img.style.transform = '';
-        });
-    });
-})();
-</script>
 @stack('scripts')
 </body>
 </html>

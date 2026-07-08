@@ -43,22 +43,36 @@
         <div class="pdp-gallery">
             @php
                 $images = array_filter(array_merge([$product->image], $product->gallery ?? []));
+                $spinFrames = $product->spin_frames;
             @endphp
-            <div class="pdp-main-image" id="pdpMainImage" style="aspect-ratio: {{ $product->image_ratio }};">
-                @if(count($images))
-                    <img src="{{ asset('storage/'.$images[array_key_first($images)]) }}" alt="{{ $product->name }}" id="pdpMainImg">
-                @else
-                    <span class="placeholder-ico" id="pdpMainPlaceholder" aria-hidden="true">◈</span>
-                @endif
-            </div>
-            @if(count($images) > 1)
-                <div class="pdp-thumbs" id="pdpThumbs">
-                    @foreach($images as $i => $img)
-                        <button type="button" class="pdp-thumb {{ $i === 0 ? 'is-active' : '' }}" onclick="pdpSwapImage('{{ asset('storage/'.$img) }}', this)">
-                            <img src="{{ asset('storage/'.$img) }}" alt="{{ $product->name }} vue {{ $i + 1 }}">
-                        </button>
-                    @endforeach
+            @if(count($spinFrames))
+                <div class="pdp-360" id="pdp360" data-frames="{{ json_encode($spinFrames) }}" style="aspect-ratio: {{ $product->image_ratio }};">
+                    <img src="{{ $spinFrames[0] }}" alt="{{ $product->name }}" id="pdp360Img" draggable="false">
+                    <span class="pdp-360-badge">360°</span>
+                    <div class="pdp-360-hint" id="pdp360Hint">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 11 3 15l6 4"/><path d="M3 15h11a6 6 0 0 0 0-12H8"/>
+                        </svg>
+                        Glisser pour faire pivoter
+                    </div>
                 </div>
+            @else
+                <div class="pdp-main-image" id="pdpMainImage" style="aspect-ratio: {{ $product->image_ratio }};">
+                    @if(count($images))
+                        <img src="{{ asset('storage/'.$images[array_key_first($images)]) }}" alt="{{ $product->name }}" id="pdpMainImg">
+                    @else
+                        <span class="placeholder-ico" id="pdpMainPlaceholder" aria-hidden="true">◈</span>
+                    @endif
+                </div>
+                @if(count($images) > 1)
+                    <div class="pdp-thumbs" id="pdpThumbs">
+                        @foreach($images as $i => $img)
+                            <button type="button" class="pdp-thumb {{ $i === 0 ? 'is-active' : '' }}" onclick="pdpSwapImage('{{ asset('storage/'.$img) }}', this)">
+                                <img src="{{ asset('storage/'.$img) }}" alt="{{ $product->name }} vue {{ $i + 1 }}">
+                            </button>
+                        @endforeach
+                    </div>
+                @endif
             @endif
         </div>
 
@@ -287,5 +301,61 @@ function pdpSelectColor(event, swatch) {
 
     return false;
 }
+
+/**
+ * Visionneuse 360° : glisser horizontalement fait défiler les images de rotation.
+ * Fonctionne à la souris et au tactile ; le curseur détermine le sens de rotation
+ * en comparant le déplacement depuis le dernier point relevé.
+ */
+(function () {
+    const viewer = document.getElementById('pdp360');
+    if (!viewer) return;
+
+    const img = document.getElementById('pdp360Img');
+    const hint = document.getElementById('pdp360Hint');
+    const frames = JSON.parse(viewer.dataset.frames || '[]');
+    if (frames.length < 2) return;
+
+    frames.forEach(src => { (new Image()).src = src; });
+
+    let currentFrame = 0;
+    let dragging = false;
+    let lastX = 0;
+    const pxPerFrame = 8;
+
+    function setFrame(index) {
+        currentFrame = ((index % frames.length) + frames.length) % frames.length;
+        img.src = frames[currentFrame];
+    }
+
+    function start(x) {
+        dragging = true;
+        lastX = x;
+        viewer.classList.add('is-dragging');
+        if (hint) hint.style.display = 'none';
+    }
+
+    function move(x) {
+        if (!dragging) return;
+        const delta = x - lastX;
+        if (Math.abs(delta) >= pxPerFrame) {
+            setFrame(currentFrame + Math.trunc(delta / pxPerFrame));
+            lastX = x;
+        }
+    }
+
+    function stop() {
+        dragging = false;
+        viewer.classList.remove('is-dragging');
+    }
+
+    viewer.addEventListener('mousedown', e => { e.preventDefault(); start(e.clientX); });
+    window.addEventListener('mousemove', e => move(e.clientX));
+    window.addEventListener('mouseup', stop);
+
+    viewer.addEventListener('touchstart', e => start(e.touches[0].clientX), { passive: true });
+    viewer.addEventListener('touchmove', e => move(e.touches[0].clientX), { passive: true });
+    viewer.addEventListener('touchend', stop);
+})();
 </script>
 @endsection
