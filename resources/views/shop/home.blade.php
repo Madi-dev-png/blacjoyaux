@@ -7,12 +7,56 @@
 
 {{-- HERO --}}
 <section class="promo-hero">
+    <div class="hero-slides">
+        <div class="hero-slide is-active" style="background-image: url('/images/hero.jpg')"></div>
+        <div class="hero-slide" style="background-image: url('/images/hero2.jpg')"></div>
+        <div class="hero-slide" style="background-image: url('/images/hero3.jpg')"></div>
+    </div>
     <div class="container">
         <p class="promo-eyebrow">Made in Côte d'Ivoire</p>
         <h1>L'AVENIR<strong>EN MAIN</strong></h1>
         <a href="{{ route('products.index') }}" class="btn-ghost-light">Découvrir</a>
     </div>
+    <div class="hero-dots" role="tablist" aria-label="Choisir une image">
+        <button type="button" class="hero-dot is-active" data-slide="0" aria-label="Image 1"></button>
+        <button type="button" class="hero-dot" data-slide="1" aria-label="Image 2"></button>
+        <button type="button" class="hero-dot" data-slide="2" aria-label="Image 3"></button>
+    </div>
 </section>
+
+<script>
+(function () {
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots = document.querySelectorAll('.hero-dot');
+    if (!slides.length) return;
+
+    let current = 0;
+    let timer = null;
+
+    function goTo(index) {
+        slides[current].classList.remove('is-active');
+        dots[current].classList.remove('is-active');
+        current = index;
+        slides[current].classList.add('is-active');
+        dots[current].classList.add('is-active');
+    }
+
+    function next() {
+        goTo((current + 1) % slides.length);
+    }
+
+    function startAuto() {
+        clearInterval(timer);
+        timer = setInterval(next, 5000);
+    }
+
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => { goTo(i); startAuto(); });
+    });
+
+    startAuto();
+})();
+</script>
 
 {{-- BARRE AVANTAGES --}}
 <div class="perks-bar">
