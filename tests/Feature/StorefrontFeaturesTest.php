@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Faq;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class StorefrontFeaturesTest extends TestCase
@@ -58,7 +59,7 @@ class StorefrontFeaturesTest extends TestCase
 
     public function test_product_page_shows_story_block_only_when_present(): void
     {
-        $withStory = Product::factory()->create(['is_active' => true, 'story' => "Le leadership se construit chaque jour."]);
+        $withStory = Product::factory()->create(['is_active' => true, 'story' => 'Le leadership se construit chaque jour.']);
         $withoutStory = Product::factory()->create(['is_active' => true, 'story' => null]);
 
         $this->get(route('products.show', $withStory))
@@ -109,5 +110,47 @@ class StorefrontFeaturesTest extends TestCase
         $priceQuestion->assertStatus(200);
         $this->assertStringContainsString('55 000 F CFA', $priceQuestion->json('reply'));
         $this->assertStringContainsString($product->name, $priceQuestion->json('reply'));
+    }
+
+    public function test_chat_assistant_calls_anthropic_api_when_a_key_is_configured(): void
+    {
+        config(['services.anthropic.key' => 'sk-ant-test-key']);
+
+        Http::fake([
+            'api.anthropic.com/*' => Http::response([
+                'content' => [
+                    ['type' => 'text', 'text' => 'Réponse simulée de Claude.'],
+                ],
+            ], 200),
+        ]);
+
+        $response = $this->postJson(route('chat.send'), ['message' => 'Avez-vous des sacs en cuir ?']);
+
+        $response->assertStatus(200)->assertJson([
+            'reply' => 'Réponse simulée de Claude.',
+            'source' => 'ia',
+        ]);
+
+        Http::assertSent(function ($request) {
+            return $request->url() === 'https://api.anthropic.com/v1/messages'
+                && $request->hasHeader('x-api-key', 'sk-ant-test-key')
+                && $request->hasHeader('anthropic-version', '2023-06-01')
+                && ! empty($request['system'])
+                && $request['messages'][0]['role'] === 'user';
+        });
+    }
+
+    public function test_chat_assistant_falls_back_to_faq_when_the_api_call_fails(): void
+    {
+        config(['services.anthropic.key' => 'sk-ant-test-key']);
+
+        Http::fake([
+            'api.anthropic.com/*' => Http::response([], 500),
+        ]);
+
+        $response = $this->postJson(route('chat.send'), ['message' => 'Bonjour']);
+
+        $response->assertStatus(200)->assertJsonFragment(['source' => 'faq']);
+        $this->assertStringContainsString('bienvenue', $response->json('reply'));
     }
 }
