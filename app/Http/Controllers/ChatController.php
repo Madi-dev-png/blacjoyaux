@@ -23,7 +23,7 @@ class ChatController extends Controller
         );
 
         return response()->json([
-            'reply'  => $result['reply'],
+            'reply' => $result['reply'],
             'source' => $result['source'],
         ]);
     }

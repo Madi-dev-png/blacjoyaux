@@ -24,10 +24,10 @@ class Order extends Model
 
     public const STATUSES = [
         'en_attente' => 'En attente',
-        'confirmee'  => 'Confirmée',
-        'expediee'   => 'Expédiée',
-        'livree'     => 'Livrée',
-        'annulee'    => 'Annulée',
+        'confirmee' => 'Confirmée',
+        'expediee' => 'Expédiée',
+        'livree' => 'Livrée',
+        'annulee' => 'Annulée',
     ];
 
     public function items(): HasMany
@@ -50,6 +50,7 @@ class Order extends Model
     {
         $year = date('Y');
         $count = static::whereYear('created_at', $year)->count() + 1;
+
         return sprintf('BJ-%s-%04d', $year, $count);
     }
 }

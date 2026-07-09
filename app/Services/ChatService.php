@@ -20,24 +20,24 @@ class ChatService
 
         if (empty($apiKey)) {
             return [
-                'reply'  => $this->fallbackFromFaq($userMessage),
+                'reply' => $this->fallbackFromFaq($userMessage),
                 'source' => 'faq',
             ];
         }
 
         $payload = [
-            'model'      => config('services.anthropic.model', 'claude-sonnet-4-6'),
+            'model' => config('services.anthropic.model', 'claude-sonnet-4-6'),
             'max_tokens' => 600,
             // L'API Anthropic prend le prompt système à part (pas dans messages[]).
-            'system'     => $this->systemPrompt(),
-            'messages'   => $this->buildMessages($userMessage, $history),
+            'system' => $this->systemPrompt(),
+            'messages' => $this->buildMessages($userMessage, $history),
         ];
 
         try {
             $response = Http::withHeaders([
-                'x-api-key'         => $apiKey,
+                'x-api-key' => $apiKey,
                 'anthropic-version' => '2023-06-01',
-                'Content-Type'      => 'application/json',
+                'Content-Type' => 'application/json',
             ])->timeout(30)->post('https://api.anthropic.com/v1/messages', $payload);
 
             if ($response->failed()) {
@@ -51,7 +51,7 @@ class ChatService
                 ->implode("\n");
 
             return [
-                'reply'  => $text !== '' ? $text : $this->fallbackFromFaq($userMessage),
+                'reply' => $text !== '' ? $text : $this->fallbackFromFaq($userMessage),
                 'source' => 'ia',
             ];
 
@@ -68,10 +68,11 @@ class ChatService
             ->map(function ($p) {
                 $prix = number_format($p->price, 0, ',', ' ').' F CFA';
                 $dispo = $p->stock > 0 ? 'en stock' : 'épuisé';
+
                 return "- {$p->name} ({$prix}, {$dispo})"
-                    . ($p->color ? ", coloris {$p->color}" : '')
-                    . ($p->material ? ", matière {$p->material}" : '')
-                    . ($p->short_description ? " : {$p->short_description}" : '');
+                    .($p->color ? ", coloris {$p->color}" : '')
+                    .($p->material ? ", matière {$p->material}" : '')
+                    .($p->short_description ? " : {$p->short_description}" : '');
             })->implode("\n");
 
         $faqs = Faq::active()->orderBy('sort_order')
@@ -140,6 +141,7 @@ PROMPT;
             $last = array_key_last($messages);
             if ($last !== null && $messages[$last]['role'] === $turn['role']) {
                 $messages[$last]['content'] .= "\n".$content;
+
                 continue;
             }
 
@@ -171,7 +173,7 @@ PROMPT;
         $whatsapp = config('services.brand.whatsapp');
 
         if (preg_match('/\b(bonjour|bonsoir|salut|coucou|hello|hi|cc)\b/u', $normalized)) {
-            return "Bonjour et bienvenue chez Blac Joyaux ! 👋 Je peux vous renseigner sur nos sacs, les délais de livraison, le paiement ou notre histoire Ashanti. Que souhaitez-vous savoir ?";
+            return 'Bonjour et bienvenue chez Blac Joyaux ! 👋 Je peux vous renseigner sur nos sacs, les délais de livraison, le paiement ou notre histoire Ashanti. Que souhaitez-vous savoir ?';
         }
 
         if (preg_match('/\b(merci|thanks|thank you)\b/u', $normalized)) {
@@ -249,14 +251,20 @@ PROMPT;
     protected function describeProduct(Product $product): string
     {
         $prix = number_format($product->price, 0, ',', ' ').' F CFA';
-        $dispo = $product->stock > 0 ? "en stock ({$product->stock} disponible" . ($product->stock > 1 ? 's' : '') . ')' : 'malheureusement épuisé pour le moment';
+        $dispo = $product->stock > 0 ? "en stock ({$product->stock} disponible".($product->stock > 1 ? 's' : '').')' : 'malheureusement épuisé pour le moment';
 
         $details = [];
-        if ($product->color) $details[] = "coloris {$product->color}";
-        if ($product->material) $details[] = "matière : {$product->material}";
-        if ($product->dimensions) $details[] = "dimensions : {$product->dimensions}";
+        if ($product->color) {
+            $details[] = "coloris {$product->color}";
+        }
+        if ($product->material) {
+            $details[] = "matière : {$product->material}";
+        }
+        if ($product->dimensions) {
+            $details[] = "dimensions : {$product->dimensions}";
+        }
 
-        $detailsText = $details ? ' (' . implode(', ', $details) . ')' : '';
+        $detailsText = $details ? ' ('.implode(', ', $details).')' : '';
 
         return "Le « {$product->name} »{$detailsText} est à {$prix}, {$dispo}. Voulez-vous que je vous aide à finaliser une commande ?";
     }

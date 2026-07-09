@@ -18,10 +18,10 @@ class FaqController extends Controller
 
         $labels = [
             'livraison' => 'Commande & Livraison',
-            'paiement'  => 'Paiement',
-            'produit'   => 'Produits',
-            'retours'   => 'Retours & SAV',
-            'general'   => 'La marque',
+            'paiement' => 'Paiement',
+            'produit' => 'Produits',
+            'retours' => 'Retours & SAV',
+            'general' => 'La marque',
         ];
 
         return view('shop.faq', compact('faqs', 'labels'));

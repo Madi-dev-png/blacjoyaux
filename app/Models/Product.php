@@ -12,13 +12,14 @@ class Product extends Model
 {
     use HasFactory;
 
-   protected $fillable = [
+    protected $fillable = [
         'category_id', 'collection', 'name', 'slug', 'short_description', 'description', 'story',
         'price', 'stock', 'image', 'gallery', 'spin_folder', 'color', 'variant_group', 'material',
         'dimensions', 'closure', 'lining',
         'is_active', 'is_featured',
         'meta_title', 'meta_description', 'seo_score',
     ];
+
     protected $casts = [
         'gallery' => 'array',
         'is_active' => 'boolean',

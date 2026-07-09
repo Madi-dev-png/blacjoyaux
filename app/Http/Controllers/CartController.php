@@ -17,7 +17,7 @@ class CartController extends Controller
 
         $cartProductIds = collect($items)->pluck('product.id');
 
-        $suggestions = \App\Models\Product::active()
+        $suggestions = Product::active()
             ->whereNotIn('id', $cartProductIds)
             ->inRandomOrder()
             ->take(3)

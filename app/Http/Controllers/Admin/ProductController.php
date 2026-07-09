@@ -27,7 +27,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        $product = new Product();
+        $product = new Product;
 
         return view('admin.products.create', compact('categories', 'product'));
     }
@@ -120,26 +120,26 @@ class ProductController extends Controller
     protected function validateProduct(Request $request, ?int $ignoreId = null): array
     {
         return $request->validate([
-            'name'              => 'required|string|max:160',
-            'category_id'       => 'nullable|exists:categories,id',
-            'collection'        => 'nullable|string|in:joyau_de_bla,collection_do,capsule',
+            'name' => 'required|string|max:160',
+            'category_id' => 'nullable|exists:categories,id',
+            'collection' => 'nullable|string|in:joyau_de_bla,collection_do,capsule',
             'short_description' => 'nullable|string|max:300',
-            'description'       => 'nullable|string',
-            'story'             => 'nullable|string',
-            'price'             => 'required|integer|min:0',
-            'stock'             => 'required|integer|min:0',
-            'color'             => 'nullable|string|max:60',
-            'variant_group'     => 'nullable|string|max:80',
-            'material'          => 'nullable|string|max:60',
-            'dimensions'        => 'nullable|string|max:60',
-            'closure'           => 'nullable|string|max:100',
-            'lining'            => 'nullable|string|max:100',
-            'image'             => 'nullable|image|max:4096',
-            'is_active'         => 'nullable|boolean',
-            'is_featured'       => 'nullable|boolean',
-            'meta_title'        => 'nullable|string|max:60',
-            'meta_description'  => 'nullable|string|max:320',
-            'slug'              => 'nullable|string|max:200',
+            'description' => 'nullable|string',
+            'story' => 'nullable|string',
+            'price' => 'required|integer|min:0',
+            'stock' => 'required|integer|min:0',
+            'color' => 'nullable|string|max:60',
+            'variant_group' => 'nullable|string|max:80',
+            'material' => 'nullable|string|max:60',
+            'dimensions' => 'nullable|string|max:60',
+            'closure' => 'nullable|string|max:100',
+            'lining' => 'nullable|string|max:100',
+            'image' => 'nullable|image|max:4096',
+            'is_active' => 'nullable|boolean',
+            'is_featured' => 'nullable|boolean',
+            'meta_title' => 'nullable|string|max:60',
+            'meta_description' => 'nullable|string|max:320',
+            'slug' => 'nullable|string|max:200',
         ]);
     }
 

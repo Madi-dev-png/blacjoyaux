@@ -15,8 +15,8 @@ class ContactController extends Controller
     public function send(Request $request)
     {
         $request->validate([
-            'nom'     => 'required|string|max:100',
-            'email'   => 'required|email:rfc,dns',
+            'nom' => 'required|string|max:100',
+            'email' => 'required|email:rfc,dns',
             'message' => 'required|string|min:10|max:2000',
         ]);
 

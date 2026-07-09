@@ -45,9 +45,9 @@ class ProductController extends Controller
             ->get();
 
         return response()->json($products->map(fn ($p) => [
-            'name'  => $p->name,
+            'name' => $p->name,
             'price' => $p->formatted_price,
-            'url'   => route('products.show', $p),
+            'url' => route('products.show', $p),
             'image' => $p->image ? asset('storage/'.$p->image) : null,
         ]));
     }
@@ -56,21 +56,21 @@ class ProductController extends Controller
     public function collections()
     {
         $defs = [
-            'joyau_de_bla'  => ['label' => 'Joyau de Bla', 'tag' => 'Collection signature'],
+            'joyau_de_bla' => ['label' => 'Joyau de Bla', 'tag' => 'Collection signature'],
             'collection_do' => ['label' => 'Collection DO', 'tag' => 'Nouveauté 2025'],
-            'capsule'       => ['label' => 'Collection Capsule', 'tag' => 'Exclusivité'],
+            'capsule' => ['label' => 'Collection Capsule', 'tag' => 'Exclusivité'],
         ];
 
         $collections = collect($defs)->map(function ($def, $key) {
             $products = Product::active()->where('collection', $key)->get();
 
             return [
-                'key'         => $key,
-                'label'       => $def['label'],
-                'tag'         => $def['tag'],
-                'count'       => $products->count(),
-                'from_price'  => $products->min('price'),
-                'thumbs'      => $products->take(4)->pluck('image'),
+                'key' => $key,
+                'label' => $def['label'],
+                'tag' => $def['tag'],
+                'count' => $products->count(),
+                'from_price' => $products->min('price'),
+                'thumbs' => $products->take(4)->pluck('image'),
             ];
         });
 
@@ -118,9 +118,9 @@ class ProductController extends Controller
         }
 
         $collectionLabels = [
-            'joyau_de_bla'  => 'Joyau de Bla',
+            'joyau_de_bla' => 'Joyau de Bla',
             'collection_do' => 'Collection DO',
-            'capsule'       => 'Capsule',
+            'capsule' => 'Capsule',
         ];
         $collectionLabel = $collectionLabels[$product->collection] ?? null;
 

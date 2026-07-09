@@ -16,9 +16,9 @@ class CheckoutController extends Controller
 
     /** Frais de livraison selon la zone (paramétrable). */
     protected array $deliveryFees = [
-        'abidjan'   => 1500,
+        'abidjan' => 1500,
         'interieur' => 3000,
-        'retrait'   => 0,
+        'retrait' => 0,
     ];
 
     public function index()
@@ -46,14 +46,14 @@ class CheckoutController extends Controller
         }
 
         $validated = $request->validate([
-            'customer_name'    => 'required|string|max:120',
-            'customer_phone'   => 'required|string|max:30',
-            'customer_email'   => 'nullable|email|max:160',
+            'customer_name' => 'required|string|max:120',
+            'customer_phone' => 'required|string|max:30',
+            'customer_email' => 'nullable|email|max:160',
             'shipping_address' => 'required|string|max:500',
-            'city'             => 'required|string|max:120',
-            'delivery_method'  => 'required|in:abidjan,interieur,retrait',
-            'payment_method'   => 'required|in:a_la_livraison,wave,orange_money,mtn_momo',
-            'notes'            => 'nullable|string|max:1000',
+            'city' => 'required|string|max:120',
+            'delivery_method' => 'required|in:abidjan,interieur,retrait',
+            'payment_method' => 'required|in:a_la_livraison,wave,orange_money,mtn_momo',
+            'notes' => 'nullable|string|max:1000',
         ]);
 
         $subtotal = $this->cart->subtotal();
@@ -88,31 +88,31 @@ class CheckoutController extends Controller
                 }
 
                 $order = Order::create([
-                    'reference'        => Order::generateReference(),
-                    'customer_name'    => $validated['customer_name'],
-                    'customer_phone'   => $validated['customer_phone'],
-                    'customer_email'   => $validated['customer_email'] ?? null,
+                    'reference' => Order::generateReference(),
+                    'customer_name' => $validated['customer_name'],
+                    'customer_phone' => $validated['customer_phone'],
+                    'customer_email' => $validated['customer_email'] ?? null,
                     'shipping_address' => $validated['shipping_address'],
-                    'city'             => $validated['city'],
-                    'delivery_method'  => $validated['delivery_method'],
-                    'delivery_fee'     => $deliveryFee,
-                    'payment_method'   => $validated['payment_method'],
-                    'status'           => 'en_attente',
-                    'subtotal'         => $subtotal,
-                    'total'            => $total,
-                    'notes'            => $validated['notes'] ?? null,
+                    'city' => $validated['city'],
+                    'delivery_method' => $validated['delivery_method'],
+                    'delivery_fee' => $deliveryFee,
+                    'payment_method' => $validated['payment_method'],
+                    'status' => 'en_attente',
+                    'subtotal' => $subtotal,
+                    'total' => $total,
+                    'notes' => $validated['notes'] ?? null,
                 ]);
 
                 foreach ($items as $item) {
                     $product = $locked[$item['product']->id];
 
                     OrderItem::create([
-                        'order_id'     => $order->id,
-                        'product_id'   => $product->id,
+                        'order_id' => $order->id,
+                        'product_id' => $product->id,
                         'product_name' => $product->name,
-                        'unit_price'   => $product->price,
-                        'quantity'     => $item['quantity'],
-                        'line_total'   => $item['line_total'],
+                        'unit_price' => $product->price,
+                        'quantity' => $item['quantity'],
+                        'line_total' => $item['line_total'],
                     ]);
 
                     // Décrémente le stock (ne peut plus passer en négatif

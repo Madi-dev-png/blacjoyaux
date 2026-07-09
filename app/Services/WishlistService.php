@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 
 /**
@@ -40,7 +41,7 @@ class WishlistService
         return true;
     }
 
-    public function items(): \Illuminate\Support\Collection
+    public function items(): Collection
     {
         $ids = $this->ids();
 

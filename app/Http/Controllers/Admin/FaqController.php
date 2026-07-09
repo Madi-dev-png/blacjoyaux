@@ -18,9 +18,9 @@ class FaqController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'question'   => 'required|string|max:255',
-            'answer'     => 'required|string',
-            'category'   => 'required|in:general,livraison,paiement,produit,retours',
+            'question' => 'required|string|max:255',
+            'answer' => 'required|string',
+            'category' => 'required|in:general,livraison,paiement,produit,retours',
             'sort_order' => 'nullable|integer|min:0',
         ]);
 
@@ -32,11 +32,11 @@ class FaqController extends Controller
     public function update(Request $request, Faq $faq)
     {
         $data = $request->validate([
-            'question'   => 'required|string|max:255',
-            'answer'     => 'required|string',
-            'category'   => 'required|in:general,livraison,paiement,produit,retours',
+            'question' => 'required|string|max:255',
+            'answer' => 'required|string',
+            'category' => 'required|in:general,livraison,paiement,produit,retours',
             'sort_order' => 'nullable|integer|min:0',
-            'is_active'  => 'nullable|boolean',
+            'is_active' => 'nullable|boolean',
         ]);
         $data['is_active'] = (bool) ($data['is_active'] ?? false);
 
