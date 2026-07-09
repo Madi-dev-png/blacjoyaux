@@ -18,12 +18,12 @@ class ProductController extends Controller
                 $q->where('collection', $request->collection);
             })
             ->when($request->search, function ($q) use ($request) {
-                $q->where('name', 'like', '%'.$request->search.'%');
+                $q->where('name', 'like', '%'.$this->escapeLike($request->search).'%');
             })
             ->when($request->sort === 'price_asc', fn ($q) => $q->orderBy('price'))
             ->when($request->sort === 'price_desc', fn ($q) => $q->orderByDesc('price'))
             ->when(! $request->sort || $request->sort === 'recent', fn ($q) => $q->latest())
-            ->paginate(11)
+            ->paginate(12)
             ->withQueryString();
 
         return view('shop.collection', compact('products', 'categories'));
@@ -39,7 +39,7 @@ class ProductController extends Controller
         }
 
         $products = Product::active()
-            ->where('name', 'like', '%'.$term.'%')
+            ->where('name', 'like', '%'.$this->escapeLike($term).'%')
             ->orderBy('name')
             ->take(6)
             ->get();
@@ -125,5 +125,14 @@ class ProductController extends Controller
         $collectionLabel = $collectionLabels[$product->collection] ?? null;
 
         return view('shop.product', compact('product', 'related', 'colorSiblings', 'collectionLabel'));
+    }
+
+    /**
+     * Échappe les jokers SQL (% _ \) dans un terme de recherche, pour qu'une
+     * saisie comme "%%%" soit traitée littéralement et non comme un motif LIKE.
+     */
+    protected function escapeLike(string $term): string
+    {
+        return addcslashes($term, '%_\\');
     }
 }

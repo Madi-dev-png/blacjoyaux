@@ -44,7 +44,10 @@ Route::get('/commande/confirmation/{reference}', [CheckoutController::class, 'co
 Route::get('/faq', [FaqController::class, 'index'])->name('faq');
 
 // Assistant IA (widget de chat, appelé en AJAX depuis toutes les pages)
-Route::post('/chat', [ChatController::class, 'send'])->name('chat.send');
+// Throttle : 20 messages/minute par IP, pour protéger le quota de l'API.
+Route::post('/chat', [ChatController::class, 'send'])
+    ->middleware('throttle:20,1')
+    ->name('chat.send');
 
 // SEO : sitemap dynamique
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
@@ -58,7 +61,10 @@ Route::post('/contact', [ContactController::class, 'send'])->name('contact.send'
 |--------------------------------------------------------------------------
 */
 Route::get('/login', [LoginController::class, 'show'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login.attempt');
+// Throttle : 10 tentatives/minute par IP contre le brute-force.
+Route::post('/login', [LoginController::class, 'login'])
+    ->middleware('throttle:10,1')
+    ->name('login.attempt');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 /*

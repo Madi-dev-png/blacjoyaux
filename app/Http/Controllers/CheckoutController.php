@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
 use App\Services\CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends Controller
 {
@@ -58,40 +60,72 @@ class CheckoutController extends Controller
         $deliveryFee = $this->deliveryFees[$validated['delivery_method']] ?? 0;
         $total = $subtotal + $deliveryFee;
 
-        $order = DB::transaction(function () use ($validated, $items, $subtotal, $deliveryFee, $total) {
-            $order = Order::create([
-                'reference'        => Order::generateReference(),
-                'customer_name'    => $validated['customer_name'],
-                'customer_phone'   => $validated['customer_phone'],
-                'customer_email'   => $validated['customer_email'] ?? null,
-                'shipping_address' => $validated['shipping_address'],
-                'city'             => $validated['city'],
-                'delivery_method'  => $validated['delivery_method'],
-                'delivery_fee'     => $deliveryFee,
-                'payment_method'   => $validated['payment_method'],
-                'status'           => 'en_attente',
-                'subtotal'         => $subtotal,
-                'total'            => $total,
-                'notes'            => $validated['notes'] ?? null,
-            ]);
+        try {
+            $order = DB::transaction(function () use ($validated, $items, $subtotal, $deliveryFee, $total) {
+                // On verrouille les lignes produits le temps de la commande
+                // (SELECT ... FOR UPDATE) : si deux clientes commandent le même
+                // sac au même instant, la seconde attend et voit le stock à jour.
+                $locked = Product::whereIn('id', collect($items)->pluck('product.id'))
+                    ->lockForUpdate()
+                    ->get()
+                    ->keyBy('id');
 
-            foreach ($items as $item) {
-                $product = $item['product'];
-                OrderItem::create([
-                    'order_id'     => $order->id,
-                    'product_id'   => $product->id,
-                    'product_name' => $product->name,
-                    'unit_price'   => $product->price,
-                    'quantity'     => $item['quantity'],
-                    'line_total'   => $item['line_total'],
+                // Revalidation du stock au moment T (le panier peut être vieux).
+                foreach ($items as $item) {
+                    $product = $locked[$item['product']->id] ?? null;
+
+                    if (! $product || ! $product->is_active) {
+                        throw ValidationException::withMessages([
+                            'cart' => "« {$item['product']->name} » n'est plus disponible à la vente.",
+                        ]);
+                    }
+
+                    if ($product->stock < $item['quantity']) {
+                        throw ValidationException::withMessages([
+                            'cart' => "Stock insuffisant pour « {$product->name} » : il en reste {$product->stock}. Merci d'ajuster votre panier.",
+                        ]);
+                    }
+                }
+
+                $order = Order::create([
+                    'reference'        => Order::generateReference(),
+                    'customer_name'    => $validated['customer_name'],
+                    'customer_phone'   => $validated['customer_phone'],
+                    'customer_email'   => $validated['customer_email'] ?? null,
+                    'shipping_address' => $validated['shipping_address'],
+                    'city'             => $validated['city'],
+                    'delivery_method'  => $validated['delivery_method'],
+                    'delivery_fee'     => $deliveryFee,
+                    'payment_method'   => $validated['payment_method'],
+                    'status'           => 'en_attente',
+                    'subtotal'         => $subtotal,
+                    'total'            => $total,
+                    'notes'            => $validated['notes'] ?? null,
                 ]);
 
-                // Décrémente le stock
-                $product->decrement('stock', $item['quantity']);
-            }
+                foreach ($items as $item) {
+                    $product = $locked[$item['product']->id];
 
-            return $order;
-        });
+                    OrderItem::create([
+                        'order_id'     => $order->id,
+                        'product_id'   => $product->id,
+                        'product_name' => $product->name,
+                        'unit_price'   => $product->price,
+                        'quantity'     => $item['quantity'],
+                        'line_total'   => $item['line_total'],
+                    ]);
+
+                    // Décrémente le stock (ne peut plus passer en négatif
+                    // grâce au contrôle ci-dessus, sous verrou).
+                    $product->decrement('stock', $item['quantity']);
+                }
+
+                return $order;
+            });
+        } catch (ValidationException $e) {
+            return redirect()->route('cart.index')
+                ->with('error', collect($e->errors())->flatten()->first());
+        }
 
         $this->cart->clear();
 

@@ -32,7 +32,23 @@ class CartController extends Controller
 
         abort_unless($product->is_active, 404);
 
-        $this->cart->add($product->id, (int) $request->input('quantity', 1));
+        if ($product->stock < 1) {
+            return back()->with('error', "« {$product->name} » est actuellement épuisé.");
+        }
+
+        $quantity = (int) $request->input('quantity', 1);
+        $alreadyInCart = $this->cart->quantityFor($product->id);
+
+        // On ne laisse jamais le panier dépasser le stock réel.
+        if ($alreadyInCart + $quantity > $product->stock) {
+            $remaining = max(0, $product->stock - $alreadyInCart);
+
+            return back()->with('error', $remaining > 0
+                ? "Stock insuffisant pour « {$product->name} » : vous pouvez encore en ajouter {$remaining} au maximum."
+                : "Vous avez déjà tout le stock disponible de « {$product->name} » dans votre panier.");
+        }
+
+        $this->cart->add($product->id, $quantity);
 
         return back()->with('success', "« {$product->name} » a été ajouté à votre panier.");
     }
@@ -41,7 +57,13 @@ class CartController extends Controller
     {
         $request->validate(['quantity' => 'required|integer|min:0|max:20']);
 
-        $this->cart->update($product->id, (int) $request->quantity);
+        $quantity = (int) $request->quantity;
+
+        if ($quantity > $product->stock) {
+            return back()->with('error', "Stock insuffisant pour « {$product->name} » : il en reste {$product->stock}.");
+        }
+
+        $this->cart->update($product->id, $quantity);
 
         return back()->with('success', 'Panier mis à jour.');
     }

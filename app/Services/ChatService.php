@@ -15,46 +15,50 @@ use Illuminate\Support\Facades\Http;
 class ChatService
 {
     public function reply(string $userMessage, array $history = []): array
-{
-    $apiKey = config('services.groq.key');
+    {
+        $apiKey = config('services.anthropic.key');
 
-    if (empty($apiKey)) {
-        return [
-            'reply'  => $this->fallbackFromFaq($userMessage),
-            'source' => 'faq',
-        ];
-    }
-
-    $payload = [
-        'model'    => config('services.groq.model', 'llama-3.3-70b-versatile'),
-        'max_tokens' => 600,
-        'messages' => array_merge(
-            [['role' => 'system', 'content' => $this->systemPrompt()]],
-            $this->buildMessages($userMessage, $history)
-        ),
-    ];
-
-    try {
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $apiKey,
-            'Content-Type'  => 'application/json',
-        ])->timeout(30)->post('https://api.groq.com/openai/v1/chat/completions', $payload);
-
-        if ($response->failed()) {
-            return ['reply' => $this->fallbackFromFaq($userMessage), 'source' => 'faq'];
+        if (empty($apiKey)) {
+            return [
+                'reply'  => $this->fallbackFromFaq($userMessage),
+                'source' => 'faq',
+            ];
         }
 
-        $text = $response->json('choices.0.message.content', '');
-
-        return [
-            'reply'  => $text !== '' ? $text : $this->fallbackFromFaq($userMessage),
-            'source' => 'ia',
+        $payload = [
+            'model'      => config('services.anthropic.model', 'claude-sonnet-4-6'),
+            'max_tokens' => 600,
+            // L'API Anthropic prend le prompt système à part (pas dans messages[]).
+            'system'     => $this->systemPrompt(),
+            'messages'   => $this->buildMessages($userMessage, $history),
         ];
 
-    } catch (\Throwable) {
-        return ['reply' => $this->fallbackFromFaq($userMessage), 'source' => 'faq'];
+        try {
+            $response = Http::withHeaders([
+                'x-api-key'         => $apiKey,
+                'anthropic-version' => '2023-06-01',
+                'Content-Type'      => 'application/json',
+            ])->timeout(30)->post('https://api.anthropic.com/v1/messages', $payload);
+
+            if ($response->failed()) {
+                return ['reply' => $this->fallbackFromFaq($userMessage), 'source' => 'faq'];
+            }
+
+            // La réponse est une liste de blocs ; on concatène les blocs texte.
+            $text = collect($response->json('content', []))
+                ->where('type', 'text')
+                ->pluck('text')
+                ->implode("\n");
+
+            return [
+                'reply'  => $text !== '' ? $text : $this->fallbackFromFaq($userMessage),
+                'source' => 'ia',
+            ];
+
+        } catch (\Throwable) {
+            return ['reply' => $this->fallbackFromFaq($userMessage), 'source' => 'faq'];
+        }
     }
-}
 
     /** Construit le prompt système avec le contexte de marque + catalogue + FAQ. */
     protected function systemPrompt(): string
@@ -111,6 +115,9 @@ PROMPT;
         $messages = [];
 
         // On garde au maximum les 8 derniers échanges pour le contexte.
+        // Contraintes de l'API Anthropic : le premier message doit être 'user'
+        // et les rôles doivent alterner — on assainit donc l'historique reçu
+        // du client (qui commence souvent par le message d'accueil de l'assistant).
         foreach (array_slice($history, -8) as $turn) {
             if (! isset($turn['role'], $turn['content'])) {
                 continue;
@@ -118,20 +125,42 @@ PROMPT;
             if (! in_array($turn['role'], ['user', 'assistant'], true)) {
                 continue;
             }
-            $messages[] = [
-                'role' => $turn['role'],
-                'content' => (string) $turn['content'],
-            ];
+
+            $content = trim((string) $turn['content']);
+            if ($content === '') {
+                continue;
+            }
+
+            // Pas de message assistant en tête de conversation.
+            if (empty($messages) && $turn['role'] === 'assistant') {
+                continue;
+            }
+
+            // Deux tours consécutifs du même rôle : on fusionne.
+            $last = array_key_last($messages);
+            if ($last !== null && $messages[$last]['role'] === $turn['role']) {
+                $messages[$last]['content'] .= "\n".$content;
+                continue;
+            }
+
+            $messages[] = ['role' => $turn['role'], 'content' => $content];
         }
 
-        $messages[] = ['role' => 'user', 'content' => $userMessage];
+        // Le message courant est toujours un tour 'user' ; s'il suit déjà un
+        // tour 'user' orphelin, on fusionne pour respecter l'alternance.
+        $last = array_key_last($messages);
+        if ($last !== null && $messages[$last]['role'] === 'user') {
+            $messages[$last]['content'] .= "\n".$userMessage;
+        } else {
+            $messages[] = ['role' => 'user', 'content' => $userMessage];
+        }
 
         return $messages;
     }
 
     /**
      * Réponse de secours quand l'API IA n'est pas configurée ou indisponible.
-     * C'est le chemin le plus emprunté tant qu'aucune clé GROQ_API_KEY n'est
+     * C'est le chemin le plus emprunté tant qu'aucune clé ANTHROPIC_API_KEY n'est
      * renseignée dans .env — d'où l'importance qu'il soit réellement utile
      * (salutations, prix/stock produit en direct, FAQ) plutôt qu'un simple
      * comptage de mots communs.

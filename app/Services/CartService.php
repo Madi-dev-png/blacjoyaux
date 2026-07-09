@@ -38,6 +38,12 @@ class CartService
         return $items;
     }
 
+    /** Quantité déjà présente au panier pour un produit donné. */
+    public function quantityFor(int $productId): int
+    {
+        return (int) (Session::get($this->key, [])[$productId] ?? 0);
+    }
+
     public function add(int $productId, int $quantity = 1): void
     {
         $cart = Session::get($this->key, []);

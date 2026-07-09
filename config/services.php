@@ -1,13 +1,19 @@
 <?php
 
 return [
-    // Configuration de l'assistant IA (API Groq)
-   'groq' => [
-    'key'   => env('GROQ_API_KEY'),
-    'model' => env('GROQ_MODEL', 'llama-3.3-70b-versatile'),
-],
+    /*
+    |--------------------------------------------------------------------------
+    | Assistant IA — API Anthropic (Claude)
+    |--------------------------------------------------------------------------
+    | Clé à renseigner dans .env : ANTHROPIC_API_KEY
+    | (https://console.anthropic.com/)
+    */
+    'anthropic' => [
+        'key'   => env('ANTHROPIC_API_KEY'),
+        'model' => env('ANTHROPIC_MODEL', 'claude-sonnet-4-6'),
+    ],
 
-'brand' => [
-    'whatsapp' => env('BJ_WHATSAPP', '2250153864606'),
-],
+    'brand' => [
+        'whatsapp' => env('BJ_WHATSAPP', '2250153864606'),
+    ],
 ];
