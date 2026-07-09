@@ -1,8 +1,16 @@
 /* ============================================================
    BLAC JOYAUX — Identité visuelle
    Palette : or Ashanti, aubergine profond, ivoire chaud
-   Display : Prata (serif luxe)  ·  Texte : Cormorant Garamond
+   Police unique de la marque : Beckman (fichier local, tout le site)
    ============================================================ */
+
+@font-face {
+    font-family: 'Beckman';
+    src: url('/fonts/Beckman-Free.otf') format('opentype');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+}
 
 :root {
     --ivoire:        #F7F1E7;
@@ -26,8 +34,8 @@
     --shadow: 0 12px 40px -18px rgba(58, 31, 43, .45);
     --shadow-sm: 0 4px 16px -8px rgba(58, 31, 43, .35);
 
-    --font-display: 'Prata', Georgia, serif;
-    --font-body: 'Cormorant Garamond', Georgia, serif;
+    --font-display: 'Beckman', Georgia, serif;
+    --font-body: 'Beckman', system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
