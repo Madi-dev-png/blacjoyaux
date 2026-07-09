@@ -28,7 +28,7 @@
                 <option value="">— Aucune —</option>
                 <option value="joyau_de_bla" {{ old('collection', $product->collection) === 'joyau_de_bla' ? 'selected' : '' }}>Joyau de Bla</option>
                 <option value="collection_do" {{ old('collection', $product->collection) === 'collection_do' ? 'selected' : '' }}>Collection DO</option>
-                <option value="capsule" {{ old('collection', $product->collection) === 'capsule' ? 'selected' : '' }}>Capsule</option>
+                <option value="capsule" {{ old('collection', $product->collection) === 'capsule' ? 'selected' : '' }}>Blac Héritage</option>
             </select>
             <small style="color:var(--gris); font-size:.78rem;">Détermine dans quelle section du site (accueil/boutique) ce produit apparaît, et avec quels sacs il partage ses pastilles de couleur.</small>
         </div>

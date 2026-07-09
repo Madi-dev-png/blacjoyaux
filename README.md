@@ -79,8 +79,10 @@ Le site est accessible sur **http://localhost:8000**
 ##  Connexion administrateur
 
 - URL : **http://localhost:8000/login**
-- Email : `admin@blacjoyaux.com`
-- Mot de passe : `password`
+- Email : `konatekader319@gmail.com`
+- Mot de passe : celui du compte admin (non documenté ici pour des raisons de sécurité).
+  Sur une base fraîchement seedée, un mot de passe aléatoire est généré — définissez
+  `ADMIN_SEED_PASSWORD` dans `.env` avant `php artisan migrate --seed` pour le choisir.
 
 (Le back-office est ensuite sur **http://localhost:8000/admin**)
 

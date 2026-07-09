@@ -58,16 +58,7 @@
     </div>
 </section>
 
-{{-- GYE NYAME --}}
-<section class="about-symbol">
-    <div class="container">
-        <div class="about-symbol-ico">
-            <img src="{{ asset('images/about/gye-nyame.jpg') }}" alt="Symbole Adinkra Gye Nyame">
-        </div>
-        <h2>Gye Nyame</h2>
-        <p>« Sauf pour Dieu » — Le symbole Adinkra de l'omnipotence et de l'omniprésence. Il est l'ancre spirituelle de nos collections, rappelant que la force réside dans l'unité et la foi.</p>
-    </div>
-</section>
+
 
 {{-- VALEURS --}}
 <section class="about-values">

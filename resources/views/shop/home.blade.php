@@ -178,17 +178,17 @@
     </div>
 </section>
 
-{{-- COLLECTION CAPSULE --}}
+{{-- BLAC HÉRITAGE --}}
 <section class="nh-section capsule-section">
     <div class="container">
         <div class="nh-section-head">
-            <span class="nh-eyebrow">Exclusivité</span>
-            <h2><strong>Collection CAPSULE</strong></h2>
-            <p class="subtitle">2 à 3 modèles exclusifs</p>
+            <span class="nh-eyebrow">Capsule premium</span>
+            <h2><strong>BLAC HÉRITAGE</strong></h2>
+            <p class="subtitle">Empire, ÉLAN et L'Ami : trois lignes pour accompagner chaque moment professionnel.</p>
         </div>
 
         <div class="capsule-grid">
-            @forelse($collectionCapsule as $product)
+            @forelse($blacHeritage as $product)
                 <a href="{{ route('products.show', $product) }}" class="capsule-card">
                     <div class="capsule-thumb">
                         @if($product->image)
@@ -202,7 +202,7 @@
                     <div class="price">{{ $product->formatted_price }}</div>
                 </a>
             @empty
-                <p>La collection Capsule arrive bientôt.</p>
+                <p>La collection Blac Héritage arrive bientôt.</p>
             @endforelse
         </div>
     </div>
@@ -212,14 +212,14 @@
 <div class="split-banner">
     <div class="split-panel femme">
         <div>
-            <h3>Pour la femme</h3>
-            <a href="{{ $bureauFemme ? route('products.show', $bureauFemme) : route('products.index') }}" class="btn-ghost-light">Découvrir</a>
+            <h3>ÉLAN</h3>
+            <a href="{{ $elanProduct ? route('products.show', $elanProduct) : route('products.index', ['collection' => 'capsule']) }}" class="btn-ghost-light">Découvrir</a>
         </div>
     </div>
     <div class="split-panel homme">
         <div>
-            <h3>Pour l'homme</h3>
-            <a href="{{ $bureauHomme ? route('products.show', $bureauHomme) : route('products.index') }}" class="btn-ghost-light">Découvrir</a>
+            <h3>Empire</h3>
+            <a href="{{ $empireProduct ? route('products.show', $empireProduct) : route('products.index', ['collection' => 'capsule']) }}" class="btn-ghost-light">Découvrir</a>
         </div>
     </div>
 </div>

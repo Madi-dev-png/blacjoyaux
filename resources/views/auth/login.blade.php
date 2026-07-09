@@ -66,8 +66,6 @@
             </label>
             <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
         </form>
-
-        <p class="login-hint">Compte de démo : admin@blacjoyaux.com / password</p>
     </div>
 </div>
 </body>

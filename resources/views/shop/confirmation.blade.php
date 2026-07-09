@@ -106,7 +106,11 @@
                 </div>
 
                 <p class="confirm-note">
-                    Un e-mail de confirmation vient de vous être envoyé. Notre atelier prépare actuellement votre pièce unique avec le plus grand soin.
+                    @if($order->customer_email)
+                        Vous recevrez un e-mail de confirmation dès que votre commande sera validée par notre équipe.
+                    @else
+                        Notre équipe va vous contacter par téléphone pour valider votre commande.
+                    @endif
                 </p>
             </div>
         </div>

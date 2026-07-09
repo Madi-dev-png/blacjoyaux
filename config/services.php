@@ -15,5 +15,6 @@ return [
 
     'brand' => [
         'whatsapp' => env('BJ_WHATSAPP', '2250153864606'),
+        'contact_email' => env('BJ_CONTACT_EMAIL', 'konatekader319@gmail.com'),
     ],
 ];

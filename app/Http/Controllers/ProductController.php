@@ -58,7 +58,7 @@ class ProductController extends Controller
         $defs = [
             'joyau_de_bla' => ['label' => 'Joyau de Bla', 'tag' => 'Collection signature'],
             'collection_do' => ['label' => 'Collection DO', 'tag' => 'Nouveauté 2025'],
-            'capsule' => ['label' => 'Collection Capsule', 'tag' => 'Exclusivité'],
+            'capsule' => ['label' => 'Blac Héritage', 'tag' => 'Capsule premium'],
         ];
 
         $collections = collect($defs)->map(function ($def, $key) {
@@ -120,7 +120,7 @@ class ProductController extends Controller
         $collectionLabels = [
             'joyau_de_bla' => 'Joyau de Bla',
             'collection_do' => 'Collection DO',
-            'capsule' => 'Capsule',
+            'capsule' => 'Blac Héritage',
         ];
         $collectionLabel = $collectionLabels[$product->collection] ?? null;
 

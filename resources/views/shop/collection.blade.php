@@ -25,7 +25,7 @@
             <a href="{{ request()->fullUrlWithQuery(['collection' => 'collection_do', 'page' => null]) }}"
                class="filter-pill {{ request('collection') === 'collection_do' ? 'is-active' : '' }}">Collection DO</a>
             <a href="{{ request()->fullUrlWithQuery(['collection' => 'capsule', 'page' => null]) }}"
-               class="filter-pill {{ request('collection') === 'capsule' ? 'is-active' : '' }}">Capsule</a>
+               class="filter-pill {{ request('collection') === 'capsule' ? 'is-active' : '' }}">Blac Héritage</a>
         </div>
 
         <form method="GET" class="shop-sort">
@@ -66,7 +66,7 @@
         $badgeMap = [
             'joyau_de_bla'   => ['label' => 'Best-seller', 'class' => 'badge-bestseller'],
             'collection_do'  => ['label' => 'Nouveauté',   'class' => 'badge-new'],
-            'capsule'        => ['label' => 'Exclusif',    'class' => 'badge-exclusive'],
+            'capsule'        => ['label' => 'Blac Héritage', 'class' => 'badge-exclusive'],
         ];
     @endphp
 

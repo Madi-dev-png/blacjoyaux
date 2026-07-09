@@ -364,9 +364,10 @@ function pdpSelectColor(event, swatch) {
     const pxPerFrame = Math.max(8, Math.round(280 / frames.length));
     const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Fondu enchaîné entre deux calques superposés : on charge la nouvelle image
-    // dans le calque caché (déjà en cache grâce au préchargement ci-dessus), puis
-    // on bascule l'opacité — ça masque le "jump-cut" entre deux angles à 45° d'écart.
+    // Fondu enchaîné (rapide, .15s) entre deux calques superposés : on charge la
+    // nouvelle image dans le calque caché (déjà en cache grâce au préchargement
+    // ci-dessus), puis on bascule l'opacité — ça adoucit le "jump-cut" entre deux
+    // angles à 45° d'écart sans donner une impression de lenteur au survol/drag.
     function setFrame(index) {
         currentFrame = ((index % frames.length) + frames.length) % frames.length;
         const next = activeLayer === 0 ? 1 : 0;
@@ -378,7 +379,7 @@ function pdpSelectColor(event, swatch) {
 
     function startAuto() {
         if (reduceMotion || autoTimer) return;
-        autoTimer = setInterval(() => setFrame(currentFrame + 1), 800);
+        autoTimer = setInterval(() => setFrame(currentFrame + 1), 700);
     }
 
     function stopAuto() {

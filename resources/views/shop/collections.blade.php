@@ -1,7 +1,7 @@
 @extends('layouts.shop')
 
 @section('title', 'Nos Collections — Blac Joyaux')
-@section('meta_description', "Découvrez les trois univers Blac Joyaux : Joyau de Bla, Collection DO et Capsule.")
+@section('meta_description', "Découvrez les trois univers Blac Joyaux : Joyau de Bla, Collection DO et Blac Héritage.")
 
 @section('content')
 
@@ -26,13 +26,13 @@
                 $descriptions = [
                     'joyau_de_bla'  => "Notre collection iconique. Des sacs sculptés dans le cuir véritable, portant l'élégance ivoirienne à travers chaque couture.",
                     'collection_do' => "Inspirée de la modernité ivoirienne. Des silhouettes épurées pour la femme contemporaine qui porte son héritage avec style.",
-                    'capsule'       => "La collection GYE NYAME est pensée comme une capsule premium composée de trois modèles complémentaires, chacun répondant à un moment précis de la vie d'un professionnel.",
+                    'capsule'       => "Blac Héritage est une capsule premium composée de trois lignes complémentaires : Empire pour les dirigeants, ÉLAN pour les professionnelles ambitieuses et L'Ami pour les déplacements.",
                 ];
             @endphp
             <p>{{ $descriptions[$c['key']] ?? '' }}</p>
 
             @if($c['key'] === 'capsule')
-                <span class="coll-meta">{{ $c['count'] }} pièces · Édition limitée</span>
+                <span class="coll-meta">3 modèles · {{ $c['count'] }} coloris</span>
             @else
                 <span class="coll-meta">À partir de {{ number_format($c['from_price'] ?? 0, 0, ',', ' ') }} FCFA</span>
             @endif
@@ -62,7 +62,7 @@
             @if($c['key'] === 'capsule')
                 <span class="coll-visual-badge coll-badge-count">{{ $c['count'] }}<small>pièces</small></span>
                 <span class="coll-visual-badge coll-badge-edition">
-                    Édition limitée<br><small>Saison 2025</small>
+                    Édition limitée<br><small>Saison 2026</small>
                 </span>
             @else
                 <span class="coll-visual-badge coll-badge-count-square">{{ $c['count'] }} modèles</span>

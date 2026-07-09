@@ -189,6 +189,13 @@ PROMPT;
             }
         }
 
+        // Question générale sur le catalogue ("quels sacs avez-vous ?", "que vendez-vous ?",
+        // "vos produits", "votre collection"...) : on liste quelques produits réels plutôt
+        // que de renvoyer directement vers WhatsApp sans avoir vraiment répondu.
+        if (preg_match('/\b(quels? sacs?|que vendez|vos produits|quels? produits?|votre collection|vos collections|catalogue|qu[\' ]?avez[\- ]vous|que proposez)\b/u', $normalized)) {
+            return $this->catalogSummary();
+        }
+
         $best = $this->bestFaqMatch($normalized);
         if ($best) {
             return $best->answer;
@@ -267,6 +274,26 @@ PROMPT;
         $detailsText = $details ? ' ('.implode(', ', $details).')' : '';
 
         return "Le « {$product->name} »{$detailsText} est à {$prix}, {$dispo}. Voulez-vous que je vous aide à finaliser une commande ?";
+    }
+
+    /** Résumé du catalogue (quelques produits réels), pour les questions générales type "quels sacs avez-vous ?". */
+    protected function catalogSummary(): string
+    {
+        $products = Product::active()->inRandomOrder()->take(4)->get(['name', 'price']);
+
+        if ($products->isEmpty()) {
+            $whatsapp = config('services.brand.whatsapp');
+
+            return "Notre catalogue est en cours de mise à jour. Contactez-nous directement sur WhatsApp pour découvrir nos modèles disponibles : https://wa.me/{$whatsapp}";
+        }
+
+        $lines = $products->map(function ($p) {
+            $prix = number_format($p->price, 0, ',', ' ').' F CFA';
+
+            return "• {$p->name} — {$prix}";
+        })->implode("\n");
+
+        return "Voici quelques-uns de nos modèles :\n{$lines}\n\nVous pouvez retrouver l'ensemble de la collection dans notre boutique, ou me demander le prix/la disponibilité d'un sac en particulier.";
     }
 
     /** Meilleure FAQ correspondant au message (question + réponse), avec seuil minimum. */
