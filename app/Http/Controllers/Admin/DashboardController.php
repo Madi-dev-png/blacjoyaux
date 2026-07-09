@@ -19,11 +19,11 @@ class DashboardController extends Controller
         $endLastMonth = now()->subMonthNoOverflow()->endOfMonth();
 
         $stats = [
-            'products'  => Product::count(),
-            'active'    => Product::active()->count(),
-            'orders'    => Order::count(),
-            'pending'   => Order::where('status', 'en_attente')->count(),
-            'revenue'   => Order::whereIn('status', $paidStatuses)->sum('total'),
+            'products' => Product::count(),
+            'active' => Product::active()->count(),
+            'orders' => Order::count(),
+            'pending' => Order::where('status', 'en_attente')->count(),
+            'revenue' => Order::whereIn('status', $paidStatuses)->sum('total'),
             'low_stock' => Product::where('stock', '<=', 3)->where('is_active', true)->count(),
         ];
 
@@ -34,7 +34,7 @@ class DashboardController extends Controller
         $revenueLastMonth = Order::whereIn('status', $paidStatuses)->whereBetween('created_at', [$startLastMonth, $endLastMonth])->sum('total');
 
         $trends = [
-            'orders'  => $this->trend($ordersThisMonth, $ordersLastMonth),
+            'orders' => $this->trend($ordersThisMonth, $ordersLastMonth),
             'revenue' => $this->trend($revenueThisMonth, $revenueLastMonth),
         ];
 
@@ -76,7 +76,7 @@ class DashboardController extends Controller
 
         $rows = Order::whereIn('status', $paidStatuses)
             ->where('created_at', '>=', $start)
-            ->selectRaw("DATE(created_at) as day, SUM(total) as total")
+            ->selectRaw('DATE(created_at) as day, SUM(total) as total')
             ->groupBy('day')
             ->pluck('total', 'day');
 
@@ -104,7 +104,7 @@ class DashboardController extends Controller
             return $current > 0 ? ['label' => 'Nouveau', 'direction' => 'up'] : ['label' => 'Stable', 'direction' => 'flat'];
         }
 
-        $delta = round((($current - $previous) / $previous) * 100);
+        $delta = (int) round((($current - $previous) / $previous) * 100);
 
         if ($delta === 0) {
             return ['label' => 'Stable', 'direction' => 'flat'];

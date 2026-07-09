@@ -47,14 +47,18 @@ class OrderController extends Controller
         if ($justConfirmed && $order->customer_email) {
             try {
                 Mail::to($order->customer_email)->send(new OrderConfirmed($order));
+
                 return back()->with('success', 'Commande confirmée. Un e-mail a été envoyé à '.$order->customer_email.'.');
             } catch (\Throwable $e) {
                 report($e);
+
                 return back()->with('success', 'Commande confirmée, mais l\'e-mail n\'a pas pu être envoyé (vérifiez la configuration mail).');
             }
         }
 
-        if ($justConfirmed && ! $order->customer_email) {
+        // Si on arrive ici, la commande vient d'être confirmée sans e-mail client
+        // (le cas "avec e-mail" est déjà géré et retourné par le bloc précédent).
+        if ($justConfirmed) {
             return back()->with('success', 'Commande confirmée. Le client n\'a pas renseigné d\'e-mail, aucune notification envoyée.');
         }
 
