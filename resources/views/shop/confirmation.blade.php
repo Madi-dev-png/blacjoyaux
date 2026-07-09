@@ -67,6 +67,9 @@
                         <span>Livraison</span>
                         <span>{{ $order->delivery_fee > 0 ? number_format($order->delivery_fee, 0, ',', ' ').' FCFA' : 'Offerte' }}</span>
                     </div>
+                    @if($order->discount > 0)
+                        <div class="line"><span>Réduction ({{ $order->promo_code }})</span><span>&minus;{{ number_format($order->discount, 0, ',', ' ') }} FCFA</span></div>
+                    @endif
                     <div class="line total"><span>Total</span><span>{{ number_format($order->total, 0, ',', ' ') }} FCFA</span></div>
                 </div>
             </div>

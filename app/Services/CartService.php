@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Product;
+use App\Models\PromoCode;
 use Illuminate\Support\Facades\Session;
 
 /**
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Session;
 class CartService
 {
     protected string $key = 'cart';
+
+    protected string $promoKey = 'cart_promo_code';
 
     public function items(): array
     {
@@ -72,6 +75,7 @@ class CartService
     public function clear(): void
     {
         Session::forget($this->key);
+        Session::forget($this->promoKey);
     }
 
     public function subtotal(): int
@@ -82,5 +86,54 @@ class CartService
     public function count(): int
     {
         return array_sum(Session::get($this->key, []));
+    }
+
+    /** Tente d'appliquer un code promo au panier. Retourne un message d'erreur, ou null si succès. */
+    public function applyPromo(string $code): ?string
+    {
+        $promo = PromoCode::findUsable($code);
+
+        if (! $promo) {
+            return 'Ce code promo n\'existe pas.';
+        }
+
+        if ($reason = $promo->invalidReason($this->subtotal())) {
+            return $reason;
+        }
+
+        Session::put($this->promoKey, $promo->code);
+
+        return null;
+    }
+
+    public function removePromo(): void
+    {
+        Session::forget($this->promoKey);
+    }
+
+    /** Code promo actuellement appliqué, uniquement s'il reste valide pour le sous-total courant. */
+    public function appliedPromo(): ?PromoCode
+    {
+        $code = Session::get($this->promoKey);
+        if (! $code) {
+            return null;
+        }
+
+        $promo = PromoCode::findUsable($code);
+        if (! $promo || ! $promo->isUsableFor($this->subtotal())) {
+            return null;
+        }
+
+        return $promo;
+    }
+
+    public function discount(): int
+    {
+        return $this->appliedPromo()?->discountFor($this->subtotal()) ?? 0;
+    }
+
+    public function total(): int
+    {
+        return $this->subtotal() - $this->discount();
     }
 }

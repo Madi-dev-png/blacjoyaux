@@ -14,6 +14,8 @@ class CartController extends Controller
     {
         $items = $this->cart->items();
         $subtotal = $this->cart->subtotal();
+        $promo = $this->cart->appliedPromo();
+        $discount = $this->cart->discount();
 
         $cartProductIds = collect($items)->pluck('product.id');
 
@@ -23,7 +25,7 @@ class CartController extends Controller
             ->take(3)
             ->get();
 
-        return view('shop.cart', compact('items', 'subtotal', 'suggestions'));
+        return view('shop.cart', compact('items', 'subtotal', 'suggestions', 'promo', 'discount'));
     }
 
     public function add(Request $request, Product $product)
@@ -73,5 +75,28 @@ class CartController extends Controller
         $this->cart->remove($product->id);
 
         return back()->with('success', 'Article retiré du panier.');
+    }
+
+    public function applyPromo(Request $request)
+    {
+        $request->validate(['code' => 'required|string|max:40']);
+
+        $error = $this->cart->applyPromo($request->input('code'));
+
+        if ($error) {
+            return back()->with('error', $error);
+        }
+
+        $promo = $this->cart->appliedPromo();
+        $discount = number_format($this->cart->discount(), 0, ',', ' ');
+
+        return back()->with('success', "Code « {$promo->code} » appliqué : -{$discount} FCFA.");
+    }
+
+    public function removePromo()
+    {
+        $this->cart->removePromo();
+
+        return back()->with('success', 'Code promo retiré.');
     }
 }

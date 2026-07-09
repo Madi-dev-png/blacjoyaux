@@ -14,12 +14,14 @@ class Order extends Model
         'reference', 'customer_name', 'customer_phone', 'customer_email',
         'shipping_address', 'city', 'delivery_method', 'delivery_fee',
         'payment_method', 'status', 'subtotal', 'total', 'notes',
+        'promo_code', 'discount',
     ];
 
     protected $casts = [
         'subtotal' => 'integer',
         'total' => 'integer',
         'delivery_fee' => 'integer',
+        'discount' => 'integer',
     ];
 
     public const STATUSES = [
@@ -43,6 +45,23 @@ class Order extends Model
     public function getFormattedTotalAttribute(): string
     {
         return number_format($this->total, 0, ',', ' ').' F CFA';
+    }
+
+    /**
+     * Numéro client au format attendu par wa.me (indicatif + numéro, sans espaces/plus).
+     * Les numéros ivoiriens sont saisis en local à 10 chiffres (ex: 0714742354) — le 0
+     * initial fait partie du numéro depuis la réforme de 2021 et n'est PAS un préfixe
+     * de tri à retirer : on ajoute juste l'indicatif 225 devant.
+     */
+    public function getWhatsappPhoneAttribute(): string
+    {
+        $digits = preg_replace('/\D/', '', (string) $this->customer_phone);
+
+        if (strlen($digits) === 10 && ! str_starts_with($digits, '225')) {
+            $digits = '225'.$digits;
+        }
+
+        return $digits;
     }
 
     /** Génère une référence unique type BJ-2026-0001 */

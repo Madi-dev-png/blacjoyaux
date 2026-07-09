@@ -170,6 +170,9 @@
             <div class="checkout-summary-lines">
                 <div class="summary-line"><span>Sous-total</span><span>{{ number_format($subtotal, 0, ',', ' ') }} CFA</span></div>
                 <div class="summary-line"><span>Livraison</span><span id="deliveryFeeDisplay">{{ number_format($fees['abidjan'], 0, ',', ' ') }} CFA</span></div>
+                @if($promo)
+                    <div class="summary-line" style="color:var(--vert-dark, #1a7a4c);"><span>Réduction ({{ $promo->code }})</span><span>&minus;{{ number_format($discount, 0, ',', ' ') }} CFA</span></div>
+                @endif
                 <div class="summary-line"><span>Taxes</span><span>0 CFA</span></div>
             </div>
 
@@ -178,7 +181,7 @@
                     <span>Total</span>
                     <div class="tva-note">TVA incluse</div>
                 </div>
-                <span id="totalDisplay">{{ number_format($subtotal + $fees['abidjan'], 0, ',', ' ') }} CFA</span>
+                <span id="totalDisplay">{{ number_format($subtotal + $fees['abidjan'] - $discount, 0, ',', ' ') }} CFA</span>
             </div>
 <div class="checkout-trust">
                 <p>
@@ -215,6 +218,7 @@
 
     const fees = { abidjan: {{ $fees['abidjan'] }}, interieur: {{ $fees['interieur'] }} };
     const subtotal = {{ $subtotal }};
+    const discount = {{ $discount }};
 
     function fmt(n) { return n.toLocaleString('fr-FR').replace(/,/g, ' ') + ' CFA'; }
 
@@ -223,7 +227,7 @@
         deliveryMethodInput.value = zone;
         const fee = fees[zone] ?? 0;
         deliveryFeeDisplay.textContent = fmt(fee);
-        totalDisplay.textContent = fmt(subtotal + fee);
+        totalDisplay.textContent = fmt(subtotal + fee - discount);
     });
 })();
 </script>

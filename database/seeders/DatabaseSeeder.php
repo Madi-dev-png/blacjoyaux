@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Faq;
 use App\Models\Product;
+use App\Models\PromoCode;
 use App\Models\User;
 use App\Services\SeoService;
 use Illuminate\Database\Seeder;
@@ -26,6 +27,12 @@ class DatabaseSeeder extends Seeder
                 'is_admin' => true,
             ]);
         }
+
+        // ---- Code promo de bienvenue ----
+        PromoCode::firstOrCreate(
+            ['code' => 'BIENVENUE10'],
+            ['type' => 'percent', 'value' => 10, 'is_active' => true]
+        );
 
         // ---- Catégories ----
         $categories = collect([

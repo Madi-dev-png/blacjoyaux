@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PromoCodeController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ChatController;
@@ -28,6 +29,9 @@ Route::get('/produit/{product}', [ProductController::class, 'show'])->name('prod
 
 // Panier (session, sans compte)
 Route::get('/panier', [CartController::class, 'index'])->name('cart.index');
+// Routes "promo" déclarées avant "{product}" pour ne pas être interprétées comme un ID produit.
+Route::post('/panier/promo', [CartController::class, 'applyPromo'])->name('cart.promo.apply');
+Route::delete('/panier/promo', [CartController::class, 'removePromo'])->name('cart.promo.remove');
 Route::post('/panier/{product}', [CartController::class, 'add'])->name('cart.add');
 Route::patch('/panier/{product}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/panier/{product}', [CartController::class, 'remove'])->name('cart.remove');
@@ -105,4 +109,14 @@ Route::prefix('admin')
             ->name('faqs.update');
         Route::delete('faq/{faq}', [App\Http\Controllers\Admin\FaqController::class, 'destroy'])
             ->name('faqs.destroy');
+
+        // Codes promo
+        Route::get('codes-promo', [PromoCodeController::class, 'index'])
+            ->name('promo-codes.index');
+        Route::post('codes-promo', [PromoCodeController::class, 'store'])
+            ->name('promo-codes.store');
+        Route::patch('codes-promo/{promoCode}', [PromoCodeController::class, 'update'])
+            ->name('promo-codes.update');
+        Route::delete('codes-promo/{promoCode}', [PromoCodeController::class, 'destroy'])
+            ->name('promo-codes.destroy');
     });

@@ -53,6 +53,13 @@
                     <td></td>
                     <td style="padding:0 0 10px; font-size:14px; text-align:right;">{{ $order->delivery_fee > 0 ? number_format($order->delivery_fee,0,',',' ').' F' : 'Offerte' }}</td>
                 </tr>
+                @if($order->discount > 0)
+                <tr>
+                    <td style="padding:0 0 10px; font-size:14px; color:#6E6258;">Réduction ({{ $order->promo_code }})</td>
+                    <td></td>
+                    <td style="padding:0 0 10px; font-size:14px; text-align:right;">&minus;{{ number_format($order->discount,0,',',' ') }} F</td>
+                </tr>
+                @endif
                 <tr>
                     <td style="padding-top:10px; border-top:2px solid #3A1F2B; font-size:16px; font-weight:bold;">Total</td>
                     <td style="border-top:2px solid #3A1F2B;"></td>

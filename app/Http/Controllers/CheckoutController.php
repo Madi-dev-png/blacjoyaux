@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\PromoCode;
 use App\Services\CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,8 +33,10 @@ class CheckoutController extends Controller
 
         $subtotal = $this->cart->subtotal();
         $fees = $this->deliveryFees;
+        $promo = $this->cart->appliedPromo();
+        $discount = $this->cart->discount();
 
-        return view('shop.checkout', compact('items', 'subtotal', 'fees'));
+        return view('shop.checkout', compact('items', 'subtotal', 'fees', 'promo', 'discount'));
     }
 
     public function store(Request $request)
@@ -58,10 +61,10 @@ class CheckoutController extends Controller
 
         $subtotal = $this->cart->subtotal();
         $deliveryFee = $this->deliveryFees[$validated['delivery_method']] ?? 0;
-        $total = $subtotal + $deliveryFee;
+        $promoCode = $this->cart->appliedPromo()?->code;
 
         try {
-            $order = DB::transaction(function () use ($validated, $items, $subtotal, $deliveryFee, $total) {
+            $order = DB::transaction(function () use ($validated, $items, $subtotal, $deliveryFee, $promoCode) {
                 // On verrouille les lignes produits le temps de la commande
                 // (SELECT ... FOR UPDATE) : si deux clientes commandent le même
                 // sac au même instant, la seconde attend et voit le stock à jour.
@@ -69,6 +72,20 @@ class CheckoutController extends Controller
                     ->lockForUpdate()
                     ->get()
                     ->keyBy('id');
+
+                // Revalidation du code promo sous verrou (au cas où il aurait expiré,
+                // atteint sa limite d'usage, ou été désactivé depuis l'ajout au panier).
+                $discount = 0;
+                $promo = null;
+                if ($promoCode) {
+                    $promo = PromoCode::where('code', $promoCode)->lockForUpdate()->first();
+                    if ($promo && $promo->isUsableFor($subtotal)) {
+                        $discount = $promo->discountFor($subtotal);
+                    } else {
+                        $promo = null;
+                    }
+                }
+                $total = $subtotal + $deliveryFee - $discount;
 
                 // Revalidation du stock au moment T (le panier peut être vieux).
                 foreach ($items as $item) {
@@ -101,7 +118,13 @@ class CheckoutController extends Controller
                     'subtotal' => $subtotal,
                     'total' => $total,
                     'notes' => $validated['notes'] ?? null,
+                    'promo_code' => $promo?->code,
+                    'discount' => $discount,
                 ]);
+
+                if ($promo) {
+                    $promo->increment('used_count');
+                }
 
                 foreach ($items as $item) {
                     $product = $locked[$item['product']->id];

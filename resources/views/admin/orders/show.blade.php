@@ -27,6 +27,9 @@
         <div style="margin-top:1rem; text-align:right;">
             <div class="summary-row" style="justify-content:flex-end; gap:2rem;"><span>Sous-total</span><span>{{ number_format($order->subtotal,0,',',' ') }} F</span></div>
             <div class="summary-row" style="justify-content:flex-end; gap:2rem;"><span>Livraison</span><span>{{ number_format($order->delivery_fee,0,',',' ') }} F</span></div>
+            @if($order->discount > 0)
+                <div class="summary-row" style="justify-content:flex-end; gap:2rem;"><span>Réduction ({{ $order->promo_code }})</span><span>&minus;{{ number_format($order->discount,0,',',' ') }} F</span></div>
+            @endif
             <div class="summary-row total" style="justify-content:flex-end; gap:2rem;"><span>Total</span><span>{{ $order->formatted_total }}</span></div>
         </div>
     </div>
@@ -60,7 +63,7 @@
             @if($order->notes)
                 <p style="margin-top:.8rem; padding-top:.8rem; border-top:1px solid var(--ivoire-2); font-size:.88rem; color:var(--gris);"><em>{{ $order->notes }}</em></p>
             @endif
-            <a href="https://wa.me/{{ preg_replace('/[^0-9]/','',$order->customer_phone) }}" target="_blank" rel="noopener" class="btn btn-whatsapp btn-sm btn-block" style="margin-top:1rem;">Contacter sur WhatsApp</a>
+            <a href="https://wa.me/{{ $order->whatsapp_phone }}?text={{ urlencode('Bonjour '.$order->customer_name.', c\'est Blac Joyaux au sujet de votre commande '.$order->reference.'.') }}" target="_blank" rel="noopener" class="btn btn-whatsapp btn-sm btn-block" style="margin-top:1rem;">Contacter sur WhatsApp</a>
         </div>
     </div>
 </div>

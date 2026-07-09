@@ -111,17 +111,34 @@
                 <span>Taxes (calculées lors du paiement)</span>
                 <span>0 FCFA</span>
             </div>
+            @if($promo)
+                <div class="summary-line" style="color:var(--vert-dark, #1a7a4c);">
+                    <span>Réduction ({{ $promo->code }})</span>
+                    <span>&minus;{{ number_format($discount, 0, ',', ' ') }} FCFA</span>
+                </div>
+            @endif
 
             <div class="summary-total">
                 <span>Total</span>
-                <span>{{ number_format($subtotal, 0, ',', ' ') }} FCFA</span>
+                <span>{{ number_format($subtotal - $discount, 0, ',', ' ') }} FCFA</span>
             </div>
 
-            <label class="summary-promo-label">Code promo</label>
-            <div class="summary-promo">
-                <input type="text" placeholder="Entrer le code">
-                <button type="button">Appliquer</button>
-            </div>
+            @if($promo)
+                <div class="summary-promo" style="display:flex; align-items:center; justify-content:space-between; gap:.5rem;">
+                    <span style="font-size:.85rem;">Code appliqué : <strong>{{ $promo->code }}</strong></span>
+                    <form method="POST" action="{{ route('cart.promo.remove') }}">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="btn btn-sm" style="background:none; color:var(--bad);">Retirer</button>
+                    </form>
+                </div>
+            @else
+                <label class="summary-promo-label" for="promoCode">Code promo</label>
+                <form method="POST" action="{{ route('cart.promo.apply') }}" class="summary-promo">
+                    @csrf
+                    <input type="text" id="promoCode" name="code" placeholder="Entrer le code" style="text-transform:uppercase;">
+                    <button type="submit">Appliquer</button>
+                </form>
+            @endif
 
            <a href="{{ route('checkout.index') }}" class="btn-checkout">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

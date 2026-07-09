@@ -179,6 +179,10 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
                 <span class="nav-label">FAQ</span>
             </a>
+            <a href="{{ route('admin.promo-codes.index') }}" class="{{ request()->routeIs('admin.promo-codes.*') ? 'is-active' : '' }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m20.59 13.41-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+                <span class="nav-label">Codes promo</span>
+            </a>
         </nav>
         <div class="admin-side-foot">
             <a href="{{ route('home') }}" target="_blank">
