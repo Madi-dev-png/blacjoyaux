@@ -51,7 +51,7 @@ class ChatService
             'source' => 'ia',
         ];
 
-    } catch (\Throwable $e) {
+    } catch (\Throwable) {
         return ['reply' => $this->fallbackFromFaq($userMessage), 'source' => 'faq'];
     }
 }
@@ -129,34 +129,143 @@ PROMPT;
         return $messages;
     }
 
-    /** Réponse de secours basée sur la FAQ (recherche par mots-clés). */
+    /**
+     * Réponse de secours quand l'API IA n'est pas configurée ou indisponible.
+     * C'est le chemin le plus emprunté tant qu'aucune clé GROQ_API_KEY n'est
+     * renseignée dans .env — d'où l'importance qu'il soit réellement utile
+     * (salutations, prix/stock produit en direct, FAQ) plutôt qu'un simple
+     * comptage de mots communs.
+     */
     protected function fallbackFromFaq(string $message): string
     {
-        $message = mb_strtolower($message);
-        $faqs = Faq::active()->get();
+        $normalized = $this->normalize($message);
+        $whatsapp = config('services.brand.whatsapp');
 
+        if (preg_match('/\b(bonjour|bonsoir|salut|coucou|hello|hi|cc)\b/u', $normalized)) {
+            return "Bonjour et bienvenue chez Blac Joyaux ! 👋 Je peux vous renseigner sur nos sacs, les délais de livraison, le paiement ou notre histoire Ashanti. Que souhaitez-vous savoir ?";
+        }
+
+        if (preg_match('/\b(merci|thanks|thank you)\b/u', $normalized)) {
+            return "Avec plaisir ! N'hésitez pas si vous avez d'autres questions, ou écrivez-nous directement sur WhatsApp pour finaliser votre commande.";
+        }
+
+        // Question sur un produit précis (prix, dispo, couleur...) : on répond
+        // avec les vraies données du catalogue plutôt que de renvoyer vers la FAQ.
+        if (preg_match('/\b(prix|coute|combien|dispo|disponible|stock|couleur|taille|dimension|matiere)\b/u', $normalized)) {
+            $product = $this->findProductInMessage($normalized);
+            if ($product) {
+                return $this->describeProduct($product);
+            }
+        }
+
+        $best = $this->bestFaqMatch($normalized);
+        if ($best) {
+            return $best->answer;
+        }
+
+        return "Je n'ai pas une réponse assez précise sous la main pour cette question, mais notre équipe se fera un plaisir de vous aider directement sur WhatsApp : https://wa.me/{$whatsapp}. Vous pouvez aussi me demander nos best-sellers, les délais de livraison ou les moyens de paiement.";
+    }
+
+    /** Minuscules + accents retirés, pour une comparaison fiable quel que soit l'orthographe. */
+    protected function normalize(string $text): string
+    {
+        $text = mb_strtolower(trim($text));
+        $map = [
+            'à' => 'a', 'â' => 'a', 'ä' => 'a',
+            'é' => 'e', 'è' => 'e', 'ê' => 'e', 'ë' => 'e',
+            'î' => 'i', 'ï' => 'i',
+            'ô' => 'o', 'ö' => 'o',
+            'ù' => 'u', 'û' => 'u', 'ü' => 'u',
+            'ç' => 'c', 'œ' => 'oe',
+        ];
+
+        return strtr($text, $map);
+    }
+
+    /** Mots vides ignorés dans les scores de correspondance (trop fréquents pour être discriminants). */
+    protected function stopWords(): array
+    {
+        return ['sac', 'sacs', 'avec', 'pour', 'dans', 'quel', 'quelle', 'quels', 'quelles', 'votre', 'vous', 'nous', 'les', 'des', 'une', 'est', 'ce'];
+    }
+
+    /** Cherche, parmi le catalogue actif, le produit le plus probablement évoqué dans le message. */
+    protected function findProductInMessage(string $normalizedMessage): ?Product
+    {
+        $stop = $this->stopWords();
         $best = null;
         $bestScore = 0;
 
-        foreach ($faqs as $faq) {
+        foreach (Product::active()->get() as $product) {
+            $words = preg_split('/[\s\-–]+/u', $this->normalize($product->name));
             $score = 0;
-            $words = preg_split('/\s+/', mb_strtolower($faq->question));
+
             foreach ($words as $word) {
-                if (mb_strlen($word) >= 4 && str_contains($message, $word)) {
+                if (mb_strlen($word) >= 3 && ! in_array($word, $stop, true) && str_contains($normalizedMessage, $word)) {
                     $score++;
                 }
             }
+
             if ($score > $bestScore) {
                 $bestScore = $score;
+                $best = $product;
+            }
+        }
+
+        // Au moins 2 mots significatifs du nom retrouvés dans le message, pour éviter
+        // qu'un mot isolé (ex: juste la couleur) ne déclenche un mauvais produit.
+        return $bestScore >= 2 ? $best : null;
+    }
+
+    /** Fiche produit condensée en réponse de chat (prix, stock, couleur, matière). */
+    protected function describeProduct(Product $product): string
+    {
+        $prix = number_format($product->price, 0, ',', ' ').' F CFA';
+        $dispo = $product->stock > 0 ? "en stock ({$product->stock} disponible" . ($product->stock > 1 ? 's' : '') . ')' : 'malheureusement épuisé pour le moment';
+
+        $details = [];
+        if ($product->color) $details[] = "coloris {$product->color}";
+        if ($product->material) $details[] = "matière : {$product->material}";
+        if ($product->dimensions) $details[] = "dimensions : {$product->dimensions}";
+
+        $detailsText = $details ? ' (' . implode(', ', $details) . ')' : '';
+
+        return "Le « {$product->name} »{$detailsText} est à {$prix}, {$dispo}. Voulez-vous que je vous aide à finaliser une commande ?";
+    }
+
+    /** Meilleure FAQ correspondant au message (question + réponse), avec seuil minimum. */
+    protected function bestFaqMatch(string $normalizedMessage): ?Faq
+    {
+        $stop = $this->stopWords();
+        $best = null;
+        $bestScore = 0;
+
+        foreach (Faq::active()->get() as $faq) {
+            $questionWords = array_filter(
+                preg_split('/\s+/', $this->normalize($faq->question)),
+                fn ($w) => mb_strlen($w) >= 4 && ! in_array($w, $stop, true)
+            );
+
+            if (empty($questionWords)) {
+                continue;
+            }
+
+            $matches = 0;
+            foreach ($questionWords as $word) {
+                if (str_contains($normalizedMessage, $word)) {
+                    $matches++;
+                }
+            }
+
+            // Score = proportion des mots-clés de la question retrouvés dans le message.
+            $ratio = $matches / count($questionWords);
+
+            if ($matches >= 2 && $ratio > $bestScore) {
+                $bestScore = $ratio;
                 $best = $faq;
             }
         }
 
-        if ($best && $bestScore > 0) {
-            return $best->answer;
-        }
-
-        $whatsapp = config('services.brand.whatsapp');
-        return "Merci pour votre message ! Pour une réponse personnalisée, n'hésitez pas à nous écrire sur WhatsApp au {$whatsapp}. Notre équipe Blac Joyaux se fera un plaisir de vous accompagner.";
+        // Au moins un tiers des mots-clés significatifs de la question doivent matcher.
+        return $bestScore >= 0.34 ? $best : null;
     }
 }

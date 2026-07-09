@@ -89,4 +89,25 @@ class StorefrontFeaturesTest extends TestCase
             ->assertStatus(200)
             ->assertSee('pas encore ajouté de sac à vos favoris');
     }
+
+    public function test_chat_assistant_greets_and_answers_product_questions(): void
+    {
+        $product = Product::factory()->create([
+            'name' => 'Sac Bureau Femme – Cognac',
+            'is_active' => true,
+            'price' => 55000,
+            'stock' => 4,
+        ]);
+
+        $greeting = $this->postJson(route('chat.send'), ['message' => 'Bonjour']);
+        $greeting->assertStatus(200)->assertJsonFragment(['source' => 'faq']);
+        $this->assertStringContainsString('bienvenue', $greeting->json('reply'));
+
+        $priceQuestion = $this->postJson(route('chat.send'), [
+            'message' => 'Combien coûte le sac bureau femme cognac ?',
+        ]);
+        $priceQuestion->assertStatus(200);
+        $this->assertStringContainsString('55 000 F CFA', $priceQuestion->json('reply'));
+        $this->assertStringContainsString($product->name, $priceQuestion->json('reply'));
+    }
 }
